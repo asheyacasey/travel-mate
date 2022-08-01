@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "526446915145",
+    "project_id": "travel-mate-adfea",
+    "storage_bucket": "travel-mate-adfea.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:526446915145:android:8a3b0174d1182bd6b69998",
+        "android_client_info": {
+          "package_name": "com.example.travel_mate"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "526446915145-jc2lq511quah1bv9h2daom7tkmlir8r1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDVC43j0Kpq3UDVcEztZuALYk0vgLNoS-4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "526446915145-jc2lq511quah1bv9h2daom7tkmlir8r1.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "526446915145-kja5tjr5gvh8foku11cr1fo4esvgsen0.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.travelMate"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
