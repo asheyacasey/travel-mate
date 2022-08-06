@@ -70,7 +70,7 @@ class HomeScreen extends StatelessWidget {
                           width: 60,
                           size: 30,
                           hasGradient: false,
-                          color: Theme.of(context).colorScheme.secondary,
+                          color: Colors.red,
                           icon: Icons.clear_rounded),
                       ChoiceButton(
                         width: 70,

@@ -18,11 +18,18 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
                 )),
             Expanded(
                 child: Text(
-                  'Discover',
+                  'TravelMate',
                   style: Theme.of(context).textTheme.headline2,
                 )),
           ],
         ),
+
+
+
+
+
+
+
         actions: [
           IconButton(
               onPressed: () {},
