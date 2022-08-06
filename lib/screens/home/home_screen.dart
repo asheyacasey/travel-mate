@@ -1,116 +1,124 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:travel_mate/screens/screens.dart';
-import '/blocs/blocs.dart';
-import '/models/models.dart';
-import '/widgets/widgets.dart';
+
+import '../../models/user_model.dart';
+import '../../widgets/custom_appbar.dart';
+import '../../widgets/user_card.dart';
 
 class HomeScreen extends StatelessWidget {
   static const String routeName = '/';
 
+  // static Route route() {
+  //   return MaterialPageRoute(
+  //       settings: RouteSettings(name: routeName),
+  //       builder: (context) {
+  //         print(BlocProvider.of<AuthBloc>(context).state.status);
+  //         return BlocProvider.of<AuthBloc>(context).state.status ==
+  //             AuthStatus.unauthenticated
+  //             ? OnboardingScreen()
+  //             :
+  //         HomeScreen();
+  //       });
+  // }
+
   static Route route() {
     return MaterialPageRoute(
-        settings: RouteSettings(name: routeName),
-        builder: (context) {
-          print(BlocProvider.of<AuthBloc>(context).state.status);
-          return BlocProvider.of<AuthBloc>(context).state.status ==
-                  AuthStatus.unauthenticated
-              ? OnboardingScreen()
-              : HomeScreen();
-        });
+        builder: (_) => HomeScreen(), settings: RouteSettings(name: routeName));
   }
 
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: 'DISCOVER'),
-      body: BlocBuilder<SwipeBloc, SwipeState>(
-        builder: (context, state) {
-          if (state is SwipeLoading) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          } else if (state is SwipeLoaded) {
-            var userCount = state.users.length;
-            return Column(
+      appBar: CustomAppBar(),
+      body: Column(
+        children: [
+          UserCard(user: User.users[0]),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 60),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                InkWell(
-                  onDoubleTap: () {
-                    Navigator.pushNamed(context, '/users',
-                        arguments: state.users[0]);
-                  },
-                  child: Draggable<User>(
-                    data: state.users[0],
-                    child: UserCard(user: state.users[0]),
-                    feedback: UserCard(user: state.users[0]),
-                    childWhenDragging: (userCount > 1)
-                        ? UserCard(user: state.users[1])
-                        : Container(),
-                    onDragEnd: (drag) {
-                      if (drag.velocity.pixelsPerSecond.dx < 0) {
-                        context.read<SwipeBloc>()
-                          ..add(SwipeLeft(user: state.users[0]));
-                        print('Swiped Left');
-                      } else {
-                        context.read<SwipeBloc>()
-                          ..add(SwipeRight(user: state.users[0]));
-                        print('Swiped Right');
-                      }
-                    },
-                  ),
+                ChoiceButton(
+                    height: 60,
+                    width: 60,
+                    size: 30,
+                    hasGradient: false,
+                    color: Theme.of(context).colorScheme.secondary,
+                    icon: Icons.clear_rounded),
+                ChoiceButton(
+                  width: 70,
+                  height: 70,
+                  size: 40,
+                  hasGradient: true,
+                  color: Theme.of(context).primaryColor,
+                  icon: Icons.favorite,
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 8.0,
-                    horizontal: 60,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      InkWell(
-                        onTap: () {
-                          context.read<SwipeBloc>()
-                            ..add(SwipeRight(user: state.users[0]));
-                          print('Swiped Right');
-                        },
-                        child: ChoiceButton(
-                          color: Theme.of(context).accentColor,
-                          icon: Icons.clear_rounded,
-                        ),
-                      ),
-                      InkWell(
-                        onTap: () {
-                          context.read<SwipeBloc>()
-                            ..add(SwipeRight(user: state.users[0]));
-                          print('Swiped Left');
-                        },
-                        child: ChoiceButton(
-                          width: 80,
-                          height: 80,
-                          size: 30,
-                          color: Colors.white,
-                          hasGradient: true,
-                          icon: Icons.favorite,
-                        ),
-                      ),
-                      ChoiceButton(
-                        color: Theme.of(context).primaryColor,
-                        icon: Icons.watch_later,
-                      ),
-                    ],
-                  ),
+                ChoiceButton(
+                  height: 60,
+                  width: 60,
+                  size: 30,
+                  hasGradient: false,
+                  color: Theme.of(context).colorScheme.secondary,
+                  icon: Icons.watch_later,
                 ),
               ],
-            );
-          }
-          if (state is SwipeError) {
-            return Center(
-              child: Text('There aren\'t any more users.',
-                  style: Theme.of(context).textTheme.headline4),
-            );
-          } else {
-            return Text('Something went wrong.');
-          }
-        },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class ChoiceButton extends StatelessWidget {
+  final double width;
+  final double height;
+  final double size;
+  final Color color;
+  final bool hasGradient;
+  final IconData icon;
+
+  const ChoiceButton({
+    Key? key,
+    required this.width,
+    required this.size,
+    required this.height,
+    required this.color,
+    required this.icon,
+    required this.hasGradient,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: width,
+      height: height,
+      decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: Colors.white,
+          // gradient: hasGradient
+          //     ? LinearGradient(
+          //         colors: [
+          //           Theme.of(context).primaryColor,
+          //           Theme.of(context).colorScheme.secondary,
+          //         ],
+          //       )
+          //     : LinearGradient(
+          //         colors: [
+          //          Colors.white,
+          //           Colors.white,
+          //         ],
+          //       ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withAlpha(50),
+              spreadRadius: 4,
+              blurRadius: 4,
+              offset: Offset(3, 3),
+            )
+          ]),
+      child: Icon(
+        icon,
+        color: color,
+        size: size,
       ),
     );
   }
