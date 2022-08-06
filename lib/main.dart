@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:travel_mate/blocs/swipe_bloc.dart';
 
 import 'package:travel_mate/screens/home/home_screen.dart';
+import 'package:travel_mate/screens/screens.dart';
 import 'config/app_router.dart';
 import 'config/theme.dart';
 import 'models/user_model.dart';
@@ -23,10 +24,10 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
         providers: [
           BlocProvider(
-            //here's the problem
-              create: (_) =>
-                  SwipeBloc()..add(LoadUsersEvent(users: User.users)))
-        ],
+              //here's the problem
+              create: (_) => SwipeBloc()..add(LoadUsers(users: User.users)))
+        ],    // users: User.users.where((where) => user.id != 1 ).toList(), -- dont delete this comment
+        // users: User.users
         child: MaterialApp(
           title: 'TravelMate',
           debugShowCheckedModeBanner: false,

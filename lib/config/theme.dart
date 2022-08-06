@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 
+
 ThemeData theme() {
   return ThemeData(
       primaryColor: const Color(0xFFB0DB2D),
       scaffoldBackgroundColor: Colors.white,
       backgroundColor: Color(0xFFF4F4F4),
 
-    fontFamily: 'Optima',
+    fontFamily: 'Manrope',
     textTheme: const TextTheme(
       headline1: TextStyle(
         color: Color(0xFF2B2E4A),
