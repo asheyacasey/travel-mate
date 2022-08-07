@@ -18,7 +18,7 @@ class Email extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 30.0),
+      padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 50.0),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
