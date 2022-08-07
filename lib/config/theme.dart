@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+
 
 ThemeData theme() {
   return ThemeData(
-    primaryColor: Color(0xFF2B2E4A),
-    // primaryColorDark: Color(0xFFFC0028),
-    // primaryColorLight: Color(0xFFFE9AAA),
-    accentColor: Color(0xFFE84545),
-    scaffoldBackgroundColor: Colors.white,
-    backgroundColor: Color(0xFFF4F4F4),
+      primaryColor: const Color(0xFFB0DB2D),
+      scaffoldBackgroundColor: Colors.white,
+      backgroundColor: Color(0xFFF4F4F4),
 
-    fontFamily: 'Optima',
+    fontFamily: GoogleFonts.manrope().fontFamily,
     textTheme: TextTheme(
       headline1: TextStyle(
         color: Color(0xFF2B2E4A),
@@ -51,6 +50,10 @@ ThemeData theme() {
         fontWeight: FontWeight.normal,
         fontSize: 10,
       ),
+
+
     ),
+
+
   );
 }
