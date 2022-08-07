@@ -1,6 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 
+import '../widgets/widgets.dart';
+
 class Biography extends StatelessWidget {
   final TabController tabController;
 
@@ -13,6 +15,53 @@ class Biography extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 50.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              CustomTextHeader(
+                  tabController: tabController,
+                  text: 'Describe Yourself a Bit'),
+              CustomTextField(
+                  tabController: tabController, text: 'ENTER YOUR BIO'),
+              SizedBox(height: 100),
+              CustomTextHeader(
+                  tabController: tabController, text: 'What Do You Like?'),
+              Row(
+                children: [
+                  CustomTextContainer(
+                      tabController: tabController, text: 'MOVIES'),
+                  CustomTextContainer(
+                      tabController: tabController, text: 'HIKING'),
+                  CustomTextContainer(
+                      tabController: tabController, text: 'MUSIC'),
+                  CustomTextContainer(
+                      tabController: tabController, text: 'BIKING'),
+                ],
+              ),
+              Row(
+                children: [
+                  CustomTextContainer(
+                      tabController: tabController, text: 'KARAOKE'),
+                  CustomTextContainer(
+                      tabController: tabController, text: 'FREE DIVING'),
+                  CustomTextContainer(
+                      tabController: tabController, text: 'FOOD TRIP'),
+                ],
+              ),
+              Row(
+                children: [
+                  CustomTextContainer(
+                      tabController: tabController, text: 'MUSEUMS'),
+                ],
+              ),
+            ],
+          ),
+          CustomButton(tabController: tabController, text: 'NEXT STEP')
+        ],
+      ),
     );
   }
 }

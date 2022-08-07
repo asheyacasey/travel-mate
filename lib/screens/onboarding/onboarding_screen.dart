@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:travel_mate/screens/onboarding/onboarding_screens/bio_screen.dart';
 import 'package:travel_mate/screens/onboarding/onboarding_screens/demo_screen.dart';
 import 'package:travel_mate/screens/onboarding/onboarding_screens/email_screen.dart';
 import 'package:travel_mate/screens/onboarding/onboarding_screens/email_verification_screen.dart';
@@ -24,6 +25,7 @@ class OnboardingScreen extends StatelessWidget {
     Tab(text: 'Email Verification'),
     Tab(text: 'Demographics'),
     Tab(text: 'Pictures'),
+    Tab(text: 'Biography'),
   ];
 
   @override
@@ -46,6 +48,7 @@ class OnboardingScreen extends StatelessWidget {
               EmailVerification(tabController: tabController),
               Demographics(tabController: tabController),
               Pictures(tabController: tabController),
+              Biography(tabController: tabController),
             ]));
       }),
     );
