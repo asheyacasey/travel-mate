@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:step_progress_indicator/step_progress_indicator.dart';
 
 import '../widgets/widgets.dart';
 
@@ -30,7 +31,18 @@ class EmailVerification extends StatelessWidget {
                   tabController: tabController, text: 'ENTER YOUR CODE'),
             ],
           ),
-          CustomButton(tabController: tabController, text: 'NEXT STEP')
+          Column(
+            children: [
+              StepProgressIndicator(
+                totalSteps: 6,
+                currentStep: 2,
+                selectedColor: Theme.of(context).primaryColor,
+                unselectedColor: Theme.of(context).backgroundColor,
+              ),
+              SizedBox(height: 10),
+              CustomButton(tabController: tabController, text: 'NEXT STEP')
+            ],
+          ),
         ],
       ),
     );

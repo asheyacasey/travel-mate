@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+import 'package:step_progress_indicator/step_progress_indicator.dart';
 
 import '../widgets/widgets.dart';
 
@@ -59,7 +60,18 @@ class Biography extends StatelessWidget {
               ),
             ],
           ),
-          CustomButton(tabController: tabController, text: 'NEXT STEP')
+          Column(
+            children: [
+              StepProgressIndicator(
+                totalSteps: 6,
+                currentStep: 5,
+                selectedColor: Theme.of(context).primaryColor,
+                unselectedColor: Theme.of(context).backgroundColor,
+              ),
+              SizedBox(height: 10),
+              CustomButton(tabController: tabController, text: 'NEXT STEP')
+            ],
+          ),
         ],
       ),
     );

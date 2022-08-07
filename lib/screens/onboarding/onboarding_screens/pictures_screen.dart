@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:step_progress_indicator/step_progress_indicator.dart';
 
 import '../widgets/widgets.dart';
 
@@ -48,7 +49,18 @@ class Pictures extends StatelessWidget {
               )
             ],
           ),
-          CustomButton(tabController: tabController, text: 'NEXT STEP')
+          Column(
+            children: [
+              StepProgressIndicator(
+                totalSteps: 6,
+                currentStep: 4,
+                selectedColor: Theme.of(context).primaryColor,
+                unselectedColor: Theme.of(context).backgroundColor,
+              ),
+              SizedBox(height: 10),
+              CustomButton(tabController: tabController, text: 'NEXT STEP')
+            ],
+          ),
         ],
       ),
     );
