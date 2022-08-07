@@ -3,9 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
-import '../widgets/custom_button.dart';
-import '../widgets/custom_text_field.dart';
-import '../widgets/custom_text_header.dart';
+import '../widgets/widgets.dart';
 
 class Demographics extends StatelessWidget {
   final TabController tabController;
@@ -23,11 +21,18 @@ class Demographics extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               CustomTextHeader(
                   tabController: tabController, text: 'What\'s Your Gender?'),
+              SizedBox(height: 10),
+              CustomCheckbox(tabController: tabController, text: 'MALE'),
+              CustomCheckbox(tabController: tabController, text: 'FEMALE'),
+              SizedBox(height: 100),
               CustomTextHeader(
                   tabController: tabController, text: 'What\'s Your Age?'),
+              CustomTextField(
+                  tabController: tabController, text: 'ENTER YOUR AGE'),
             ],
           ),
           CustomButton(tabController: tabController, text: 'NEXT STEP')

@@ -19,7 +19,7 @@ class CustomTextHeader extends StatelessWidget {
       text,
       style: Theme.of(context)
           .textTheme
-          .headline1!
+          .headline2!
           .copyWith(fontWeight: FontWeight.normal),
     );
   }

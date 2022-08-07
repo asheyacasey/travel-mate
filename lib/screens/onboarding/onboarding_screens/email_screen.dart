@@ -3,10 +3,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/material/tab_controller.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:travel_mate/screens/onboarding/widgets/custom_text_field.dart';
-import 'package:travel_mate/screens/onboarding/widgets/custom_text_header.dart';
 
 import '../widgets/custom_button.dart';
+import '../widgets/widgets.dart';
 
 class Email extends StatelessWidget {
   final TabController tabController;
