@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:travel_mate/widgets/widgets.dart';
 
 class OnboardingScreen extends StatelessWidget {
   static const String routeName = '/onboarding';
@@ -9,8 +10,15 @@ class OnboardingScreen extends StatelessWidget {
       builder: (context) => OnboardingScreen(),
     );
   }
+
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+      appBar: CustomAppBar(
+        title: 'ARROW',
+        hasAction: false,
+      ),
+      body: Container(),
+    );
   }
 }

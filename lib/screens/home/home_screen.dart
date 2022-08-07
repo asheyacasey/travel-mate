@@ -29,20 +29,22 @@ class HomeScreen extends StatelessWidget {
 
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(),
+      appBar: CustomAppBar(
+        title: '',
+      ),
       body: BlocBuilder<SwipeBloc, SwipeState>(
         builder: (context, state) {
-          if( state is SwipeLoading) {
+          if (state is SwipeLoading) {
             return Center(
               child: CircularProgressIndicator(),
             );
-          }
-          else if (state is SwipeLoaded) {
+          } else if (state is SwipeLoaded) {
             return Column(
               children: [
                 InkWell(
                   onDoubleTap: () {
-                    Navigator.pushNamed(context, '/users', arguments: state.users[0]);
+                    Navigator.pushNamed(context, '/users',
+                        arguments: state.users[0]);
                   },
                   child: Draggable(
                     child: UserCard(user: state.users[0]),
@@ -50,18 +52,20 @@ class HomeScreen extends StatelessWidget {
                     childWhenDragging: UserCard(user: state.users[1]),
                     onDragEnd: (drag) {
                       if (drag.velocity.pixelsPerSecond.dx < 0) {
-                        context.read<SwipeBloc>()..add(SwipeLeft(user: state.users[0]));
+                        context.read<SwipeBloc>()
+                          ..add(SwipeLeft(user: state.users[0]));
                         print('Swiped Left');
                       } else {
-                        context.read<SwipeBloc>()..add(SwipeRight(user: state.users[0]));
+                        context.read<SwipeBloc>()
+                          ..add(SwipeRight(user: state.users[0]));
                         print('Swiped Right');
                       }
                     },
                   ),
                 ),
-
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 60),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 8.0, horizontal: 60),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -101,4 +105,3 @@ class HomeScreen extends StatelessWidget {
     );
   }
 }
-
