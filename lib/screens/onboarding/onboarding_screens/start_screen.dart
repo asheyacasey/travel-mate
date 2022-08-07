@@ -10,8 +10,7 @@ class Start extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 30.0),
-      child: Container(
-          child: Column(
+      child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Column(
@@ -40,7 +39,7 @@ class Start extends StatelessWidget {
           ),
           CustomButton(tabController: tabController)
         ],
-      )),
+      ),
     );
   }
 }
