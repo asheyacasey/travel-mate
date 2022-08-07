@@ -14,15 +14,22 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
             Expanded(
                 child: SvgPicture.asset(
                   'assets/logo.svg',
-                  height: 50,
+                  height: 90,
                 )),
             Expanded(
                 child: Text(
-                  'Discover',
+                  'TravelMate',
                   style: Theme.of(context).textTheme.headline2,
                 )),
           ],
         ),
+
+
+
+
+
+
+
         actions: [
           IconButton(
               onPressed: () {},
