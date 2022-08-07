@@ -26,14 +26,14 @@ class MyApp extends StatelessWidget {
           BlocProvider(
               //here's the problem
               create: (_) => SwipeBloc()..add(LoadUsers(users: User.users)))
-        ],    // users: User.users.where((where) => user.id != 1 ).toList(), -- don't delete this comment
+        ], // users: User.users.where((where) => user.id != 1 ).toList(), -- don't delete this comment
         // users: User.users
         child: MaterialApp(
           title: 'TravelMate',
           debugShowCheckedModeBanner: false,
           theme: theme(),
           onGenerateRoute: AppRouter.onGenerateRoute,
-          initialRoute: HomeScreen.routeName,
+          initialRoute: OnboardingScreen.routeName,
         ));
   }
 }
