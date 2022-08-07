@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:travel_mate/screens/onboarding/onboarding_screens/email_screen.dart';
+import 'package:travel_mate/screens/onboarding/onboarding_screens/email_verification_screen.dart';
 import 'package:travel_mate/widgets/widgets.dart';
 
 import 'onboarding_screens/start_screen.dart';
@@ -18,6 +19,7 @@ class OnboardingScreen extends StatelessWidget {
   static const List<Tab> tabs = <Tab>[
     Tab(text: 'Start'),
     Tab(text: 'Email'),
+    Tab(text: 'Email Verification'),
   ];
 
   @override
@@ -37,6 +39,7 @@ class OnboardingScreen extends StatelessWidget {
             body: TabBarView(children: [
               Start(tabController: tabController),
               Email(tabController: tabController),
+              EmailVerification(tabController: tabController),
             ]));
       }),
     );
