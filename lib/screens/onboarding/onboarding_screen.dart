@@ -11,14 +11,28 @@ class OnboardingScreen extends StatelessWidget {
     );
   }
 
+  static const List<Tab> tabs = <Tab>[
+    Tab(text: 'Start'),
+  ];
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: CustomAppBar(
-        title: 'ARROW',
-        hasAction: false,
-      ),
-      body: Container(),
+    return DefaultTabController(
+      length: tabs.length,
+      child: Builder(builder: (BuildContext context) {
+        final TabController tabController = DefaultTabController.of(context)!;
+        tabController.addListener(() {
+          if (!tabController.indexIsChanging) {}
+        });
+
+        return Scaffold(
+          appBar: CustomAppBar(
+            title: 'ARROW',
+            hasAction: false,
+          ),
+          body: Container(),
+        );
+      }),
     );
   }
 }
