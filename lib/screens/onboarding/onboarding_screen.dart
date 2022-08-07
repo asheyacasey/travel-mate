@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:travel_mate/widgets/widgets.dart';
 
+import 'onboarding_screens/start_screen.dart';
+
 class OnboardingScreen extends StatelessWidget {
   static const String routeName = '/onboarding';
 
@@ -24,14 +26,14 @@ class OnboardingScreen extends StatelessWidget {
         tabController.addListener(() {
           if (!tabController.indexIsChanging) {}
         });
-
         return Scaffold(
-          appBar: CustomAppBar(
-            title: 'ARROW',
-            hasAction: false,
-          ),
-          body: Container(),
-        );
+            appBar: CustomAppBar(
+              title: 'ARROW',
+              hasAction: false,
+            ),
+            body: TabBarView(children: [
+              Start(tabController: tabController),
+            ]));
       }),
     );
   }
