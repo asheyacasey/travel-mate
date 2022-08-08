@@ -27,7 +27,7 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
           Expanded(
               flex: 2,
               child: Text(
-                'TravelMate',
+                title,
                 style: Theme.of(context).textTheme.headline2,
               )),
         ],
