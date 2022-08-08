@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:travel_mate/screens/chat/chat_screen.dart';
 import 'package:travel_mate/widgets/custom_appbar.dart';
 import 'package:travel_mate/widgets/user_image_small.dart';
 
@@ -65,40 +66,47 @@ class MatchesScreen extends StatelessWidget {
                 shrinkWrap: true,
                 itemCount: activeMatches.length,
                 itemBuilder: (context, index) {
-                  return Row(
-                    children: [
-                      UserImageSmall(
-                        height: 70,
-                        width: 70,
-                        imageUrl: activeMatches[index].matchedUser.imageUrls[0],
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            activeMatches[index].matchedUser.name,
-                            style: Theme.of(context).textTheme.headline5,
-                          ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          Text(
-                            activeMatches[index].chat![0].messages[0].message,
-                            style: Theme.of(context).textTheme.headline6,
-                          ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          Text(
-                            activeMatches[index]
-                                .chat![0]
-                                .messages[0]
-                                .timeString,
-                            style: Theme.of(context).textTheme.bodyText1,
-                          ),
-                        ],
-                      ),
-                    ],
+                  return InkWell(
+                    onTap: () {
+                      Navigator.pushNamed(context, ChatScreen.routeName,
+                          arguments: activeMatches[index]);
+                    },
+                    child: Row(
+                      children: [
+                        UserImageSmall(
+                          height: 70,
+                          width: 70,
+                          imageUrl:
+                              activeMatches[index].matchedUser.imageUrls[0],
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              activeMatches[index].matchedUser.name,
+                              style: Theme.of(context).textTheme.headline5,
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Text(
+                              activeMatches[index].chat![0].messages[0].message,
+                              style: Theme.of(context).textTheme.headline6,
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Text(
+                              activeMatches[index]
+                                  .chat![0]
+                                  .messages[0]
+                                  .timeString,
+                              style: Theme.of(context).textTheme.bodyText1,
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   );
                 },
               ),
