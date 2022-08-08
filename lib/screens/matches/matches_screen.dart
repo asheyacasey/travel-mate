@@ -55,7 +55,53 @@ class MatchesScreen extends StatelessWidget {
                     );
                   },
                 ),
-              )
+              ),
+              SizedBox(height: 10),
+              Text(
+                'Conversations',
+                style: Theme.of(context).textTheme.headline4,
+              ),
+              ListView.builder(
+                shrinkWrap: true,
+                itemCount: activeMatches.length,
+                itemBuilder: (context, index) {
+                  return Row(
+                    children: [
+                      UserImageSmall(
+                        height: 70,
+                        width: 70,
+                        imageUrl: activeMatches[index].matchedUser.imageUrls[0],
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            activeMatches[index].matchedUser.name,
+                            style: Theme.of(context).textTheme.headline5,
+                          ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Text(
+                            activeMatches[index].chat![0].messages[0].message,
+                            style: Theme.of(context).textTheme.headline6,
+                          ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Text(
+                            activeMatches[index]
+                                .chat![0]
+                                .messages[0]
+                                .timeString,
+                            style: Theme.of(context).textTheme.bodyText1,
+                          ),
+                        ],
+                      ),
+                    ],
+                  );
+                },
+              ),
             ],
           ),
         ),
