@@ -4,12 +4,10 @@ import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
 class CustomTextHeader extends StatelessWidget {
-  final TabController tabController;
   final String text;
 
   const CustomTextHeader({
     Key? key,
-    required this.tabController,
     required this.text,
   }) : super(key: key);
 

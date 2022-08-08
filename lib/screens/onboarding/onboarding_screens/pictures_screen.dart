@@ -24,8 +24,7 @@ class Pictures extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              CustomTextHeader(
-                  tabController: tabController, text: 'Add 2 or More Pictures'),
+              CustomTextHeader(text: 'Add 2 or More Pictures'),
               SizedBox(height: 10),
               Row(
                 children: [
