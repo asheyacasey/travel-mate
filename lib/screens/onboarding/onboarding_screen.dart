@@ -3,6 +3,7 @@ import 'package:travel_mate/screens/onboarding/onboarding_screens/bio_screen.dar
 import 'package:travel_mate/screens/onboarding/onboarding_screens/demo_screen.dart';
 import 'package:travel_mate/screens/onboarding/onboarding_screens/email_screen.dart';
 import 'package:travel_mate/screens/onboarding/onboarding_screens/email_verification_screen.dart';
+import 'package:travel_mate/screens/onboarding/onboarding_screens/location_screen.dart';
 import 'package:travel_mate/screens/onboarding/onboarding_screens/pictures_screen.dart';
 import 'package:travel_mate/widgets/widgets.dart';
 
@@ -26,6 +27,7 @@ class OnboardingScreen extends StatelessWidget {
     Tab(text: 'Demographics'),
     Tab(text: 'Pictures'),
     Tab(text: 'Biography'),
+    Tab(text: 'Location'),
   ];
 
   @override
@@ -49,6 +51,7 @@ class OnboardingScreen extends StatelessWidget {
               Demographics(tabController: tabController),
               Pictures(tabController: tabController),
               Biography(tabController: tabController),
+              Location(tabController: tabController),
             ]));
       }),
     );

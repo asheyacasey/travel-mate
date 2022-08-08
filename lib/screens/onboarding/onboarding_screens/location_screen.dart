@@ -33,7 +33,7 @@ class Location extends StatelessWidget {
             children: [
               StepProgressIndicator(
                 totalSteps: 6,
-                currentStep: 1,
+                currentStep: 6,
                 selectedColor: Theme.of(context).primaryColor,
                 unselectedColor: Theme.of(context).backgroundColor,
               ),
