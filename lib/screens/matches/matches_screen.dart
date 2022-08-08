@@ -16,13 +16,20 @@ class MatchesScreen extends StatelessWidget {
     return Scaffold(
       appBar: CustomAppBar(title: 'MATCHES'),
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Text(
-              'Your Matches',
-              style: Theme.of(context).textTheme.headline4,
-            )
-          ],
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            children: [
+              Text(
+                'Your Matches',
+                style: Theme.of(context).textTheme.headline4,
+              ),
+              SizedBox(
+                height: 100,
+                //child: ListView.builder(itemCount: ,),
+              )
+            ],
+          ),
         ),
       ),
     );

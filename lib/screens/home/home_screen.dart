@@ -30,7 +30,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-        title: 'TravelMate',
+        title: 'DISCOVER',
       ),
       body: BlocBuilder<SwipeBloc, SwipeState>(
         builder: (context, state) {
