@@ -6,10 +6,13 @@ class UserMatch extends Equatable {
   final int id;
   final int userId;
   final User matchedUser;
-  //final List<Chat>? chat;
+  final List<Chat>? chat;
 
   const UserMatch(
-      {required this.id, required this.userId, required this.matchedUser});
+      {required this.id,
+      required this.userId,
+      required this.matchedUser,
+      required this.chat});
 
   @override
   // TODO: implement props
