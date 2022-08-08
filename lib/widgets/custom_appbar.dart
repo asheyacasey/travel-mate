@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
@@ -16,34 +17,26 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
     return AppBar(
       backgroundColor: Colors.transparent,
       elevation: 0,
-      title: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Expanded(
-              child: SvgPicture.asset(
-            'assets/logo.svg',
-            height: 90,
-          )),
-          Expanded(
-              flex: 2,
-              child: Text(
-                title,
-                style: Theme.of(context).textTheme.headline2,
-              )),
-        ],
+      leading: SvgPicture.asset(
+        'assets/logo.svg',
+        height: 90,
+      ),
+      title:Text(
+        title,
+        style: Theme.of(context).primaryTextTheme.headline2,
       ),
       actions: hasAction
           ? [
               IconButton(
                   onPressed: () {},
                   icon: Icon(
-                    Icons.person,
+                    FeatherIcons.messageCircle,
                     color: Theme.of(context).primaryColor,
                   )),
               IconButton(
                   onPressed: () {},
                   icon: Icon(
-                    Icons.message,
+                    FeatherIcons.user,
                     color: Theme.of(context).primaryColor,
                   )),
             ]

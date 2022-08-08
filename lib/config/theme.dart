@@ -8,6 +8,16 @@ ThemeData theme() {
       scaffoldBackgroundColor: Colors.white,
       backgroundColor: Color(0xFFF4F4F4),
 
+    primaryTextTheme: TextTheme(
+      headline2: TextStyle(
+        fontFamily: GoogleFonts.fredoka().fontFamily,
+        color: Color(0xFFB0DB2D),
+        fontWeight: FontWeight.w900,
+        fontSize: 24,
+      ),
+    ),
+
+
     fontFamily: GoogleFonts.manrope().fontFamily,
     textTheme: TextTheme(
       headline1: TextStyle(
