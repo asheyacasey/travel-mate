@@ -36,66 +36,116 @@ class ChatScreen extends StatelessWidget {
           ],
         ),
       ),
-      body: SingleChildScrollView(
-        child: userMatch.chat != null
-            ? Container(
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: userMatch.chat![0].messages.length,
-                  itemBuilder: (context, index) {
-                    return ListTile(
-                      title: userMatch.chat![0].messages[index].senderId == 1
-                          ? Align(
-                              alignment: Alignment.topRight,
-                              child: Container(
-                                padding: const EdgeInsets.all(8),
-                                decoration: BoxDecoration(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(8)),
-                                  color: Theme.of(context).backgroundColor,
-                                ),
-                                child: Text(
-                                  userMatch.chat![0].messages[index].message,
-                                  style: Theme.of(context).textTheme.headline6,
-                                ),
-                              ),
-                            )
-                          : Align(
-                              alignment: Alignment.topLeft,
-                              child: Row(
-                                children: [
-                                  CircleAvatar(
-                                    radius: 15,
-                                    backgroundImage: NetworkImage(
-                                        userMatch.matchedUser.imageUrls[0]),
-                                  ),
-                                  SizedBox(
-                                    width: 3,
-                                  ),
-                                  Container(
-                                    padding: const EdgeInsets.all(8),
-                                    decoration: BoxDecoration(
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(8)),
-                                      color: Theme.of(context).primaryColor,
+      body: Column(
+        children: [
+          Expanded(
+            child: SingleChildScrollView(
+              child: userMatch.chat != null
+                  ? Container(
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: userMatch.chat![0].messages.length,
+                        itemBuilder: (context, index) {
+                          return ListTile(
+                            title: userMatch
+                                        .chat![0].messages[index].senderId ==
+                                    1
+                                ? Align(
+                                    alignment: Alignment.topRight,
+                                    child: Container(
+                                      padding: const EdgeInsets.all(8),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(8)),
+                                        color:
+                                            Theme.of(context).backgroundColor,
+                                      ),
+                                      child: Text(
+                                        userMatch
+                                            .chat![0].messages[index].message,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headline6,
+                                      ),
                                     ),
-                                    child: Text(
-                                      userMatch
-                                          .chat![0].messages[index].message,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .headline6!
-                                          .copyWith(color: Colors.white),
+                                  )
+                                : Align(
+                                    alignment: Alignment.topLeft,
+                                    child: Row(
+                                      children: [
+                                        CircleAvatar(
+                                          radius: 15,
+                                          backgroundImage: NetworkImage(
+                                              userMatch
+                                                  .matchedUser.imageUrls[0]),
+                                        ),
+                                        SizedBox(
+                                          width: 3,
+                                        ),
+                                        Container(
+                                          padding: const EdgeInsets.all(8),
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(8)),
+                                            color:
+                                                Theme.of(context).primaryColor,
+                                          ),
+                                          child: Text(
+                                            userMatch.chat![0].messages[index]
+                                                .message,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .headline6!
+                                                .copyWith(color: Colors.white),
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
-                                ],
-                              ),
-                            ),
-                    );
-                  },
+                          );
+                        },
+                      ),
+                    )
+                  : SizedBox(),
+            ),
+          ),
+          Container(
+            padding: EdgeInsets.all(5),
+            height: 100,
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.white,
+                      hintText: 'Type a message',
+                      contentPadding:
+                          const EdgeInsets.only(left: 20, bottom: 5, top: 5),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white),
+                      ),
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white),
+                      ),
+                    ),
+                  ),
                 ),
-              )
-            : SizedBox(),
+                Container(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Theme.of(context).primaryColor,
+                  ),
+                  child: IconButton(
+                    icon: Icon(Icons.send_outlined),
+                    onPressed: () {},
+                    color: Colors.white,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
