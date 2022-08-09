@@ -29,29 +29,40 @@ class EmailVerification extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                child: Row(
-                  children: [
-                    Container(
-                      child: Icon(
-                        UniconsLine.envelope
-                      )
-                    ),
-                   CustomTextHeader( text:
-                      ' Please check your inbox',
-                   ),
-                  ],
-                ),
+                  width: 90,
+                  height: 90,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Theme.of(context).primaryColor,
+                  ),
+                  child: Icon(
+                    UniconsLine.envelopes,
+                    size: 40,
+                    color: Colors.white,
+                  )),
+              SizedBox(
+                height: 15,
               ),
-
-              SizedBox(height: 5,),
               Text(
-                'We\'ve sent a code to your email',
+                'Verification Code',
+                style: Theme.of(context)
+                    .primaryTextTheme
+                    .headline2!
+                    .copyWith(color: Colors.black),
+              ),
+              SizedBox(
+                height: 5,
+              ),
+              Text(
+                'Please enter the verification code sent to your email',
                 style: Theme.of(context)
                     .textTheme
                     .headline6!
                     .copyWith(fontWeight: FontWeight.w900, color: Colors.grey),
               ),
-              SizedBox(height: 5,),
+              SizedBox(
+                height: 25,
+              ),
               CustomTextField(
                 hint: 'Enter the code',
                 controller: controller,
