@@ -30,7 +30,21 @@ class Email extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  CustomTextHeader(text: 'What\'s Your Email Address?'),
+                  Text('Welcome,',
+                      style: Theme.of(context)
+                      .primaryTextTheme
+                      .headline2!
+                      .copyWith(height: 1.8, color:Theme.of(context).primaryColor, fontSize: 36)),
+                  Text('TravelMate!',
+                      style: Theme.of(context)
+                          .primaryTextTheme
+                          .headline2!
+                          .copyWith(color: Theme.of(context).primaryColorLight, fontSize: 36)
+                  ),
+                  SizedBox(height: 50,),
+                  CustomTextHeader(
+                    text: 'What\'s Your Email Address?',
+                  ),
                   CustomTextField(
                     hint: 'ENTER YOUR EMAIL',
                     onChanged: (value) {
@@ -38,7 +52,8 @@ class Email extends StatelessWidget {
                       print(state.email);
                     },
                   ),
-                  CustomTextHeader(text: 'Choose A Password'),
+                  SizedBox(height: 10,),
+                  CustomTextHeader(text: 'Create A Password'),
                   CustomTextField(
                     hint: 'ENTER YOUR PASSWORD',
                     onChanged: (value) {
