@@ -47,11 +47,10 @@ class CustomImageContainer extends StatelessWidget {
                       content: Text('No image was selected.'),
                     ),
                   );
-
-                  if (_image != null) {
-                    print('Uploading...');
-                    StorageRepository().uploadImage(_image);
-                  }
+                }
+                if (_image != null) {
+                  print('Uploading...');
+                  StorageRepository().uploadImage(_image);
                 }
               },
             ),
