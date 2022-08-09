@@ -47,6 +47,7 @@ class OnboardingScreen extends StatelessWidget {
           if (!tabController.indexIsChanging) {}
         });
         return Scaffold(
+            resizeToAvoidBottomInset : false,
             body: TabBarView(children: [
               Start(tabController: tabController),
               Email(tabController: tabController),
