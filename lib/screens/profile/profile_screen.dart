@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:travel_mate/screens/onboarding/widgets/widgets.dart';
 import 'package:travel_mate/widgets/custom_appbar.dart';
 
 import '../../models/models.dart';
@@ -77,6 +78,7 @@ class ProfileScreen extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(20),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 TitleWithIcon(title: 'Biography', icon: Icons.edit),
                 Text(
@@ -87,8 +89,46 @@ class ProfileScreen extends StatelessWidget {
                       .copyWith(height: 1.5),
                 ),
                 TitleWithIcon(title: 'Photos', icon: Icons.edit),
+                SizedBox(
+                  height: 125,
+                  child: ListView.builder(
+                      itemCount: 5,
+                      shrinkWrap: true,
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: const EdgeInsets.only(right: 5),
+                          child: Container(
+                            height: 125,
+                            width: 100,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(
+                                color: Theme.of(context).primaryColor,
+                              ),
+                              image: DecorationImage(
+                                fit: BoxFit.cover,
+                                image: NetworkImage(user.imageUrls[index]),
+                              ),
+                            ),
+                          ),
+                        );
+                      }),
+                ),
                 TitleWithIcon(title: 'Interests', icon: Icons.edit),
+                Row(
+                  children: [
+                    CustomTextContainer(text: 'Music'),
+                  ],
+                ),
                 TitleWithIcon(title: 'Location', icon: Icons.edit),
+                Text(
+                  'UJS-R Basak Campus',
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyText1!
+                      .copyWith(height: 1.5),
+                ),
               ],
             ),
           ),
