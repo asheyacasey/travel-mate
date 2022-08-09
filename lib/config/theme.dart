@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:google_fonts/google_fonts.dart';
 
 
@@ -10,13 +11,16 @@ ThemeData theme() {
 
     primaryTextTheme: TextTheme(
       headline2: TextStyle(
-        fontFamily: GoogleFonts.fredoka().fontFamily,
+        fontFamily: GoogleFonts.fredokaOne().fontFamily,
         color: Color(0xFFB0DB2D),
-        fontWeight: FontWeight.w900,
         fontSize: 24,
       ),
     ),
 
+    iconTheme: IconThemeData(
+      color: Colors.black,
+
+    ),
 
     fontFamily: GoogleFonts.manrope().fontFamily,
     textTheme: TextTheme(
