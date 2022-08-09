@@ -1,26 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
-import '../../blocs/auth/auth_bloc.dart';
-import '../onboarding/onboarding_screen.dart';
+import 'package:travel_mate/widgets/custom_appbar.dart';
 
 class ProfileScreen extends StatelessWidget {
   static const String routeName = '/profile';
+
   static Route route() {
     return MaterialPageRoute(
-        settings: RouteSettings(name: routeName),
-        builder: (context) {
-          print(BlocProvider.of<AuthBloc>(context).state);
-
-          return BlocProvider.of<AuthBloc>(context).state.status ==
-              AuthStatus.unauthenticated
-              ? OnboardingScreen()
-              : ProfileScreen();
-        });
+      settings: RouteSettings(name: routeName),
+      builder: (context) => ProfileScreen(),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+      appBar: CustomAppBar(
+        title: 'PROFILE',
+      ),
+      body: Column(
+        children: [],
+      ),
+    );
   }
 }
