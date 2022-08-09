@@ -3,7 +3,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
+import 'package:unicons/unicons.dart';
 
 import '../widgets/widgets.dart';
 
@@ -24,10 +26,34 @@ class EmailVerification extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              CustomTextHeader(text: 'Did You Get The Verification Code?'),
+              Container(
+                child: Row(
+                  children: [
+                    Container(
+                      child: Icon(
+                        UniconsLine.envelope
+                      )
+                    ),
+                   CustomTextHeader( text:
+                      ' Please check your inbox',
+                   ),
+                  ],
+                ),
+              ),
+
+              SizedBox(height: 5,),
+              Text(
+                'We\'ve sent a code to your email',
+                style: Theme.of(context)
+                    .textTheme
+                    .headline6!
+                    .copyWith(fontWeight: FontWeight.w900, color: Colors.grey),
+              ),
+              SizedBox(height: 5,),
               CustomTextField(
-                hint: 'ENTER YOUR CODE',
+                hint: 'Enter the code',
                 controller: controller,
               ),
             ],

@@ -27,8 +27,17 @@ class Demographics extends StatelessWidget {
             children: [
               CustomTextHeader(text: 'What\'s Your Gender?'),
               SizedBox(height: 10),
-              CustomCheckbox(tabController: tabController, text: 'MALE'),
-              CustomCheckbox(tabController: tabController, text: 'FEMALE'),
+              Container(
+                child: Row(
+                  children: [
+                    CustomCheckbox(tabController: tabController, text: 'MALE'),
+                    CustomCheckbox(tabController: tabController, text: 'FEMALE'),
+                  ],
+                ),
+              ),
+
+              // CustomCheckbox(tabController: tabController, text: 'MALE'),
+              // CustomCheckbox(tabController: tabController, text: 'FEMALE'),
               SizedBox(height: 100),
               CustomTextHeader(text: 'What\'s Your Age?'),
               CustomTextField(
