@@ -74,8 +74,54 @@ class ProfileScreen extends StatelessWidget {
               ),
             ],
           ),
+          Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              children: [
+                TitleWithIcon(title: 'Biography', icon: Icons.edit),
+                Text(
+                  user.bio,
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyText1!
+                      .copyWith(height: 1.5),
+                ),
+                TitleWithIcon(title: 'Photos', icon: Icons.edit),
+                TitleWithIcon(title: 'Interests', icon: Icons.edit),
+                TitleWithIcon(title: 'Location', icon: Icons.edit),
+              ],
+            ),
+          ),
         ],
       ),
+    );
+  }
+}
+
+class TitleWithIcon extends StatelessWidget {
+  final String title;
+  final IconData icon;
+
+  const TitleWithIcon({
+    Key? key,
+    required this.title,
+    required this.icon,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          title,
+          style: Theme.of(context).textTheme.headline3,
+        ),
+        IconButton(
+          onPressed: () {},
+          icon: Icon(icon),
+        ),
+      ],
     );
   }
 }
