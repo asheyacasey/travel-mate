@@ -106,6 +106,7 @@ class ProfileScreen extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(10),
                                 border: Border.all(
                                   color: Theme.of(context).primaryColor,
+                                  width: 2,
                                 ),
                                 image: DecorationImage(
                                   fit: BoxFit.cover,
