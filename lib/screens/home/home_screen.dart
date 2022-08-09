@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:travel_mate/blocs/swipe_bloc.dart';
 
+import 'package:unicons/unicons.dart';
 import '../../widgets/choice_button.dart';
 import '../../widgets/custom_appbar.dart';
 import '../../widgets/user_card.dart';
@@ -30,7 +31,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-        title: 'DISCOVER',
+        title: 'Discover',
       ),
       body: BlocBuilder<SwipeBloc, SwipeState>(
         builder: (context, state) {
@@ -74,23 +75,24 @@ class HomeScreen extends StatelessWidget {
                           width: 60,
                           size: 30,
                           hasGradient: false,
-                          color: Colors.red,
-                          icon: Icons.clear_rounded),
-                      ChoiceButton(
+                          color: Colors.blueGrey,
+                          icon:  UniconsSolid.times_circle,
+                      ),
+                      PrimaryButton(
                         width: 70,
                         height: 70,
                         size: 40,
                         hasGradient: true,
-                        color: Theme.of(context).primaryColor,
-                        icon: Icons.favorite,
+                        color: Colors.white,
+                        icon: UniconsSolid.favorite,
                       ),
                       ChoiceButton(
                         height: 60,
                         width: 60,
                         size: 30,
                         hasGradient: false,
-                        color: Theme.of(context).colorScheme.secondary,
-                        icon: Icons.watch_later,
+                        color: Theme.of(context).primaryColor,
+                        icon:  UniconsSolid.check_circle,
                       ),
                     ],
                   ),

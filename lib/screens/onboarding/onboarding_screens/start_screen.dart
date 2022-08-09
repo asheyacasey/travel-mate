@@ -14,29 +14,28 @@ class Start extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Column(
-            children: [
-              Container(
-                height: 200,
-                width: 200,
-                child: SvgPicture.asset(
-                  'assets/logo.svg',
+          Padding(
+            padding: const EdgeInsets.only(top: 80.0),
+            child: Column(
+              children: [
+                Container(
+                  height: 220,
+                  width:220,
+                  child: SvgPicture.asset(
+                    'assets/start-up-logo.svg',
+                  ),
                 ),
-              ),
-              SizedBox(height: 50),
-              Text(
-                'Welcome to TravelMate',
-                style: Theme.of(context).textTheme.headline2,
-              ),
-              SizedBox(height: 20),
-              Text(
-                  'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context)
-                      .textTheme
-                      .headline6!
-                      .copyWith(height: 1.8)),
-            ],
+
+             //   SizedBox(height: 20),
+                Text(
+                    'Find your the ONE and make your travel to the next level.',
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context)
+                        .textTheme
+                        .headline4!
+                        .copyWith(height: 1.8, color: Colors.blueGrey)),
+              ],
+            ),
           ),
           CustomButton(tabController: tabController)
         ],

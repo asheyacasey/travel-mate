@@ -47,10 +47,7 @@ class OnboardingScreen extends StatelessWidget {
           if (!tabController.indexIsChanging) {}
         });
         return Scaffold(
-            appBar: CustomAppBar(
-              title: 'TravelMate',
-              hasAction: false,
-            ),
+            resizeToAvoidBottomInset : false,
             body: TabBarView(children: [
               Start(tabController: tabController),
               Email(tabController: tabController),

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:travel_mate/widgets/choice_button.dart';
+import 'package:unicons/unicons.dart';
 
 import '../../models/user_model.dart';
 
@@ -58,23 +60,24 @@ class UsersScreen extends StatelessWidget {
                             width: 80,
                             size: 30,
                             height: 80,
-                            color: Colors.red,
-                            icon: Icons.clear_rounded,
+                            color: Colors.blueGrey,
+                            icon:  UniconsSolid.times_circle,
                             hasGradient: true),
-                        ChoiceButton(
+                        PrimaryButton(
                           width: 80,
                           height: 80,
                           size: 30,
-                          color: Theme.of(context).primaryColor,
+                          color: Colors.white,
+                          icon: UniconsSolid.favorite,
                           hasGradient: true,
-                          icon: Icons.favorite,
+
                         ),
                         ChoiceButton(
                             width: 80,
                             size: 30,
                             height: 80,
-                            color: Colors.blue,
-                            icon: Icons.watch_later,
+                            color: Theme.of(context).primaryColor,
+                            icon:  UniconsSolid.check_circle,
                             hasGradient: true)
                       ],
                     ),
@@ -83,14 +86,23 @@ class UsersScreen extends StatelessWidget {
               ],
             ),
           ),
+          SizedBox( height: 20),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8.0),
-            child: Column(
+
+            child:
+
+            Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+
               children: [
                 Text(
                   '${user.name}, ${user.age}',
-                  style: Theme.of(context).textTheme.headline1,
+                  style: Theme.of(context).primaryTextTheme.headline2!.copyWith(
+                      fontFamily: GoogleFonts.fredoka().fontFamily,
+                      fontWeight: FontWeight.w900,
+                      color: Colors.black ),
+
                 ),
                 Text(
                   '${user.jobTitle}',
@@ -100,8 +112,8 @@ class UsersScreen extends StatelessWidget {
                 ),
                 SizedBox(height: 15),
                 Text('About',
-                    style: Theme.of(context).textTheme.headline2!.copyWith(
-                          fontWeight: FontWeight.normal,
+                    style: Theme.of(context).textTheme.headline3!.copyWith(
+                          fontWeight: FontWeight.bold,
                         )),
                 Text('${user.bio}',
                     style: Theme.of(context).textTheme.bodyText1!.copyWith(
@@ -110,7 +122,7 @@ class UsersScreen extends StatelessWidget {
                 SizedBox(height: 15),
                 Text('Interest',
                     style: Theme.of(context).textTheme.headline3!.copyWith(
-                          fontWeight: FontWeight.normal,
+                          fontWeight: FontWeight.bold,
                         )),
                 Row(
                   children: user.interests
@@ -139,3 +151,5 @@ class UsersScreen extends StatelessWidget {
     );
   }
 }
+
+

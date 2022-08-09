@@ -10,7 +10,7 @@ class CustomButton extends StatelessWidget {
   const CustomButton({
     Key? key,
     required this.tabController,
-    this.text = 'START',
+    this.text = 'Get Started',
   }) : super(key: key);
 
   @override
@@ -18,7 +18,7 @@ class CustomButton extends StatelessWidget {
     return DecoratedBox(
       decoration: BoxDecoration(
         color: Theme.of(context).primaryColor,
-        borderRadius: BorderRadius.circular(5.0),
+        borderRadius: BorderRadius.circular(25.0),
       ),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
