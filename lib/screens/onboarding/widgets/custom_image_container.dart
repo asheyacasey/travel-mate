@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:travel_mate/repositories/storage/storage_repository.dart';
 
 class CustomImageContainer extends StatelessWidget {
   final TabController tabController;
@@ -35,8 +38,21 @@ class CustomImageContainer extends StatelessWidget {
                   Icon(Icons.add_circle, color: Theme.of(context).primaryColor),
               onPressed: () async {
                 ImagePicker _picker = ImagePicker();
-                final XFile? image =
+                final XFile? _image =
                     await _picker.pickImage(source: ImageSource.gallery);
+
+                if (_image == null) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('No image was selected.'),
+                    ),
+                  );
+
+                  if (_image != null) {
+                    print('Uploading...');
+                    StorageRepository().uploadImage(_image);
+                  }
+                }
               },
             ),
           ),
