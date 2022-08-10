@@ -47,13 +47,22 @@ class Pictures extends StatelessWidget {
                                 ? CustomImageContainer(
                                     imageUrl: state.imageUrls[0])
                                 : CustomImageContainer(),
-                            CustomImageContainer(),
+                            (imagesCount > 1)
+                                ? CustomImageContainer(
+                                    imageUrl: state.imageUrls[1])
+                                : CustomImageContainer(),
                           ],
                         ),
                         Row(
                           children: [
-                            CustomImageContainer(),
-                            CustomImageContainer(),
+                            (imagesCount > 2)
+                                ? CustomImageContainer(
+                                    imageUrl: state.imageUrls[2])
+                                : CustomImageContainer(),
+                            (imagesCount > 3)
+                                ? CustomImageContainer(
+                                    imageUrl: state.imageUrls[3])
+                                : CustomImageContainer(),
                           ],
                         ),
                       ],
