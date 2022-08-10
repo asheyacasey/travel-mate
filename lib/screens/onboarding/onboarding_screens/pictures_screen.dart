@@ -4,6 +4,7 @@ import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
+import 'package:unicons/unicons.dart';
 
 import '../../../blocs/images/images_bloc.dart';
 import '../widgets/widgets.dart';
@@ -26,7 +27,33 @@ class Pictures extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              CustomTextHeader(text: 'Add 2 or More Pictures'),
+              Container(
+                  width: 50,
+                  height: 50,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Theme.of(context).primaryColor,
+                  ),
+                  child: Icon(
+                    UniconsLine.scenery,
+                    // size: 40,
+                    color: Colors.white,
+                  )),
+              SizedBox(height: 10),
+              Text(
+                'Profile Photo',
+                style: Theme.of(context)
+                    .primaryTextTheme
+                    .headline2!
+                    .copyWith(color: Colors.black),
+              ),
+              Text(
+                'Add at least 2 photos to continue',
+                style: Theme.of(context)
+                    .textTheme
+                    .headline6!
+                    .copyWith(fontWeight: FontWeight.w900, color: Colors.grey),
+              ),
               SizedBox(height: 10),
               BlocBuilder<ImagesBloc, ImagesState>(
                 builder: (context, state) {

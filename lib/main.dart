@@ -59,7 +59,7 @@ class MyApp extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             theme: theme(),
             onGenerateRoute: AppRouter.onGenerateRoute,
-            initialRoute: OnboardingScreen.routeName,
+            initialRoute: HomeScreen.routeName,
           )),
     );
   }

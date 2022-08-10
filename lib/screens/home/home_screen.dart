@@ -70,21 +70,35 @@ class HomeScreen extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      ChoiceButton(
-                          height: 60,
-                          width: 60,
-                          size: 30,
-                          hasGradient: false,
-                          color: Colors.blueGrey,
-                          icon:  UniconsSolid.times_circle,
+                      InkWell(
+                        onTap: (){
+                          context.read<SwipeBloc>()
+                            ..add(SwipeLeft(user: state.users[0]));
+                          print('Swiped Left');
+                        },
+                        child: ChoiceButton(
+                            height: 60,
+                            width: 60,
+                            size: 30,
+                            hasGradient: false,
+                            color: Colors.blueGrey,
+                            icon:  UniconsSolid.times_circle,
+                        ),
                       ),
-                      PrimaryButton(
-                        width: 70,
-                        height: 70,
-                        size: 40,
-                        hasGradient: true,
-                        color: Colors.white,
-                        icon: UniconsSolid.favorite,
+                      InkWell(
+                        onTap: (){
+                          context.read<SwipeBloc>()
+                            ..add(SwipeRight(user: state.users[0]));
+                          print('Swiped ');
+                        },
+                        child: PrimaryButton(
+                          width: 70,
+                          height: 70,
+                          size: 40,
+                          hasGradient: true,
+                          color: Colors.white,
+                          icon: UniconsSolid.favorite,
+                        ),
                       ),
                       ChoiceButton(
                         height: 60,
