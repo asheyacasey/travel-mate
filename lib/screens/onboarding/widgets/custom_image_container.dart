@@ -48,12 +48,6 @@ class CustomImageContainer extends StatelessWidget {
                     if (_image != null) {
                       print('Uploading...');
                       StorageRepository().uploadImage(_image);
-
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text('Image Uploaded.'),
-                        ),
-                      );
                     }
                   },
                 ),
