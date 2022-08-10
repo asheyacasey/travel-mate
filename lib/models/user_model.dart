@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
-class User extends Equatable{
+class User extends Equatable {
   final String? id;
   final String name;
   final int age;
@@ -26,20 +26,20 @@ class User extends Equatable{
 
   @override
   List<Object?> get props => [
-    id,
-    name,
-    age,
-    gender,
-    imageUrls,
-    interests,
-    bio,
-    jobTitle,
-    location,
-  ];
+        id,
+        name,
+        age,
+        gender,
+        imageUrls,
+        interests,
+        bio,
+        jobTitle,
+        location,
+      ];
 
   static User fromSnapshot(DocumentSnapshot snap) {
     User user = User(
-      id: snap.id,
+      id: snap['id'],
       name: snap['name'],
       age: snap['age'],
       gender: snap['gender'],
@@ -105,7 +105,7 @@ class User extends Equatable{
       jobTitle: 'Job Title Here',
       interests: ['Music', 'Economics', 'Football'],
       bio:
-      'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.',
+          'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.',
       location: 'Milan',
     ),
     User(
@@ -123,7 +123,7 @@ class User extends Equatable{
       jobTitle: 'Job Title Here',
       interests: ['Music', 'Economics', 'Football'],
       bio:
-      'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.',
+          'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.',
       location: 'Milan',
     ),
     User(
@@ -141,7 +141,7 @@ class User extends Equatable{
       jobTitle: 'Job Title Here',
       interests: ['Music', 'Economics', 'Football'],
       bio:
-      'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.',
+          'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.',
       location: 'Milan',
     ),
     User(
@@ -159,7 +159,7 @@ class User extends Equatable{
       jobTitle: 'Job Title Here',
       interests: ['Music', 'Economics', 'Football'],
       bio:
-      'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.',
+          'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.',
       location: 'Milan',
     ),
     User(
@@ -177,7 +177,7 @@ class User extends Equatable{
       jobTitle: 'Job Title Here',
       interests: ['Music', 'Economics', 'Football'],
       bio:
-      'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.',
+          'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.',
       location: 'Milan',
     ),
     User(
@@ -195,7 +195,7 @@ class User extends Equatable{
       jobTitle: 'Job Title Here',
       interests: ['Music', 'Economics', 'Football'],
       bio:
-      'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.',
+          'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.',
       location: 'Milan',
     ),
     User(
@@ -213,7 +213,7 @@ class User extends Equatable{
       jobTitle: 'Job Title Here',
       interests: ['Music', 'Economics', 'Football'],
       bio:
-      'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.',
+          'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.',
       location: 'Milan',
     ),
     User(
@@ -231,7 +231,7 @@ class User extends Equatable{
       jobTitle: 'Job Title Here',
       interests: ['Music', 'Economics', 'Football'],
       bio:
-      'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.',
+          'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.',
       location: 'Milan',
     ),
     User(
@@ -249,7 +249,7 @@ class User extends Equatable{
       jobTitle: 'Job Title Here',
       interests: ['Music', 'Economics', 'Football'],
       bio:
-      'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.',
+          'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.',
       location: 'Milan',
     ),
     User(
@@ -267,7 +267,7 @@ class User extends Equatable{
       jobTitle: 'Job Title Here',
       interests: ['Music', 'Economics', 'Football'],
       bio:
-      'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.',
+          'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.',
       location: 'Milan',
     ),
     User(
@@ -285,7 +285,7 @@ class User extends Equatable{
       jobTitle: 'Job Title Here',
       interests: ['Music', 'Economics', 'Football'],
       bio:
-      'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.',
+          'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.',
       location: 'Milan',
     ),
     User(
@@ -303,9 +303,8 @@ class User extends Equatable{
       jobTitle: 'Job Title Here',
       interests: ['Music', 'Economics', 'Football'],
       bio:
-      'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.',
+          'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.',
       location: 'Milan',
     ),
   ];
-
 }

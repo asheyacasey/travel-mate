@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:travel_mate/blocs/auth/auth_bloc.dart';
+import 'package:travel_mate/blocs/images/images_bloc.dart';
 import 'package:travel_mate/blocs/swipe_bloc.dart';
 import 'package:travel_mate/repositories/auth/auth_repository.dart';
+import 'package:travel_mate/repositories/database/database_repository.dart';
 
 import 'package:travel_mate/screens/home/home_screen.dart';
 import 'package:travel_mate/screens/screens.dart';
@@ -37,10 +39,21 @@ class MyApp extends StatelessWidget {
               ),
             ),
             BlocProvider(
-                //here's the problem
-                create: (_) => SwipeBloc()..add(LoadUsers(users: User.users)))
-          ], // users: User.users.where((where) => user.id != 1 ).toList(), -- don't delete this comment
-          // users: User.users
+              //here's the problem
+              create: (_) => SwipeBloc()
+                ..add(
+                  LoadUsers(users: User.users),
+                ), // users: User.users.where((where) => user.id != 1 ).toList(), -- don't delete this comment
+              // users: User.users
+            ),
+            BlocProvider(
+              create: (_) => ImagesBloc(
+                databaseRepository: DatabaseRepository(),
+              )..add(
+                  LoadImages(),
+                ),
+            ),
+          ],
           child: MaterialApp(
             title: 'TravelMate',
             debugShowCheckedModeBanner: false,

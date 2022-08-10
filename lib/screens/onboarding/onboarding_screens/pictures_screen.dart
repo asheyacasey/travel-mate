@@ -2,8 +2,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
 
+import '../../../blocs/images/images_bloc.dart';
 import '../widgets/widgets.dart';
 
 class Pictures extends StatelessWidget {
@@ -26,26 +28,50 @@ class Pictures extends StatelessWidget {
             children: [
               CustomTextHeader(text: 'Add 2 or More Pictures'),
               SizedBox(height: 10),
-              Row(
-                children: [
-                  CustomImageContainer(
-                    tabController: tabController,
-                  ),
-                  CustomImageContainer(
-                    tabController: tabController,
-                  ),
-                ],
+              BlocBuilder<ImagesBloc, ImagesState>(
+                builder: (context, state) {
+                  if (state is ImagesLoading) {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+
+                  if (state is ImagesLoaded) {
+                    var imagesCount = state.imageUrls.length;
+
+                    return Column(
+                      children: [
+                        Row(
+                          children: [
+                            (imagesCount > 0)
+                                ? CustomImageContainer(
+                                    imageUrl: state.imageUrls[0])
+                                : CustomImageContainer(),
+                            (imagesCount > 1)
+                                ? CustomImageContainer(
+                                    imageUrl: state.imageUrls[1])
+                                : CustomImageContainer(),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            (imagesCount > 2)
+                                ? CustomImageContainer(
+                                    imageUrl: state.imageUrls[2])
+                                : CustomImageContainer(),
+                            (imagesCount > 3)
+                                ? CustomImageContainer(
+                                    imageUrl: state.imageUrls[3])
+                                : CustomImageContainer(),
+                          ],
+                        ),
+                      ],
+                    );
+                  } else {
+                    return Text('Something went wrong.');
+                  }
+                },
               ),
-              Row(
-                children: [
-                  CustomImageContainer(
-                    tabController: tabController,
-                  ),
-                  CustomImageContainer(
-                    tabController: tabController,
-                  ),
-                ],
-              )
             ],
           ),
           Column(

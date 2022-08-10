@@ -17,7 +17,9 @@ class StorageRepository extends BaseStorageRepository {
           .putFile(
             File(image.path),
           )
-          .then((p0) => DatabaseRepository().updateUserPictures(image.name));
+          .then(
+            (p0) => DatabaseRepository().updateUserPictures(image.name),
+          );
     } catch (_) {}
   }
 
