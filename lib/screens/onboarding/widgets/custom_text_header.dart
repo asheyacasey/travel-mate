@@ -22,3 +22,18 @@ class CustomTextHeader extends StatelessWidget {
     );
   }
 }
+
+class CustomTextHeader1 extends StatelessWidget {
+  const CustomTextHeader1({Key? key, required this.text,}) : super(key: key);
+  final String text;
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      text,
+      style: Theme.of(context)
+          .primaryTextTheme
+          .headline2!
+          .copyWith(height: 1.8, color:Theme.of(context).primaryColor, fontSize: 36),
+    );
+  }
+}
