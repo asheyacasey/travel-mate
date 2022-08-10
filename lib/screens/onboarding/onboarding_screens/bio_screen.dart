@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
+import 'package:unicons/unicons.dart';
 
 import '../widgets/widgets.dart';
 
@@ -23,13 +24,46 @@ class Biography extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              CustomTextHeader(text: 'Describe Yourself a Bit'),
+              Container(
+                  width: 50,
+                  height: 50,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Theme.of(context).primaryColor,
+                  ),
+                  child: Icon(
+                    UniconsLine.smile_beam,
+                    size: 40,
+                    color: Colors.white,
+                  )),
+              SizedBox(height: 10),
+              Text(
+                'Describe Yourself a Bit',
+                style: Theme.of(context)
+                    .primaryTextTheme
+                    .headline2!
+                    .copyWith(color: Colors.black),
+              ),
+              Text(
+                'Add a short description about your travel experience',
+                style: Theme.of(context)
+                    .textTheme
+                    .headline6!
+                    .copyWith(fontWeight: FontWeight.w900, color: Colors.grey),
+              ),
+              SizedBox(height: 10),
               CustomTextField(
-                hint: 'ENTER YOUR BIO',
+                hint: 'Edit bio',
                 controller: controller,
               ),
               SizedBox(height: 100),
-              CustomTextHeader(text: 'What Do You Like?'),
+              Text(
+                'I\'m interested in...',
+                style: Theme.of(context)
+                    .primaryTextTheme
+                    .headline2!
+                    .copyWith(color: Colors.black),
+              ),
               Row(
                 children: [
                   CustomTextContainer(text: 'MOVIES'),

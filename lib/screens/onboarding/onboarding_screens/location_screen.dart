@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
+import 'package:unicons/unicons.dart';
 
 import '../widgets/widgets.dart';
 
@@ -23,10 +24,35 @@ class Location extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              CustomTextHeader(text: 'Where Are You?'),
+              Row(
+                children: [
+                  Container(
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Theme.of(context).primaryColor,
+                      ),
+                      child: Icon(
+                        UniconsLine.location_point,
+                        size: 30,
+                        color: Colors.white,
+                      )),
+                  SizedBox(width: 10,),
+                  Text(
+                    'Where are you?',
+                    style: Theme.of(context)
+                        .primaryTextTheme
+                        .headline2!
+                        .copyWith(color: Colors.black, fontSize: 24),
+                  ),
+                ],
+              ),
+              SizedBox(height: 10,),
               CustomTextField(
-                  hint: 'ENTER YOUR LOCATION', controller: controller),
+                  hint: 'Enter your location', controller: controller),
             ],
           ),
           Column(
