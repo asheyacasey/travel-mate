@@ -39,33 +39,19 @@ class Pictures extends StatelessWidget {
                   if (state is ImagesLoaded) {
                     var imagesCount = state.imageUrls.length;
 
-                    return Column(
-                      children: [
-                        Row(
-                          children: [
-                            (imagesCount > 0)
+                    return SizedBox(
+                      height: 350,
+                      child: GridView.builder(
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 3, childAspectRatio: 0.66),
+                          itemCount: 6,
+                          itemBuilder: (BuildContext context, int index) {
+                            return (imagesCount > index)
                                 ? CustomImageContainer(
-                                    imageUrl: state.imageUrls[0])
-                                : CustomImageContainer(),
-                            (imagesCount > 1)
-                                ? CustomImageContainer(
-                                    imageUrl: state.imageUrls[1])
-                                : CustomImageContainer(),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            (imagesCount > 2)
-                                ? CustomImageContainer(
-                                    imageUrl: state.imageUrls[2])
-                                : CustomImageContainer(),
-                            (imagesCount > 3)
-                                ? CustomImageContainer(
-                                    imageUrl: state.imageUrls[3])
-                                : CustomImageContainer(),
-                          ],
-                        ),
-                      ],
+                                    imageUrl: state.imageUrls[index])
+                                : CustomImageContainer();
+                          }),
                     );
                   } else {
                     return Text('Something went wrong.');
