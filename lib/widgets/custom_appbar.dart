@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:unicons/unicons.dart';
+
 
 class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
   final String title;
@@ -30,13 +31,15 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
               IconButton(
                   onPressed: () {},
                   icon: Icon(
-                    FeatherIcons.messageCircle,
+                    UniconsLine.comment,
                     color: Theme.of(context).primaryColor,
-                  )),
+                  )
+
+              ),
               IconButton(
                   onPressed: () {},
                   icon: Icon(
-                    FeatherIcons.user,
+                    UniconsLine.user,
                     color: Theme.of(context).primaryColor,
                   )),
             ]

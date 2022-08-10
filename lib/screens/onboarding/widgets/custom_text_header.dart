@@ -4,12 +4,10 @@ import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
 class CustomTextHeader extends StatelessWidget {
-  final TabController tabController;
   final String text;
 
   const CustomTextHeader({
     Key? key,
-    required this.tabController,
     required this.text,
   }) : super(key: key);
 
@@ -19,8 +17,23 @@ class CustomTextHeader extends StatelessWidget {
       text,
       style: Theme.of(context)
           .textTheme
+          .headline3!
+          .copyWith(fontWeight: FontWeight.bold),
+    );
+  }
+}
+
+class CustomTextHeader1 extends StatelessWidget {
+  const CustomTextHeader1({Key? key, required this.text,}) : super(key: key);
+  final String text;
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      text,
+      style: Theme.of(context)
+          .primaryTextTheme
           .headline2!
-          .copyWith(fontWeight: FontWeight.normal),
+          .copyWith(height: 1.8, color:Theme.of(context).primaryColor, fontSize: 36),
     );
   }
 }

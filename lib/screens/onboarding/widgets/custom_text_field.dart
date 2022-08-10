@@ -2,31 +2,41 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:unicons/unicons.dart';
 
 class CustomTextField extends StatelessWidget {
-  final TabController tabController;
-  final String text;
+  final TextEditingController? controller;
+  final String hint;
+  final Function(String)? onChanged;
 
   const CustomTextField({
     Key? key,
-    required this.tabController,
-    required this.text,
+    this.controller,
+    required this.hint,
+    this.onChanged,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return TextField(
+
       decoration: InputDecoration(
-          filled: true,
-          fillColor: Colors.white,
-          hintText: text,
-          contentPadding: const EdgeInsets.only(bottom: 5.0, top: 12.5),
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.white),
+        filled: true,
+        fillColor: Colors.white,
+        hintText: hint,
+        contentPadding: const EdgeInsets.only(bottom: 5.0, top: 12.5, left: 15.0),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Theme.of(context).primaryColorLight),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+            color: Color(0xFFF5C518),
+            width: 2
           ),
-          enabledBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: Colors.white),
-          )),
+          borderRadius: BorderRadius.circular(8)
+        ),
+      ),
+      onChanged: onChanged,
     );
   }
 }

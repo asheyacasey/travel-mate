@@ -3,7 +3,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
+import 'package:unicons/unicons.dart';
 
 import '../widgets/widgets.dart';
 
@@ -17,18 +19,54 @@ class EmailVerification extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final controller = TextEditingController();
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 50.0),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              CustomTextHeader(
-                  tabController: tabController,
-                  text: 'Did You Get The Verification Code?'),
+              Container(
+                  width: 90,
+                  height: 90,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Theme.of(context).primaryColor,
+                  ),
+                  child: Icon(
+                    UniconsLine.envelopes,
+                    size: 40,
+                    color: Colors.white,
+                  )),
+              SizedBox(
+                height: 15,
+              ),
+              Text(
+                'Verification Code',
+                style: Theme.of(context)
+                    .primaryTextTheme
+                    .headline2!
+                    .copyWith(color: Colors.black),
+              ),
+              SizedBox(
+                height: 5,
+              ),
+              Text(
+                'Please enter the verification code sent to your email',
+                style: Theme.of(context)
+                    .textTheme
+                    .headline6!
+                    .copyWith(fontWeight: FontWeight.w900, color: Colors.grey),
+              ),
+              SizedBox(
+                height: 25,
+              ),
               CustomTextField(
-                  tabController: tabController, text: 'ENTER YOUR CODE'),
+                hint: 'Enter the code',
+                controller: controller,
+              ),
             ],
           ),
           Column(
@@ -40,7 +78,7 @@ class EmailVerification extends StatelessWidget {
                 unselectedColor: Theme.of(context).backgroundColor,
               ),
               SizedBox(height: 10),
-              CustomButton(tabController: tabController, text: 'NEXT STEP')
+              CustomButton(tabController: tabController, text: 'NEXT STEP'),
             ],
           ),
         ],

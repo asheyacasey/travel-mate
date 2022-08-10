@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:travel_mate/cubits/signup/signup_cubit.dart';
+import 'package:travel_mate/repositories/auth/auth_repository.dart';
 import 'package:travel_mate/screens/onboarding/onboarding_screens/bio_screen.dart';
 import 'package:travel_mate/screens/onboarding/onboarding_screens/demo_screen.dart';
 import 'package:travel_mate/screens/onboarding/onboarding_screens/email_screen.dart';
 import 'package:travel_mate/screens/onboarding/onboarding_screens/email_verification_screen.dart';
+import 'package:travel_mate/screens/onboarding/onboarding_screens/location_screen.dart';
 import 'package:travel_mate/screens/onboarding/onboarding_screens/pictures_screen.dart';
 import 'package:travel_mate/widgets/widgets.dart';
 
@@ -15,7 +19,11 @@ class OnboardingScreen extends StatelessWidget {
   static Route route() {
     return MaterialPageRoute(
       settings: RouteSettings(name: routeName),
-      builder: (context) => OnboardingScreen(),
+      builder: (context) => BlocProvider(
+        create: (_) =>
+            SignupCubit(authRepository: context.read<AuthRepository>()),
+        child: OnboardingScreen(),
+      ),
     );
   }
 
@@ -26,6 +34,7 @@ class OnboardingScreen extends StatelessWidget {
     Tab(text: 'Demographics'),
     Tab(text: 'Pictures'),
     Tab(text: 'Biography'),
+    Tab(text: 'Location'),
   ];
 
   @override
@@ -38,10 +47,7 @@ class OnboardingScreen extends StatelessWidget {
           if (!tabController.indexIsChanging) {}
         });
         return Scaffold(
-            appBar: CustomAppBar(
-              title: 'TravelMate',
-              hasAction: false,
-            ),
+            resizeToAvoidBottomInset : false,
             body: TabBarView(children: [
               Start(tabController: tabController),
               Email(tabController: tabController),
@@ -49,6 +55,7 @@ class OnboardingScreen extends StatelessWidget {
               Demographics(tabController: tabController),
               Pictures(tabController: tabController),
               Biography(tabController: tabController),
+              Location(tabController: tabController),
             ]));
       }),
     );
