@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:travel_mate/screens/onboarding/widgets/widgets.dart';
 import 'package:travel_mate/widgets/custom_appbar.dart';
+import 'package:unicons/unicons.dart';
 
 import '../../models/models.dart';
 
@@ -19,7 +20,7 @@ class ProfileScreen extends StatelessWidget {
     final User user = User.users[0];
     return Scaffold(
       appBar: CustomAppBar(
-        title: 'PROFILE',
+        title: 'Profile',
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -27,69 +28,158 @@ class ProfileScreen extends StatelessWidget {
             SizedBox(
               height: 10,
             ),
-            Stack(
+            Column(
               children: [
                 Container(
-                  height: MediaQuery.of(context).size.height / 4,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey,
-                        offset: Offset(3, 3),
-                        blurRadius: 3,
-                        spreadRadius: 3,
+                  alignment: Alignment.center,
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
+                      child: Container(
+                        width: 150,
+                        height: 150,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          image: DecorationImage(
+                            fit: BoxFit.cover,
+                            image: NetworkImage(user.imageUrls[0]),
+                          ),
+                        ),
                       ),
-                    ],
-                    image: DecorationImage(
-                      fit: BoxFit.cover,
-                      image: NetworkImage(user.imageUrls[0]),
                     ),
                   ),
                 ),
                 Container(
-                  height: MediaQuery.of(context).size.height / 4,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    gradient: LinearGradient(
-                      colors: [
-                        Color.fromARGB(0, 0, 0, 0),
-                        Color.fromARGB(150, 0, 0, 0),
-                      ],
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                    ),
-                  ),
-                  child: Align(
-                    alignment: Alignment.bottomLeft,
-                    child: Padding(
-                      padding: const EdgeInsets.only(bottom: 10, left: 10),
-                      child: Text(
-                        user.name,
-                        style: Theme.of(context)
-                            .textTheme
-                            .headline1!
-                            .copyWith(color: Colors.white),
-                      ),
-                    ),
+                  alignment: Alignment.center,
+                  width: 100,
+                  height: 50,
+                  child: Text(
+                    user.name,
+                    style: Theme.of(context)
+                        .primaryTextTheme
+                        .headline2!
+                        .copyWith(color: Colors.black),
                   ),
                 ),
               ],
             ),
             Padding(
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  TitleWithIcon(title: 'Biography', icon: Icons.edit),
-                  Text(
-                    user.bio,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyText1!
-                        .copyWith(height: 1.5),
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Theme.of(context).primaryColor,
+                      ),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          Container(
+                            child: Icon(
+                              UniconsLine.user_location,
+                              color: Theme.of(context).primaryColor,
+                              size: 30,
+                            ),
+                          ),
+                          SizedBox(
+                            width: 2,
+                          ),
+                          Text(
+                            'Cebu City',
+                            style: Theme.of(context)
+                                .textTheme
+                                .headline4!
+                                .copyWith(height: 1.5),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
-                  TitleWithIcon(title: 'Photos', icon: Icons.edit),
+                  SizedBox(height: 10,),
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Theme.of(context).primaryColor,
+                      ),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Column(
+                        children: [
+                          TitleWithIcon(title: 'Profile Summary', icon:  UniconsLine.edit),
+                          Text(
+                            user.bio,
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyText1!
+                                .copyWith(height: 1.5),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Theme.of(context).primaryColor,
+                      ),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Column(
+                        children: [
+                          TitleWithIcon(title: 'I\'m interested in...', icon:  UniconsLine.edit),
+                          Row(
+                            children: [
+                              CustomTextContainer(text: 'Music'),
+                              CustomTextContainer(text: 'Politics'),
+                              CustomTextContainer(text: 'Karaoke'),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 10,),
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Theme.of(context).primaryColor,
+                      ),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Column(
+                        children: [
+                          TitleWithIcon(title: 'My Travel Itinerary', icon: UniconsLine.edit),
+                          Row(
+                            children: [
+                              CustomTextContainer(text: 'Oslob'),
+                              CustomTextContainer(text: 'Osmena Peak'),
+                              CustomTextContainer(text: 'Tops Mountain View'),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  TitleWithIcon(title: 'Photos', icon:  UniconsLine.edit),
                   SizedBox(
                     height: 125,
                     child: ListView.builder(
@@ -116,22 +206,6 @@ class ProfileScreen extends StatelessWidget {
                             ),
                           );
                         }),
-                  ),
-                  TitleWithIcon(title: 'Interests', icon: Icons.edit),
-                  Row(
-                    children: [
-                      CustomTextContainer(text: 'Music'),
-                      CustomTextContainer(text: 'Politics'),
-                      CustomTextContainer(text: 'Karaoke'),
-                    ],
-                  ),
-                  TitleWithIcon(title: 'Location', icon: Icons.edit),
-                  Text(
-                    'UJS-R Basak Campus',
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyText1!
-                        .copyWith(height: 1.5),
                   ),
                 ],
               ),
@@ -160,11 +234,11 @@ class TitleWithIcon extends StatelessWidget {
       children: [
         Text(
           title,
-          style: Theme.of(context).textTheme.headline3,
+          style: Theme.of(context).textTheme.headline4!.copyWith(fontWeight: FontWeight.w900),
         ),
         IconButton(
           onPressed: () {},
-          icon: Icon(icon),
+          icon: Icon(icon, color: Colors.grey, size: 15,),
         ),
       ],
     );

@@ -18,6 +18,7 @@ class UserImageSmall extends StatelessWidget {
       height: height,
       width: width,
       decoration: BoxDecoration(
+
         image: DecorationImage(
           image: NetworkImage(imageUrl),
           fit: BoxFit.cover,

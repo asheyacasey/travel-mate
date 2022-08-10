@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:unicons/unicons.dart';
 import '../../models/user_match_model.dart';
 
 class ChatScreen extends StatelessWidget {
@@ -137,7 +138,7 @@ class ChatScreen extends StatelessWidget {
                     color: Theme.of(context).primaryColor,
                   ),
                   child: IconButton(
-                    icon: Icon(Icons.send_outlined),
+                    icon: Icon(UniconsLine.message),
                     onPressed: () {},
                     color: Colors.white,
                   ),
