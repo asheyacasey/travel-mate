@@ -23,26 +23,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     });
   }
 
-  @override
-  Stream<AuthState> mapEventToState(
-    AuthEvent event,
-  ) async* {
-    if (event is AuthUserChanged) {
-      yield* _mapAuthUserChangedToState(event);
-    }
-  }
-
-  Stream<AuthState> _mapAuthUserChangedToState(AuthUserChanged event) async* {
-    yield AuthState.authenticated(user: event.user);
-  }
-
   void _onAuthUserChanged(
     AuthUserChanged event,
     Emitter<AuthState> emit,
   ) {
-    event.user != null
-        ? emit(AuthState.authenticated(user: event.user))
-        : emit(AuthState.unauthenticated());
+    emit(AuthState.authenticated(user: event.user));
   }
 
   @override

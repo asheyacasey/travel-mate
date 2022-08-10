@@ -13,18 +13,15 @@ class ImagesBloc extends Bloc<ImagesEvent, ImagesState> {
 
   ImagesBloc({required DatabaseRepository databaseRepository})
       : _databaseRepository = databaseRepository,
-        super(ImagesLoading());
-
-  Stream<ImagesState> mapEventToState(ImagesEvent event) async* {
-    if (event is LoadImages) {
-      yield* _mapLoadImagesToState();
-    }
-    if (event is UpdateImages) {
-      yield* _mapUpdateImagesToState(event);
-    }
+        super(ImagesLoading()) {
+    on<LoadImages>(_onLoadImages);
+    on<UpdateImages>(_onUpdateImages);
   }
 
-  Stream<ImagesState> _mapLoadImagesToState() async* {
+  void _onLoadImages(
+    LoadImages event,
+    Emitter<ImagesState> emit,
+  ) {
     _databaseSubscription?.cancel();
 
     _databaseRepository.getUser().listen(
@@ -34,7 +31,10 @@ class ImagesBloc extends Bloc<ImagesEvent, ImagesState> {
         );
   }
 
-  Stream<ImagesState> _mapUpdateImagesToState(UpdateImages event) async* {
-    yield ImagesLoaded(imageUrls: event.imageUrls);
+  void _onUpdateImages(
+    UpdateImages event,
+    Emitter<ImagesState> emit,
+  ) {
+    emit(ImagesLoaded(imageUrls: event.imageUrls));
   }
 }

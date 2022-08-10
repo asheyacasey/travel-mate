@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:travel_mate/blocs/swipe_bloc.dart';
 
 import 'package:unicons/unicons.dart';
+import '../../blocs/blocs.dart';
 import '../../widgets/choice_button.dart';
 import '../../widgets/custom_appbar.dart';
 import '../../widgets/user_card.dart';
@@ -71,12 +71,12 @@ class HomeScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       ChoiceButton(
-                          height: 60,
-                          width: 60,
-                          size: 30,
-                          hasGradient: false,
-                          color: Colors.blueGrey,
-                          icon:  UniconsSolid.times_circle,
+                        height: 60,
+                        width: 60,
+                        size: 30,
+                        hasGradient: false,
+                        color: Colors.blueGrey,
+                        icon: UniconsSolid.times_circle,
                       ),
                       PrimaryButton(
                         width: 70,
@@ -92,7 +92,7 @@ class HomeScreen extends StatelessWidget {
                         size: 30,
                         hasGradient: false,
                         color: Theme.of(context).primaryColor,
-                        icon:  UniconsSolid.check_circle,
+                        icon: UniconsSolid.check_circle,
                       ),
                     ],
                   ),
