@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:travel_mate/blocs/swipe_bloc.dart';
 
 import 'package:unicons/unicons.dart';
+import '../../blocs/blocs.dart';
 import '../../widgets/choice_button.dart';
 import '../../widgets/custom_appbar.dart';
 import '../../widgets/user_card.dart';
@@ -106,7 +106,7 @@ class HomeScreen extends StatelessWidget {
                         size: 30,
                         hasGradient: false,
                         color: Theme.of(context).primaryColor,
-                        icon:  UniconsSolid.check_circle,
+                        icon: UniconsSolid.check_circle,
                       ),
                     ],
                   ),
