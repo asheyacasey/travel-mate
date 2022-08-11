@@ -44,7 +44,7 @@ class OnboardingScreen extends StatelessWidget {
   static const List<Tab> tabs = <Tab>[
     Tab(text: 'Start'),
     Tab(text: 'Email'),
-    Tab(text: 'Email Verification'),
+    // Tab(text: 'Email Verification'),
     Tab(text: 'Demographics'),
     Tab(text: 'Pictures'),
     Tab(text: 'Biography'),
@@ -65,7 +65,7 @@ class OnboardingScreen extends StatelessWidget {
             body: TabBarView(children: [
               Start(tabController: tabController),
               Email(tabController: tabController),
-              EmailVerification(tabController: tabController),
+              // EmailVerification(tabController: tabController),
               Demographics(tabController: tabController),
               Pictures(tabController: tabController),
               Biography(tabController: tabController),
