@@ -24,19 +24,19 @@ class MyApp extends StatelessWidget {
     return MultiRepositoryProvider(
       providers: [
         RepositoryProvider(
-          create: (_) => AuthRepository(),
+          create: (context) => AuthRepository(),
         ),
       ],
       child: MultiBlocProvider(
         providers: [
           BlocProvider(
-            create: (_) => AuthBloc(
+            create: (context) => AuthBloc(
               authRepository: context.read<AuthRepository>(),
             ),
           ),
           BlocProvider(
             //here's the problem
-            create: (_) => SwipeBloc()
+            create: (context) => SwipeBloc()
               ..add(
                 LoadUsers(
                   users: User.users.where((user) => user.id != 1).toList(),
@@ -50,7 +50,7 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           theme: theme(),
           onGenerateRoute: AppRouter.onGenerateRoute,
-          initialRoute: OnboardingScreen.routeName,
+          initialRoute: SplashScreen.routeName,
         ),
       ),
     );
