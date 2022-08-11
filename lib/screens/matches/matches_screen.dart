@@ -24,7 +24,7 @@ class MatchesScreen extends StatelessWidget {
         .where((match) => match.userId == 1 && match.chat!.isNotEmpty)
         .toList();
     return Scaffold(
-      appBar: CustomAppBar(title: 'MATCHES'),
+      appBar: CustomAppBar(title: 'TravelMate'),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(20.0),
