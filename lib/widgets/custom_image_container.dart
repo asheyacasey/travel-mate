@@ -49,10 +49,14 @@ class CustomImageContainer extends StatelessWidget {
                     }
                     if (_image != null) {
                       print('Uploading...');
-                      //StorageRepository().uploadImage(_image);
                       context
                           .read<OnboardingBloc>()
                           .add(UpdateUserImages(image: _image));
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Image uploaded'),
+                        ),
+                      );
                     }
                   },
                 ),
