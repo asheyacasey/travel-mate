@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:travel_mate/screens/onboarding/widgets/widgets.dart';
 import 'package:travel_mate/widgets/custom_appbar.dart';
@@ -69,39 +70,7 @@ class ProfileScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Theme.of(context).primaryColor,
-                      ),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        children: [
-                          Container(
-                            child: Icon(
-                              UniconsLine.user_location,
-                              color: Theme.of(context).primaryColor,
-                              size: 30,
-                            ),
-                          ),
-                          SizedBox(
-                            width: 2,
-                          ),
-                          Text(
-                            'Cebu City',
-                            style: Theme.of(context)
-                                .textTheme
-                                .headline4!
-                                .copyWith(height: 1.5),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
+
                   SizedBox(height: 10,),
                   Container(
                     width: MediaQuery.of(context).size.width,
@@ -155,30 +124,6 @@ class ProfileScreen extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: 10,),
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Theme.of(context).primaryColor,
-                      ),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Column(
-                        children: [
-                          TitleWithIcon(title: 'My Travel Itinerary', icon: UniconsLine.edit),
-                          Row(
-                            children: [
-                              CustomTextContainer(text: 'Oslob'),
-                              CustomTextContainer(text: 'Osmena Peak'),
-                              CustomTextContainer(text: 'Tops Mountain View'),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
                   TitleWithIcon(title: 'Photos', icon:  UniconsLine.edit),
                   SizedBox(
                     height: 125,
@@ -206,6 +151,40 @@ class ProfileScreen extends StatelessWidget {
                             ),
                           );
                         }),
+                  ),
+                  SizedBox(height: 15,),
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Theme.of(context).primaryColor,
+                      ),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          Container(
+                            child: Icon(
+                              UniconsLine.user_location,
+                              color: Theme.of(context).primaryColor,
+                              size: 30,
+                            ),
+                          ),
+                          SizedBox(
+                            width: 2,
+                          ),
+                          Text(
+                            'Cebu City',
+                            style: Theme.of(context)
+                                .textTheme
+                                .headline4!
+                                .copyWith(height: 1.5),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                 ],
               ),
