@@ -1,19 +1,19 @@
-part of 'images_bloc.dart';
+// part of 'images_bloc.dart';
 
-abstract class ImagesState extends Equatable {
-  const ImagesState();
+// abstract class ImagesState extends Equatable {
+//   const ImagesState();
 
-  @override
-  List<Object> get props => [];
-}
+//   @override
+//   List<Object> get props => [];
+// }
 
-class ImagesLoading extends ImagesState {}
+// class ImagesLoading extends ImagesState {}
 
-class ImagesLoaded extends ImagesState {
-  final List<dynamic> imageUrls;
+// class ImagesLoaded extends ImagesState {
+//   final List<dynamic> imageUrls;
 
-  ImagesLoaded({this.imageUrls = const []});
+//   ImagesLoaded({this.imageUrls = const []});
 
-  @override
-  List<Object> get props => [imageUrls];
-}
+//   @override
+//   List<Object> get props => [imageUrls];
+// }

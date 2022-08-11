@@ -1,19 +1,19 @@
-part of 'images_bloc.dart';
+// part of 'images_bloc.dart';
 
-abstract class ImagesEvent extends Equatable {
-  const ImagesEvent();
+// abstract class ImagesEvent extends Equatable {
+//   const ImagesEvent();
 
-  @override
-  List<Object> get props => [];
-}
+//   @override
+//   List<Object> get props => [];
+// }
 
-class LoadImages extends ImagesEvent {}
+// class LoadImages extends ImagesEvent {}
 
-class UpdateImages extends ImagesEvent {
-  final List<dynamic> imageUrls;
+// class UpdateImages extends ImagesEvent {
+//   final List<dynamic> imageUrls;
 
-  UpdateImages(this.imageUrls);
+//   UpdateImages(this.imageUrls);
 
-  @override
-  List<Object> get props => [imageUrls];
-}
+//   @override
+//   List<Object> get props => [imageUrls];
+// }
