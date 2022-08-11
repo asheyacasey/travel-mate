@@ -1,8 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:travel_mate/repositories/auth/base_auth_repository.dart';
 
-
-
 class AuthRepository extends BaseAuthRepository {
   final auth.FirebaseAuth _firebaseAuth;
 
@@ -26,10 +24,10 @@ class AuthRepository extends BaseAuthRepository {
   }
 
   @override
-  Stream<auth.User?> get user => _firebaseAuth.userChanges();
-
-  @override
   Future<void> signOut() async {
     await _firebaseAuth.signOut();
   }
+
+  @override
+  Stream<auth.User?> get user => _firebaseAuth.userChanges();
 }
