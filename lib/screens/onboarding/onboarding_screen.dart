@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:travel_mate/blocs/blocs.dart';
 import 'package:travel_mate/cubits/signup/signup_cubit.dart';
 import 'package:travel_mate/repositories/auth/auth_repository.dart';
+import 'package:travel_mate/repositories/database/database_repository.dart';
+import 'package:travel_mate/repositories/repositories.dart';
 import 'package:travel_mate/screens/onboarding/onboarding_screens/bio_screen.dart';
 import 'package:travel_mate/screens/onboarding/onboarding_screens/demo_screen.dart';
 import 'package:travel_mate/screens/onboarding/onboarding_screens/email_screen.dart';
 import 'package:travel_mate/screens/onboarding/onboarding_screens/email_verification_screen.dart';
 import 'package:travel_mate/screens/onboarding/onboarding_screens/location_screen.dart';
 import 'package:travel_mate/screens/onboarding/onboarding_screens/pictures_screen.dart';
-import 'package:travel_mate/widgets/widgets.dart';
 
 import 'onboarding_screens/start_screen.dart';
 import 'onboarding_screens/email_screen.dart';
@@ -19,9 +21,21 @@ class OnboardingScreen extends StatelessWidget {
   static Route route() {
     return MaterialPageRoute(
       settings: RouteSettings(name: routeName),
-      builder: (context) => BlocProvider(
-        create: (_) =>
-            SignupCubit(authRepository: context.read<AuthRepository>()),
+      builder: (context) => MultiBlocProvider(
+        providers: [
+          BlocProvider<SignupCubit>(
+            create: (_) =>
+                SignupCubit(authRepository: context.read<AuthRepository>()),
+          ),
+          BlocProvider<OnboardingBloc>(
+            create: (_) => OnboardingBloc(
+              databaseRepository: DatabaseRepository(),
+              storageRepostitory: StorageRepository(),
+            )..add(
+                StartOnboarding(),
+              ),
+          )
+        ],
         child: OnboardingScreen(),
       ),
     );
@@ -47,7 +61,7 @@ class OnboardingScreen extends StatelessWidget {
           if (!tabController.indexIsChanging) {}
         });
         return Scaffold(
-            resizeToAvoidBottomInset : false,
+            resizeToAvoidBottomInset: false,
             body: TabBarView(children: [
               Start(tabController: tabController),
               Email(tabController: tabController),

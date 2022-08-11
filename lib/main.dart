@@ -44,13 +44,6 @@ class MyApp extends StatelessWidget {
               ), // users: User.users.where((where) => user.id != 1 ).toList(), -- don't delete this comment
             // users: User.users
           ),
-          BlocProvider(
-            create: (_) => ImagesBloc(
-              databaseRepository: DatabaseRepository(),
-            )..add(
-                LoadImages(),
-              ),
-          ),
         ],
         child: MaterialApp(
           title: 'TravelMate',

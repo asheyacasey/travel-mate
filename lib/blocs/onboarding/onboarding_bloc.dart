@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:image_picker/image_picker.dart';
@@ -52,5 +50,15 @@ class OnboardingBloc extends Bloc<OnboardingEvent, OnboardingState> {
   void _onUpdateUserImages(
     UpdateUserImages event,
     Emitter<OnboardingState> emit,
-  ) {}
+  ) async {
+    if (state is OnboardingLoaded) {
+      User user = (state as OnboardingLoaded).user;
+
+      await _storageRepository.uploadImage(user, event.image);
+
+      _databaseRepository.getUser(user.id!).listen((user) {
+        add(UpdateUser(user: user));
+      });
+    }
+  }
 }

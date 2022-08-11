@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:travel_mate/blocs/onboarding/onboarding_bloc.dart';
 import 'package:travel_mate/repositories/storage/storage_repository.dart';
 
 class CustomImageContainer extends StatelessWidget {
@@ -47,7 +49,10 @@ class CustomImageContainer extends StatelessWidget {
                     }
                     if (_image != null) {
                       print('Uploading...');
-                      StorageRepository().uploadImage(_image);
+                      //StorageRepository().uploadImage(_image);
+                      context
+                          .read<OnboardingBloc>()
+                          .add(UpdateUserImages(image: _image));
                     }
                   },
                 ),
