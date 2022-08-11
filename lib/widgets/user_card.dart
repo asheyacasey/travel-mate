@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:travel_mate/widgets/user_image.dart';
 import 'package:travel_mate/widgets/user_image_small.dart';
 import 'package:unicons/unicons.dart';
 
@@ -25,14 +26,8 @@ class UserCard extends StatelessWidget {
           width: MediaQuery.of(context).size.width,
           child: Stack(
             children: [
-              Container(
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    fit: BoxFit.cover,
-                    image: NetworkImage(user.imageUrls[0]),
-                  ),
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
+              UserImage.large(
+                imageUrl: user.imageUrls[0],
               ),
               Container(
                   decoration: BoxDecoration(
@@ -53,41 +48,52 @@ class UserCard extends StatelessWidget {
                   children: [
                     Text(
                       '${user.name}, ${user.age}',
-                      style: Theme.of(context).primaryTextTheme.headline2!.copyWith(
-                          fontFamily: GoogleFonts.fredoka().fontFamily,
-                          fontWeight: FontWeight.w900,
-                          color: Colors.white ),
+                      style: Theme.of(context)
+                          .primaryTextTheme
+                          .headline2!
+                          .copyWith(
+                              fontFamily: GoogleFonts.fredoka().fontFamily,
+                              fontWeight: FontWeight.w900,
+                              color: Colors.white),
                     ),
                     Text(
                       '${user.jobTitle}',
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline3!
-                          .copyWith(
-                        color: Colors.white,
-                        fontWeight: FontWeight.normal,
-                      ),
+                      style: Theme.of(context).textTheme.headline3!.copyWith(
+                            color: Colors.white,
+                            fontWeight: FontWeight.normal,
+                          ),
                     ),
-                    Row(
-                      children: [
-                        UserImageSmall(imageUrl: user.imageUrls[1]),
-                        UserImageSmall(imageUrl: user.imageUrls[2]),
-                        UserImageSmall(imageUrl: user.imageUrls[3]),
-                        UserImageSmall(imageUrl: user.imageUrls[4]),
-                        Container(
-                          width: 35,
-                          height: 35,
-                          decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.white
-                          ),
-                          child: Icon(UniconsLine.info_circle,
-                            size: 25, color: Theme.of(context).primaryColor,
-
-                          ),
-                        )
-                      ],
-                    )
+                    SizedBox(
+                      height: 70,
+                      child: ListView.builder(
+                          shrinkWrap: true,
+                          scrollDirection: Axis.horizontal,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemCount: user.imageUrls.length + 1,
+                          itemBuilder:(builder, index){
+                            return index < user.imageUrls.length
+                                ? UserImage.small(
+                              imageUrl: user.imageUrls[index],
+                              margin: const EdgeInsets.only(
+                                top: 8.0,
+                                right: 8.0,
+                              ),
+                            )
+                                : Container(
+                              width: 35,
+                              height: 35,
+                              decoration: const BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.white,
+                              ),
+                              child: Icon(
+                                Icons.info_outline,
+                                size: 25,
+                                color: Theme.of(context).primaryColor,
+                              ),
+                            );
+                          },),
+                    ),
                   ],
                 ),
               )
