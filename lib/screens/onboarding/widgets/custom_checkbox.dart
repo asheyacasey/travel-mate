@@ -4,25 +4,28 @@ import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
 class CustomCheckbox extends StatelessWidget {
-  final TabController tabController;
   final String text;
+  final bool value;
+  final Function(bool?)? onChanged;
 
   const CustomCheckbox({
     Key? key,
-    required this.tabController,
     required this.text,
+    required this.value,
+    required this.onChanged,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Checkbox(value: false, onChanged: (bool? newValue) {}),
+        Checkbox(
+          value: value,
+          onChanged: onChanged,
+        ),
         Text(
           text,
-          style: Theme.of(context)
-              .textTheme
-              .headline4,
+          style: Theme.of(context).textTheme.headline4,
         )
       ],
     );
