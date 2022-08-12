@@ -6,4 +6,5 @@ abstract class BaseDatabaseRepository {
   Future<String> createUser(User user);
   Future<void> updateUser(User user);
   Future<void> updateUserPictures(User user, String imageName);
+  Future<void> updateUserSwipe(String userId,String matchId, bool isSwipeRight);
 }

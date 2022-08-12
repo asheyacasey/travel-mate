@@ -48,15 +48,20 @@ class DatabaseRepository extends BaseDatabaseRepository {
   }
 
   @override
-  Stream<List<User>> getUsers(String userID, String gender) {
+  Stream<List<User>> getUsers(User user) {
+    List<String> userFilter = List.from(user.swipeLeft!)
+    ..addAll(user.swipeRight!)
+    ..add(user.id!);
+
     return _firebaseFirestore
         .collection('users')
-        .where('gender', isNotEqualTo: gender)
+        .where('gender', isEqualTo: 'Female')
+        .where(FieldPath.documentId, whereNotIn: userFilter )
         .snapshots()
         .map((snapshot) => snapshot.docs
-        .map(
-          (doc) => User.fromSnapshot(doc),
-    )
-        .toList());
+            .map(
+              (doc) => User.fromSnapshot(doc),
+            )
+            .toList());
   }
 }
