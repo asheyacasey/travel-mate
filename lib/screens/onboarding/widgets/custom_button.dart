@@ -28,10 +28,10 @@ class CustomButton extends StatelessWidget {
           primary: Colors.transparent,
         ),
         onPressed: () async {
-          if (tabController.index <= 4) {
-            tabController.animateTo(tabController.index + 1);
-          } else {
+          if (tabController.index == 5) {
             Navigator.pushNamed(context, '/');
+          } else {
+            tabController.animateTo(tabController.index + 1);
           }
 
           if (tabController.index == 2) {

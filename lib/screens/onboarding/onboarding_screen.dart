@@ -21,23 +21,7 @@ class OnboardingScreen extends StatelessWidget {
   static Route route() {
     return MaterialPageRoute(
       settings: RouteSettings(name: routeName),
-      builder: (context) => MultiBlocProvider(
-        providers: [
-          BlocProvider<SignupCubit>(
-            create: (_) =>
-                SignupCubit(authRepository: context.read<AuthRepository>()),
-          ),
-          BlocProvider<OnboardingBloc>(
-            create: (_) => OnboardingBloc(
-              databaseRepository: DatabaseRepository(),
-              storageRepostitory: StorageRepository(),
-            )..add(
-                StartOnboarding(),
-              ),
-          )
-        ],
-        child: OnboardingScreen(),
-      ),
+      builder: (context) => OnboardingScreen(),
     );
   }
 
@@ -57,9 +41,6 @@ class OnboardingScreen extends StatelessWidget {
       length: tabs.length,
       child: Builder(builder: (BuildContext context) {
         final TabController tabController = DefaultTabController.of(context)!;
-        tabController.addListener(() {
-          if (!tabController.indexIsChanging) {}
-        });
         return Scaffold(
             resizeToAvoidBottomInset: false,
             body: TabBarView(children: [
