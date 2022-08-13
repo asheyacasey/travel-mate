@@ -1,19 +1,27 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:travel_mate/blocs/auth/auth_bloc.dart';
+import 'package:travel_mate/screens/onboarding/onboarding_screen.dart';
 import 'package:travel_mate/screens/onboarding/widgets/widgets.dart';
 import 'package:travel_mate/widgets/custom_appbar.dart';
 import 'package:unicons/unicons.dart';
 
 import '../../models/models.dart';
+import '../../repositories/repositories.dart';
 
 class ProfileScreen extends StatelessWidget {
   static const String routeName = '/profile';
 
   static Route route() {
     return MaterialPageRoute(
-      settings: RouteSettings(name: routeName),
-      builder: (context) => ProfileScreen(),
-    );
+        settings: RouteSettings(name: routeName),
+        builder: (context) {
+          print(BlocProvider.of<AuthBloc>(context).state.status);
+          return BlocProvider.of<AuthBloc>(context).state.status ==
+                  AuthStatus.unauthenticated
+              ? OnboardingScreen()
+              : ProfileScreen();
+        });
   }
 
   @override
@@ -70,8 +78,9 @@ class ProfileScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-
-                  SizedBox(height: 10,),
+                  SizedBox(
+                    height: 10,
+                  ),
                   Container(
                     width: MediaQuery.of(context).size.width,
                     decoration: BoxDecoration(
@@ -84,7 +93,8 @@ class ProfileScreen extends StatelessWidget {
                       padding: const EdgeInsets.all(10.0),
                       child: Column(
                         children: [
-                          TitleWithIcon(title: 'Profile Summary', icon:  UniconsLine.edit),
+                          TitleWithIcon(
+                              title: 'Profile Summary', icon: UniconsLine.edit),
                           Text(
                             user.bio,
                             style: Theme.of(context)
@@ -111,7 +121,9 @@ class ProfileScreen extends StatelessWidget {
                       padding: const EdgeInsets.all(10.0),
                       child: Column(
                         children: [
-                          TitleWithIcon(title: 'I\'m interested in...', icon:  UniconsLine.edit),
+                          TitleWithIcon(
+                              title: 'I\'m interested in...',
+                              icon: UniconsLine.edit),
                           Row(
                             children: [
                               CustomTextContainer(text: 'Music'),
@@ -123,8 +135,10 @@ class ProfileScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  SizedBox(height: 10,),
-                  TitleWithIcon(title: 'Photos', icon:  UniconsLine.edit),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  TitleWithIcon(title: 'Photos', icon: UniconsLine.edit),
                   SizedBox(
                     height: 125,
                     child: ListView.builder(
@@ -152,7 +166,9 @@ class ProfileScreen extends StatelessWidget {
                           );
                         }),
                   ),
-                  SizedBox(height: 15,),
+                  SizedBox(
+                    height: 15,
+                  ),
                   Container(
                     width: MediaQuery.of(context).size.width,
                     decoration: BoxDecoration(
@@ -186,6 +202,20 @@ class ProfileScreen extends StatelessWidget {
                       ),
                     ),
                   ),
+                  TextButton(
+                    onPressed: () {
+                      RepositoryProvider.of<AuthRepository>(context).signOut();
+                    },
+                    child: Center(
+                      child: Text(
+                        'Sign Out',
+                        style: Theme.of(context)
+                            .textTheme
+                            .headline5!
+                            .copyWith(color: Theme.of(context).primaryColor),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -213,11 +243,18 @@ class TitleWithIcon extends StatelessWidget {
       children: [
         Text(
           title,
-          style: Theme.of(context).textTheme.headline4!.copyWith(fontWeight: FontWeight.w900),
+          style: Theme.of(context)
+              .textTheme
+              .headline4!
+              .copyWith(fontWeight: FontWeight.w900),
         ),
         IconButton(
           onPressed: () {},
-          icon: Icon(icon, color: Colors.grey, size: 15,),
+          icon: Icon(
+            icon,
+            color: Colors.grey,
+            size: 15,
+          ),
         ),
       ],
     );

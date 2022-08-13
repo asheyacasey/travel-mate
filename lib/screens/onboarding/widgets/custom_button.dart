@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:travel_mate/cubits/signup/signup_cubit.dart';
@@ -25,10 +24,15 @@ class CustomButton extends StatelessWidget {
           elevation: 0,
           primary: Colors.transparent,
         ),
-        onPressed: () {
-          tabController.animateTo(tabController.index + 1);
+        onPressed: () async {
+          if (tabController.index == 5) {
+            Navigator.pushNamed(context, '/');
+          } else {
+            tabController.animateTo(tabController.index + 1);
+          }
+
           if (tabController.index == 2) {
-            context.read<SignupCubit>().signupWithCredentials();
+            context.read<SignupCubit>().signupWithCredentials(context);
           }
         },
         child: Container(

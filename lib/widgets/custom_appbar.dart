@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:unicons/unicons.dart';
 
-
 class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
   final String title;
   final bool hasAction;
@@ -22,7 +21,7 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
         'assets/logo.svg',
         height: 90,
       ),
-      title:Text(
+      title: Text(
         title,
         style: Theme.of(context).primaryTextTheme.headline2,
       ),
@@ -33,11 +32,11 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
                   icon: Icon(
                     UniconsLine.comment,
                     color: Theme.of(context).primaryColor,
-                  )
-
-              ),
+                  )),
               IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/profile');
+                  },
                   icon: Icon(
                     UniconsLine.user,
                     color: Theme.of(context).primaryColor,
