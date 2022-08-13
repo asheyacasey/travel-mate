@@ -61,7 +61,7 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           theme: theme(),
           onGenerateRoute: AppRouter.onGenerateRoute,
-          initialRoute: SplashScreen.routeName,
+          initialRoute: LoginScreen.routeName,
         ),
       ),
     );
