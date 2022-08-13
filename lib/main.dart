@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:travel_mate/cubits/cubits.dart';
 
 import 'package:travel_mate/screens/screens.dart';
 
@@ -35,6 +36,20 @@ class MyApp extends StatelessWidget {
               authRepository: context.read<AuthRepository>(),
             ),
           ),
+          BlocProvider<SignupCubit>(
+            create: (context) =>
+                SignupCubit(authRepository: context.read<AuthRepository>()),
+          ),
+          BlocProvider<LoginCubit>(
+            create: (context) =>
+                LoginCubit(authRepository: context.read<AuthRepository>()),
+          ),
+          BlocProvider<OnboardingBloc>(
+            create: (context) => OnboardingBloc(
+              databaseRepository: DatabaseRepository(),
+              storageRepostitory: StorageRepository(),
+            ),
+          ),
           BlocProvider(
             //here's the problem
             create: (context) => SwipeBloc()
@@ -44,16 +59,6 @@ class MyApp extends StatelessWidget {
                 ),
               ), // users: User.users.where((where) => user.id != 1 ).toList(), -- don't delete this comment
             // users: User.users
-          ),
-          BlocProvider<SignupCubit>(
-            create: (context) =>
-                SignupCubit(authRepository: context.read<AuthRepository>()),
-          ),
-          BlocProvider<OnboardingBloc>(
-            create: (context) => OnboardingBloc(
-              databaseRepository: DatabaseRepository(),
-              storageRepostitory: StorageRepository(),
-            ),
           ),
         ],
         child: MaterialApp(
