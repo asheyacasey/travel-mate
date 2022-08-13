@@ -7,7 +7,6 @@ import 'package:step_progress_indicator/step_progress_indicator.dart';
 import 'package:travel_mate/blocs/blocs.dart';
 import 'package:unicons/unicons.dart';
 
-import '../../../blocs/images/images_bloc.dart';
 import '../widgets/widgets.dart';
 
 class Pictures extends StatelessWidget {

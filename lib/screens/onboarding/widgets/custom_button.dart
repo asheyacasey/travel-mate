@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:travel_mate/cubits/signup/signup_cubit.dart';
-import 'package:travel_mate/models/models.dart';
-
-import '../../../blocs/blocs.dart';
 
 class CustomButton extends StatelessWidget {
   final TabController tabController;
@@ -35,23 +32,7 @@ class CustomButton extends StatelessWidget {
           }
 
           if (tabController.index == 2) {
-            await context.read<SignupCubit>().signupWithCredentials();
-
-            User user = User(
-              id: context.read<SignupCubit>().state.user!.uid,
-              name: '',
-              age: 0,
-              gender: '',
-              imageUrls: [],
-              interests: [],
-              bio: '',
-              jobTitle: '',
-              location: '',
-            );
-
-            context.read<OnboardingBloc>().add(
-                  StartOnboarding(user: user),
-                );
+            context.read<SignupCubit>().signupWithCredentials(context);
           }
         },
         child: Container(

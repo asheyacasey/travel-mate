@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:travel_mate/blocs/blocs.dart';
+import 'package:travel_mate/blocs/onboarding/onboarding_bloc.dart';
 import 'package:travel_mate/cubits/signup/signup_cubit.dart';
-import 'package:travel_mate/repositories/auth/auth_repository.dart';
-import 'package:travel_mate/repositories/database/database_repository.dart';
-import 'package:travel_mate/repositories/repositories.dart';
 import 'package:travel_mate/screens/onboarding/onboarding_screens/bio_screen.dart';
 import 'package:travel_mate/screens/onboarding/onboarding_screens/demo_screen.dart';
 import 'package:travel_mate/screens/onboarding/onboarding_screens/email_screen.dart';
-import 'package:travel_mate/screens/onboarding/onboarding_screens/email_verification_screen.dart';
 import 'package:travel_mate/screens/onboarding/onboarding_screens/location_screen.dart';
 import 'package:travel_mate/screens/onboarding/onboarding_screens/pictures_screen.dart';
 
+import '../../models/user_model.dart';
 import 'onboarding_screens/start_screen.dart';
 import 'onboarding_screens/email_screen.dart';
 
@@ -37,22 +34,44 @@ class OnboardingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: tabs.length,
-      child: Builder(builder: (BuildContext context) {
-        final TabController tabController = DefaultTabController.of(context)!;
-        return Scaffold(
-            resizeToAvoidBottomInset: false,
-            body: TabBarView(children: [
-              Start(tabController: tabController),
-              Email(tabController: tabController),
-              // EmailVerification(tabController: tabController),
-              Demographics(tabController: tabController),
-              Pictures(tabController: tabController),
-              Biography(tabController: tabController),
-              Location(tabController: tabController),
-            ]));
-      }),
+    return BlocListener<SignupCubit, SignupState>(
+      bloc: context.read<SignupCubit>(),
+      listener: (context, SignupState state) {
+        if (state.status == SignupStatus.success) {
+          User u = User(
+            id: context.read<SignupCubit>().state.user!.uid,
+            name: '',
+            age: 0,
+            gender: '',
+            imageUrls: [],
+            interests: [],
+            bio: '',
+            jobTitle: '',
+            location: '',
+          );
+
+          context.read<OnboardingBloc>().add(
+                StartOnboarding(user: u),
+              );
+        }
+      },
+      child: DefaultTabController(
+        length: tabs.length,
+        child: Builder(builder: (BuildContext context) {
+          final TabController tabController = DefaultTabController.of(context)!;
+          return Scaffold(
+              resizeToAvoidBottomInset: false,
+              body: TabBarView(children: [
+                Start(tabController: tabController),
+                Email(tabController: tabController),
+                // EmailVerification(tabController: tabController),
+                Demographics(tabController: tabController),
+                Pictures(tabController: tabController),
+                Biography(tabController: tabController),
+                Location(tabController: tabController),
+              ]));
+        }),
+      ),
     );
   }
 }
