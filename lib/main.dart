@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:travel_mate/blocs/profile/profile_bloc.dart';
 
 import 'package:travel_mate/screens/screens.dart';
 
@@ -27,6 +28,12 @@ class MyApp extends StatelessWidget {
         RepositoryProvider(
           create: (context) => AuthRepository(),
         ),
+        RepositoryProvider(
+          create: (context) => StorageRepository(),
+        ),
+        RepositoryProvider(
+          create: (context) => DatabaseRepository(),
+        ),
       ],
       child: MultiBlocProvider(
         providers: [
@@ -51,9 +58,17 @@ class MyApp extends StatelessWidget {
           ),
           BlocProvider<OnboardingBloc>(
             create: (context) => OnboardingBloc(
-              databaseRepository: DatabaseRepository(),
-              storageRepostitory: StorageRepository(),
+              databaseRepository: context.read<DatabaseRepository>(),
+              storageRepostitory: context.read<StorageRepository>(),
             ),
+          ),
+          BlocProvider(
+            create: (context) => ProfileBloc(
+              authBloc: context.read<AuthBloc>(),
+              databaseRepository: context.read<DatabaseRepository>(),
+            )..add(
+                LoadProfile(userId: context.read<AuthBloc>().state.user!.uid),
+              ),
           ),
         ],
         child: MaterialApp(
