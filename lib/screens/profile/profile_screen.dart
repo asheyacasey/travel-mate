@@ -27,7 +27,6 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final User user = User.users[0];
     return Scaffold(
       appBar: CustomAppBar(
         title: 'Profile',
@@ -46,58 +45,42 @@ class ProfileScreen extends StatelessWidget {
                   SizedBox(
                     height: 10,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 20, right: 20),
-                    child: Stack(
-                      children: [
-                        Container(
-                          height: MediaQuery.of(context).size.height / 4,
-                          decoration: BoxDecoration(
-                              image: DecorationImage(
-                                image: NetworkImage(state.user.imageUrls[0]),
-                                fit: BoxFit.cover,
-                              ),
-                              borderRadius: BorderRadius.circular(15.0),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey,
-                                  offset: Offset(1, 1),
-                                  blurRadius: 2,
-                                  spreadRadius: 2,
+                  Column(
+                    children: [
+                      Container(
+                        alignment: Alignment.center,
+                        child: Align(
+                          alignment: Alignment.center,
+                          child: Padding(
+                            padding:
+                                EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
+                            child: Container(
+                              width: 150,
+                              height: 150,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8),
+                                image: DecorationImage(
+                                  fit: BoxFit.cover,
+                                  image: NetworkImage(state.user.imageUrls[0]),
                                 ),
-                              ]),
-                        ),
-                        Container(
-                          height: MediaQuery.of(context).size.height / 4,
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: [
-                                Color.fromARGB(0, 0, 0, 0),
-                                Color.fromARGB(150, 0, 0, 0),
-                              ],
-                              begin: Alignment.topCenter,
-                              end: Alignment.bottomCenter,
-                            ),
-                            borderRadius: BorderRadius.circular(15.0),
-                          ),
-                          child: Align(
-                            alignment: Alignment.bottomCenter,
-                            child: Padding(
-                              padding: const EdgeInsets.only(bottom: 40.0),
-                              child: Text(
-                                state.user.name,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headline2!
-                                    .copyWith(
-                                      color: Colors.white,
-                                    ),
                               ),
                             ),
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                      Container(
+                        alignment: Alignment.center,
+                        width: MediaQuery.of(context).size.width,
+                        height: 50,
+                        child: Text(
+                          state.user.name,
+                          style: Theme.of(context)
+                              .primaryTextTheme
+                              .headline2!
+                              .copyWith(color: Colors.black),
+                        ),
+                      ),
+                    ],
                   ),
                   Padding(
                     padding:
@@ -154,8 +137,7 @@ class ProfileScreen extends StatelessWidget {
                                     icon: UniconsLine.edit),
                                 Row(
                                   children: [
-                                    CustomTextContainer(
-                                        text: state.user.interests[0]),
+                                    CustomTextContainer(text: state.user.interests[0]),
                                   ],
                                 ),
                               ],
@@ -186,8 +168,8 @@ class ProfileScreen extends StatelessWidget {
                                       ),
                                       image: DecorationImage(
                                         fit: BoxFit.cover,
-                                        image: NetworkImage(
-                                            state.user.imageUrls[index]),
+                                        image:
+                                            NetworkImage(state.user.imageUrls[index]),
                                       ),
                                     ),
                                   ),
