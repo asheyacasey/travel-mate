@@ -6,6 +6,7 @@ import 'package:travel_mate/screens/onboarding/widgets/widgets.dart';
 import 'package:travel_mate/widgets/custom_appbar.dart';
 import 'package:unicons/unicons.dart';
 
+import '../../blocs/blocs.dart';
 import '../../models/models.dart';
 import '../../repositories/repositories.dart';
 
@@ -32,194 +33,228 @@ class ProfileScreen extends StatelessWidget {
         title: 'Profile',
       ),
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            SizedBox(
-              height: 10,
-            ),
-            Column(
-              children: [
-                Container(
-                  alignment: Alignment.center,
-                  child: Align(
-                    alignment: Alignment.center,
-                    child: Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
-                      child: Container(
-                        width: 150,
-                        height: 150,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          image: DecorationImage(
-                            fit: BoxFit.cover,
-                            image: NetworkImage(user.imageUrls[0]),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Container(
-                  alignment: Alignment.center,
-                  width: 100,
-                  height: 50,
-                  child: Text(
-                    user.name,
-                    style: Theme.of(context)
-                        .primaryTextTheme
-                        .headline2!
-                        .copyWith(color: Colors.black),
-                  ),
-                ),
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+        child: BlocBuilder<ProfileBloc, ProfileState>(
+          builder: (context, state) {
+            if (state is ProfileLoading) {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+            if (state is ProfileLoaded) {
+              return Column(
                 children: [
                   SizedBox(
                     height: 10,
                   ),
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Theme.of(context).primaryColor,
-                      ),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Column(
-                        children: [
-                          TitleWithIcon(
-                              title: 'Profile Summary', icon: UniconsLine.edit),
-                          Text(
-                            user.bio,
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyText1!
-                                .copyWith(height: 1.5),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Theme.of(context).primaryColor,
-                      ),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Column(
-                        children: [
-                          TitleWithIcon(
-                              title: 'I\'m interested in...',
-                              icon: UniconsLine.edit),
-                          Row(
-                            children: [
-                              CustomTextContainer(text: 'Music'),
-                              CustomTextContainer(text: 'Politics'),
-                              CustomTextContainer(text: 'Karaoke'),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  TitleWithIcon(title: 'Photos', icon: UniconsLine.edit),
-                  SizedBox(
-                    height: 125,
-                    child: ListView.builder(
-                        itemCount: 5,
-                        shrinkWrap: true,
-                        scrollDirection: Axis.horizontal,
-                        itemBuilder: (context, index) {
-                          return Padding(
-                            padding: const EdgeInsets.only(right: 5),
-                            child: Container(
-                              height: 125,
-                              width: 100,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                border: Border.all(
-                                  color: Theme.of(context).primaryColor,
-                                  width: 2,
+                  Padding(
+                    padding: const EdgeInsets.only(left: 20, right: 20),
+                    child: Stack(
+                      children: [
+                        Container(
+                          height: MediaQuery.of(context).size.height / 4,
+                          decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: NetworkImage(state.user.imageUrls[0]),
+                                fit: BoxFit.cover,
+                              ),
+                              borderRadius: BorderRadius.circular(15.0),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey,
+                                  offset: Offset(1, 1),
+                                  blurRadius: 2,
+                                  spreadRadius: 2,
                                 ),
-                                image: DecorationImage(
-                                  fit: BoxFit.cover,
-                                  image: NetworkImage(user.imageUrls[index]),
-                                ),
+                              ]),
+                        ),
+                        Container(
+                          height: MediaQuery.of(context).size.height / 4,
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [
+                                Color.fromARGB(0, 0, 0, 0),
+                                Color.fromARGB(150, 0, 0, 0),
+                              ],
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                            ),
+                            borderRadius: BorderRadius.circular(15.0),
+                          ),
+                          child: Align(
+                            alignment: Alignment.bottomCenter,
+                            child: Padding(
+                              padding: const EdgeInsets.only(bottom: 40.0),
+                              child: Text(
+                                state.user.name,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headline2!
+                                    .copyWith(
+                                      color: Colors.white,
+                                    ),
                               ),
                             ),
-                          );
-                        }),
-                  ),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Theme.of(context).primaryColor,
-                      ),
-                      borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                      ],
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        children: [
-                          Container(
-                            child: Icon(
-                              UniconsLine.user_location,
+                  ),
+                  Padding(
+                    padding:
+                        const EdgeInsets.only(left: 20, right: 20, bottom: 20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Container(
+                          width: MediaQuery.of(context).size.width,
+                          decoration: BoxDecoration(
+                            border: Border.all(
                               color: Theme.of(context).primaryColor,
-                              size: 30,
+                            ),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Column(
+                              children: [
+                                TitleWithIcon(
+                                    title: 'Profile Summary',
+                                    icon: UniconsLine.edit),
+                                Text(
+                                  state.user.bio,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1!
+                                      .copyWith(height: 1.5),
+                                ),
+                              ],
                             ),
                           ),
-                          SizedBox(
-                            width: 2,
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Container(
+                          width: MediaQuery.of(context).size.width,
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: Theme.of(context).primaryColor,
+                            ),
+                            borderRadius: BorderRadius.circular(8),
                           ),
-                          Text(
-                            'Cebu City',
-                            style: Theme.of(context)
-                                .textTheme
-                                .headline4!
-                                .copyWith(height: 1.5),
+                          child: Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Column(
+                              children: [
+                                TitleWithIcon(
+                                    title: 'I\'m interested in...',
+                                    icon: UniconsLine.edit),
+                                Row(
+                                  children: [
+                                    CustomTextContainer(
+                                        text: state.user.interests[0]),
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      RepositoryProvider.of<AuthRepository>(context).signOut();
-                    },
-                    child: Center(
-                      child: Text(
-                        'Sign Out',
-                        style: Theme.of(context)
-                            .textTheme
-                            .headline5!
-                            .copyWith(color: Theme.of(context).primaryColor),
-                      ),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        TitleWithIcon(title: 'Photos', icon: UniconsLine.edit),
+                        SizedBox(
+                          height: 125,
+                          child: ListView.builder(
+                              itemCount: state.user.imageUrls.length,
+                              shrinkWrap: true,
+                              scrollDirection: Axis.horizontal,
+                              itemBuilder: (context, index) {
+                                return Padding(
+                                  padding: const EdgeInsets.only(right: 5),
+                                  child: Container(
+                                    height: 125,
+                                    width: 100,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      border: Border.all(
+                                        color: Theme.of(context).primaryColor,
+                                        width: 2,
+                                      ),
+                                      image: DecorationImage(
+                                        fit: BoxFit.cover,
+                                        image: NetworkImage(
+                                            state.user.imageUrls[index]),
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              }),
+                        ),
+                        SizedBox(
+                          height: 15,
+                        ),
+                        Container(
+                          width: MediaQuery.of(context).size.width,
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: Theme.of(context).primaryColor,
+                            ),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Row(
+                              children: [
+                                Container(
+                                  child: Icon(
+                                    UniconsLine.user_location,
+                                    color: Theme.of(context).primaryColor,
+                                    size: 30,
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 2,
+                                ),
+                                Text(
+                                  state.user.location,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headline4!
+                                      .copyWith(height: 1.5),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            RepositoryProvider.of<AuthRepository>(context)
+                                .signOut();
+                          },
+                          child: Center(
+                            child: Text(
+                              'Sign Out',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline5!
+                                  .copyWith(
+                                      color: Theme.of(context).primaryColor),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
-              ),
-            ),
-          ],
+              );
+            } else {
+              return Text('Something went wrong');
+            }
+          },
         ),
       ),
     );
