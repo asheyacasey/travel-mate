@@ -53,8 +53,8 @@ class MyApp extends StatelessWidget {
           ),
           BlocProvider<OnboardingBloc>(
             create: (context) => OnboardingBloc(
-              databaseRepository: DatabaseRepository(),
-              storageRepostitory: StorageRepository(),
+              databaseRepository: context.read<DatabaseRepository>(),
+              storageRepostitory: context.read<StorageRepository>(),
             ),
           ),
           BlocProvider(
@@ -63,6 +63,14 @@ class MyApp extends StatelessWidget {
               databaseRepository: context.read<DatabaseRepository>(),
               authBloc: context.read<AuthBloc>(),
             ),
+          ),
+          BlocProvider(
+            create: (context) => ProfileBloc(
+              authBloc: context.read<AuthBloc>(),
+              databaseRepository: context.read<DatabaseRepository>(),
+            )..add(
+                LoadProfile(userId: context.read<AuthBloc>().state.user!.uid),
+              ),
           ),
         ],
         child: MaterialApp(
