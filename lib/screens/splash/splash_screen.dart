@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:travel_mate/screens/home/home_screen.dart';
 import 'package:travel_mate/screens/onboarding/onboarding_screen.dart';
+import 'package:travel_mate/screens/screens.dart';
 
 import '../../blocs/blocs.dart';
 
@@ -28,9 +29,8 @@ class SplashScreen extends StatelessWidget {
           if (state.status == AuthStatus.unauthenticated) {
             Timer(
               Duration(seconds: 1),
-              () => Navigator.of(context).pushNamedAndRemoveUntil(
-                OnboardingScreen.routeName,
-                ModalRoute.withName('/onboarding'),
+              () => Navigator.of(context).pushNamed(
+                LoginScreen.routeName,
               ),
             );
           } else if (state.status == AuthStatus.authenticated) {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:travel_mate/cubits/cubits.dart';
 import 'package:travel_mate/blocs/profile/profile_bloc.dart';
 
 import 'package:travel_mate/screens/screens.dart';
@@ -42,30 +43,26 @@ class MyApp extends StatelessWidget {
               authRepository: context.read<AuthRepository>(),
             ),
           ),
+          BlocProvider<SignupCubit>(
+            create: (context) =>
+                SignupCubit(authRepository: context.read<AuthRepository>()),
+          ),
+          BlocProvider<LoginCubit>(
+            create: (context) =>
+                LoginCubit(authRepository: context.read<AuthRepository>()),
+          ),
+          BlocProvider<OnboardingBloc>(
+            create: (context) => OnboardingBloc(
+              databaseRepository: DatabaseRepository(),
+              storageRepostitory: StorageRepository(),
+            ),
+          ),
           BlocProvider(
             //here's the problem
             create: (context) => SwipeBloc(
               databaseRepository: context.read<DatabaseRepository>(),
               authBloc: context.read<AuthBloc>(),
             ),
-          ),
-          BlocProvider<SignupCubit>(
-            create: (context) =>
-                SignupCubit(authRepository: context.read<AuthRepository>()),
-          ),
-          BlocProvider<OnboardingBloc>(
-            create: (context) => OnboardingBloc(
-              databaseRepository: context.read<DatabaseRepository>(),
-              storageRepostitory: context.read<StorageRepository>(),
-            ),
-          ),
-          BlocProvider(
-            create: (context) => ProfileBloc(
-              authBloc: context.read<AuthBloc>(),
-              databaseRepository: context.read<DatabaseRepository>(),
-            )..add(
-                LoadProfile(userId: context.read<AuthBloc>().state.user!.uid),
-              ),
           ),
         ],
         child: MaterialApp(
