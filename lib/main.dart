@@ -44,13 +44,10 @@ class MyApp extends StatelessWidget {
           ),
           BlocProvider(
             //here's the problem
-            create: (context) => SwipeBloc()
-              ..add(
-                LoadUsers(
-                  users: User.users.where((user) => user.id != 1).toList(),
-                ),
-              ), // users: User.users.where((where) => user.id != 1 ).toList(), -- don't delete this comment
-            // users: User.users
+            create: (context) => SwipeBloc(
+              databaseRepository: context.read<DatabaseRepository>(),
+              authBloc: context.read<AuthBloc>(),
+            ),
           ),
           BlocProvider<SignupCubit>(
             create: (context) =>
