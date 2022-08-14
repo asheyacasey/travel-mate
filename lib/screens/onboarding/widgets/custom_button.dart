@@ -5,11 +5,15 @@ import 'package:travel_mate/cubits/signup/signup_cubit.dart';
 class CustomButton extends StatelessWidget {
   final TabController tabController;
   final String text;
+  final String? password;
+  final String? confirmPassword;
 
   const CustomButton({
     Key? key,
     required this.tabController,
     this.text = 'Get Started',
+    this.password = '',
+    this.confirmPassword = '',
   }) : super(key: key);
 
   @override
@@ -32,7 +36,19 @@ class CustomButton extends StatelessWidget {
           }
 
           if (tabController.index == 2) {
-            context.read<SignupCubit>().signupWithCredentials(context);
+            print(password);
+            print(confirmPassword);
+            if (password != confirmPassword) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('Passwords do not match'),
+                ),
+              );
+              tabController.animateTo(tabController.index - 1);
+            }
+            if (password == confirmPassword) {
+              context.read<SignupCubit>().signupWithCredentials(context);
+            }
           }
         },
         child: Container(

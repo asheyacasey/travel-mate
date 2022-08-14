@@ -14,6 +14,8 @@ class Email extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String? pass;
+    String? confirmPass;
     return BlocBuilder<SignupCubit, SignupState>(
       builder: (context, state) {
         return Padding(
@@ -28,25 +30,39 @@ class Email extends StatelessWidget {
                   children: [
                     Text('Welcome,',
                         style: Theme.of(context)
-                        .primaryTextTheme
-                        .headline2!
-                        .copyWith(height: 1.8, color:Theme.of(context).primaryColor, fontSize: 36)),
+                            .primaryTextTheme
+                            .headline2!
+                            .copyWith(
+                                height: 1.8,
+                                color: Theme.of(context).primaryColor,
+                                fontSize: 36)),
                     Text('TravelMate!',
                         style: Theme.of(context)
                             .primaryTextTheme
                             .headline2!
-                            .copyWith(color: Theme.of(context).primaryColorLight, fontSize: 36)
+                            .copyWith(
+                                color: Theme.of(context).primaryColorLight,
+                                fontSize: 36)),
+                    SizedBox(
+                      height: 10,
                     ),
-                    SizedBox(height: 10,),
-                    Text('Create an account and start looking for the perfect travel date to your exciting journey.',  style: Theme.of(context)
-                        .primaryTextTheme
-                        .bodyText1!
-                        .copyWith(color: Colors.grey, fontWeight: FontWeight.bold)),
-                    SizedBox(height: 50,),
+                    Text(
+                        'Create an account and start looking for the perfect travel date to your exciting journey.',
+                        style: Theme.of(context)
+                            .primaryTextTheme
+                            .bodyText1!
+                            .copyWith(
+                                color: Colors.grey,
+                                fontWeight: FontWeight.bold)),
+                    SizedBox(
+                      height: 50,
+                    ),
                     CustomTextHeader(
                       text: 'Email Address',
                     ),
-                    SizedBox(height: 5,),
+                    SizedBox(
+                      height: 5,
+                    ),
                     CustomTextField(
                       hint: 'Enter your email',
                       onChanged: (value) {
@@ -54,14 +70,33 @@ class Email extends StatelessWidget {
                         print(state.email);
                       },
                     ),
-                    SizedBox(height: 20,),
+                    SizedBox(
+                      height: 20,
+                    ),
                     CustomTextHeader(text: 'Create a Password'),
                     SizedBox(height: 5),
                     CustomTextField(
-
+                      hint: 'Enter your password',
+                      isPassword: true,
+                      onChanged: (value) {
+                        context.read<SignupCubit>().passwordChanged(value);
+                        pass = value;
+                        print('The pass is ${pass}');
+                        print(state.password);
+                      },
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    CustomTextHeader(text: 'Confirm your Password'),
+                    SizedBox(height: 5),
+                    CustomTextField(
+                      isPassword: true,
                       hint: 'Enter your password',
                       onChanged: (value) {
                         context.read<SignupCubit>().passwordChanged(value);
+                        confirmPass = value;
+                        print('The confirm pass is ${confirmPass}');
                         print(state.password);
                       },
                     ),
@@ -77,6 +112,8 @@ class Email extends StatelessWidget {
                     ),
                     SizedBox(height: 10),
                     CustomButton(
+                      password: pass,
+                      confirmPassword: confirmPass,
                       tabController: tabController,
                       text: 'NEXT STEP',
                     )
