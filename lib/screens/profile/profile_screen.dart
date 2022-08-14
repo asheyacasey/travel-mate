@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:travel_mate/blocs/auth/auth_bloc.dart';
 import 'package:travel_mate/screens/onboarding/onboarding_screen.dart';
 import 'package:travel_mate/screens/onboarding/widgets/widgets.dart';
-import 'package:travel_mate/widgets/custom_appbar.dart';
+import 'package:travel_mate/widgets/widgets.dart';
 import 'package:unicons/unicons.dart';
 
 import '../../blocs/blocs.dart';
-import '../../models/models.dart';
 import '../../repositories/repositories.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -137,7 +135,8 @@ class ProfileScreen extends StatelessWidget {
                                     icon: UniconsLine.edit),
                                 Row(
                                   children: [
-                                    CustomTextContainer(text: state.user.interests[0]),
+                                    CustomTextContainer(
+                                        text: state.user.interests[0]),
                                   ],
                                 ),
                               ],
@@ -157,20 +156,13 @@ class ProfileScreen extends StatelessWidget {
                               itemBuilder: (context, index) {
                                 return Padding(
                                   padding: const EdgeInsets.only(right: 5),
-                                  child: Container(
-                                    height: 125,
+                                  child: UserImage.small(
                                     width: 100,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      border: Border.all(
-                                        color: Theme.of(context).primaryColor,
-                                        width: 2,
-                                      ),
-                                      image: DecorationImage(
-                                        fit: BoxFit.cover,
-                                        image:
-                                            NetworkImage(state.user.imageUrls[index]),
-                                      ),
+                                    height: 125,
+                                    url: state.user.imageUrls[index],
+                                    border: Border.all(
+                                      color: Theme.of(context).primaryColor,
+                                      width: 2,
                                     ),
                                   ),
                                 );
