@@ -64,11 +64,11 @@ class DatabaseRepository extends BaseDatabaseRepository {
       bool isSwipeRight
       ) async {
     if (isSwipeRight) {
-      await _firebaseFirestore.collection('user').doc(userId).update({
+      await _firebaseFirestore.collection('users').doc(userId).update({
         'swipeRight': FieldValue.arrayUnion([matchId])
       });
     } else {
-      await _firebaseFirestore.collection('user').doc(userId).update({
+      await _firebaseFirestore.collection('users').doc(userId).update({
         'swipeLeft': FieldValue.arrayUnion([matchId])
       });
     }
