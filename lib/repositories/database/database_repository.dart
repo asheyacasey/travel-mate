@@ -40,8 +40,10 @@ class DatabaseRepository extends BaseDatabaseRepository {
   }
 
   @override
-  Stream<List<User>> getUsers(User user) {
-    List<String> userFilter = List.from(user.swipeLeft!)
+  Stream<List<User>> getUsers(
+      User user,
+      ) {
+       List<String> userFilter = List.from(user.swipeLeft!)
       ..addAll(user.swipeRight!)
       ..add(user.id!);
 
@@ -59,7 +61,10 @@ class DatabaseRepository extends BaseDatabaseRepository {
 
   @override
   Future<void> updateUserSwipe(
-      String userId, String matchId, bool isSwipeRight) async {
+      String userId,
+      String matchId,
+      bool isSwipeRight
+      ) async {
     if (isSwipeRight) {
       await _firebaseFirestore.collection('user').doc(userId).update({
         'swipeRight': FieldValue.arrayUnion([matchId])

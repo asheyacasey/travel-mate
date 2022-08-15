@@ -37,8 +37,10 @@ class SwipeBloc extends Bloc<SwipeEvent, SwipeState> {
 
   void _onLoadUsers(LoadUsers event, Emitter<SwipeState> emit) {
     _databaseRepository.getUsers(event.user).listen((users) {
-      debugPrint('Loading User: $users');
-      add(UpdateHome(users: users));
+      print('Loading User: $users');
+      add(
+          UpdateHome(users: users)
+      );
     });
   }
 
@@ -57,7 +59,10 @@ class SwipeBloc extends Bloc<SwipeEvent, SwipeState> {
       List<User> users = List.from(state.users)..remove(event.user);
 
       _databaseRepository.updateUserSwipe(
-          _authBloc.state.authUser!.uid, event.user.id!, false);
+          _authBloc.state.authUser!.uid,
+          event.user.id!,
+          false
+      );
 
       if (users.isNotEmpty) {
         emit(SwipeLoaded(users: users));
@@ -75,7 +80,9 @@ class SwipeBloc extends Bloc<SwipeEvent, SwipeState> {
 
      await _databaseRepository.updateUserSwipe(
           userId,
-          event.user.id!, true);
+          event.user.id!,
+          true
+     );
 
       if(event.user.swipeRight!.contains(userId)) {
       await _databaseRepository.updateUserMatch(

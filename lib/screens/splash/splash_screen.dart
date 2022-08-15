@@ -25,6 +25,7 @@ class SplashScreen extends StatelessWidget {
       onWillPop: () async => false,
       child: BlocListener<AuthBloc, AuthState>(
         // listenWhen: (previous, current) => previous.authUser != current.authUser,
+        // mao na sa babao ang gi add ni max sa ep 22, pero ambot ma stuck siya sa splashscreen japon
         listener: (context, state) {
           print('Listener');
           if (state.status == AuthStatus.unauthenticated) {

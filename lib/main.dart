@@ -40,8 +40,9 @@ class MyApp extends StatelessWidget {
         providers: [
           BlocProvider(
             create: (context) => AuthBloc(
-              authRepository: context.read<AuthRepository>(),
               databaseRepository: context.read<DatabaseRepository>(),
+              authRepository: context.read<AuthRepository>(),
+
             ),
           ),
           BlocProvider<SignupCubit>(
