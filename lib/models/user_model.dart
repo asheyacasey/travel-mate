@@ -11,6 +11,10 @@ class User extends Equatable {
   final String bio;
   final String jobTitle;
   final String location;
+  final List<String>? swipeLeft;
+  final List<String>? swipeRight;
+  final List<String>? matches;
+
 
   const User({
     this.id,
@@ -22,6 +26,9 @@ class User extends Equatable {
     required this.bio,
     required this.jobTitle,
     required this.location,
+    this.swipeRight,
+    this.swipeLeft,
+    this.matches
   });
 
   @override
@@ -35,6 +42,9 @@ class User extends Equatable {
         bio,
         jobTitle,
         location,
+        swipeLeft,
+        swipeRight,
+        matches
       ];
 
   static User fromSnapshot(DocumentSnapshot snap) {
@@ -48,6 +58,9 @@ class User extends Equatable {
       bio: snap['bio'],
       jobTitle: snap['jobTitle'],
       location: snap['location'],
+      swipeLeft: (snap['swipeLeft'] as List).map((swipeLeft) => swipeLeft as String).toList(),
+      swipeRight: (snap['swipeRight'] as List).map((swipeRight) => swipeRight as String).toList(),
+      matches: (snap['matches'] as List).map(( matches) =>  matches as String).toList()
     );
     return user;
   }
@@ -62,6 +75,9 @@ class User extends Equatable {
       'bio': bio,
       'jobTitle': jobTitle,
       'location': location,
+      'swipeLeft' : swipeLeft,
+      'swipeRight' : swipeRight,
+      'matches' : matches
     };
   }
 
@@ -75,6 +91,9 @@ class User extends Equatable {
     String? bio,
     String? jobTitle,
     String? location,
+    List<String>? swipeLeft,
+    List<String>? swipeRight,
+    List<String>? matches,
   }) {
     return User(
       id: id ?? this.id,
@@ -86,6 +105,9 @@ class User extends Equatable {
       bio: bio ?? this.bio,
       jobTitle: jobTitle ?? this.jobTitle,
       location: location ?? this.location,
+      swipeLeft: swipeLeft ?? this.swipeLeft,
+      swipeRight: swipeRight ?? this.swipeRight,
+      matches: matches ?? this.matches
     );
   }
 
