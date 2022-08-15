@@ -14,6 +14,7 @@ class Email extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String? email;
     String? pass;
     String? confirmPass;
     return BlocBuilder<SignupCubit, SignupState>(
@@ -67,6 +68,8 @@ class Email extends StatelessWidget {
                       hint: 'Enter your email',
                       onChanged: (value) {
                         context.read<SignupCubit>().emailChanged(value);
+                        email = value;
+                        print(email);
                         print(state.email);
                       },
                     ),
@@ -112,6 +115,7 @@ class Email extends StatelessWidget {
                     ),
                     SizedBox(height: 10),
                     CustomButton(
+                      email: email,
                       password: pass,
                       confirmPassword: confirmPass,
                       tabController: tabController,

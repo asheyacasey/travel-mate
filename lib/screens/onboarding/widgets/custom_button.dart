@@ -7,6 +7,7 @@ class CustomButton extends StatelessWidget {
   final String text;
   final String? password;
   final String? confirmPassword;
+  final String? email;
 
   const CustomButton({
     Key? key,
@@ -14,6 +15,7 @@ class CustomButton extends StatelessWidget {
     this.text = 'Get Started',
     this.password = '',
     this.confirmPassword = '',
+    this.email = '',
   }) : super(key: key);
 
   @override
@@ -33,20 +35,38 @@ class CustomButton extends StatelessWidget {
             Navigator.pushNamed(context, '/');
           } else {
             tabController.animateTo(tabController.index + 1);
+            //!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]").hasMatch(email)
           }
 
           if (tabController.index == 2) {
             print(password);
             print(confirmPassword);
-            if (password != confirmPassword) {
+            if (email! != '' &&
+                !RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]")
+                    .hasMatch(email!)) {
+              if (password != confirmPassword) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('Invalid credentials format'),
+                  ),
+                );
+                tabController.animateTo(tabController.index - 1);
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('Please enter a valid email'),
+                  ),
+                );
+                tabController.animateTo(tabController.index - 1);
+              }
+            } else if (password != confirmPassword) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text('Passwords do not match'),
                 ),
               );
               tabController.animateTo(tabController.index - 1);
-            }
-            if (password == confirmPassword) {
+            } else if (password == confirmPassword) {
               context.read<SignupCubit>().signupWithCredentials(context);
             }
           }
