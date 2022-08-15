@@ -46,7 +46,6 @@ class HomeScreen extends StatelessWidget {
           return SwipeLoadedHomeScreen(state: state);
         }
 
-
         if (state is SwipeMatched) {
           return SwipedMatchedHomeScreen(state: state);
         }
@@ -153,8 +152,7 @@ class SwipedMatchedHomeScreen extends StatelessWidget {
               onPressed: () {
                 context
                     .read<SwipeBloc>()
-                    .add(
-                    LoadUsers(user: context.read<AuthBloc>().state.user!));
+                    .add(LoadUsers(user: context.read<AuthBloc>().state.user!));
               },
             ),
           ],
