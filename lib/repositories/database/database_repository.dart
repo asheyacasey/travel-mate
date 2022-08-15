@@ -52,11 +52,9 @@ class DatabaseRepository extends BaseDatabaseRepository {
         .where('gender', isEqualTo: 'Female')
         .where(FieldPath.documentId, whereNotIn: userFilter)
         .snapshots()
-        .map((snap) => snap.docs
-            .map(
-              (doc) => User.fromSnapshot(doc),
-            )
-            .toList());
+        .map((snap) {
+          return snap.docs.map((doc) => User.fromSnapshot(doc)).toList();
+        });
   }
 
   @override

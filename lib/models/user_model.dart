@@ -45,6 +45,29 @@ class User extends Equatable {
         matches
       ];
 
+  // static User fromSnapshot(DocumentSnapshot snap) {
+  //   User user = User(
+  //       id: snap.id,
+  //       name: snap['name'],
+  //       age: snap['age'],
+  //       gender: snap['gender'],
+  //       imageUrls: snap['imageUrls'],
+  //       interests: snap['interests'],
+  //       bio: snap['bio'],
+  //       jobTitle: snap['jobTitle'],
+  //       location: snap['location'],
+  //       swipeLeft: (snap['swipeLeft'] as List)
+  //           .map((swipeLeft) => swipeLeft as String)
+  //           .toList(),
+  //       swipeRight: (snap['swipeRight'] as List)
+  //           .map((swipeRight) => swipeRight as String)
+  //           .toList(),
+  //       matches: (snap['matches'] as List)
+  //           .map((matches) => matches as String)
+  //           .toList());
+  //   return user;
+  // }
+
   static User fromSnapshot(DocumentSnapshot snap) {
     User user = User(
         id: snap.id,
@@ -67,6 +90,8 @@ class User extends Equatable {
             .toList());
     return user;
   }
+
+
 
   Map<String, dynamic> toMap() {
     return {

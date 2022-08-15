@@ -32,6 +32,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<SwipeBloc, SwipeState>(
       builder: (context, state) {
+        print('state');
         if (state is SwipeLoading) {
           return Scaffold(
             appBar: CustomAppBar(title: 'Discover'),
@@ -44,7 +45,9 @@ class HomeScreen extends StatelessWidget {
         if (state is SwipeLoaded) {
           return SwipeLoadedHomeScreen(state: state);
         }
-        if (state is SwipedMatched) {
+
+
+        if (state is SwipeMatched) {
           return SwipedMatchedHomeScreen(state: state);
         }
 
@@ -73,7 +76,7 @@ class SwipedMatchedHomeScreen extends StatelessWidget {
     required this.state,
   }) : super(key: key);
 
-  final SwipedMatched state;
+  final SwipeMatched state;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
