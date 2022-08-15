@@ -24,3 +24,12 @@ class SwipeError extends SwipeState {
   @override
   List<Object> get props => [];
 }
+
+class SwipedMatched extends SwipeState {
+  final User user;
+
+  SwipedMatched({required this.user});
+
+  @override
+  List<Object> get props => [user];
+}

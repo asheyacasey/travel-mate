@@ -48,6 +48,9 @@ class OnboardingScreen extends StatelessWidget {
             bio: '',
             jobTitle: '',
             location: '',
+            matches: [],
+            swipeLeft: [],
+            swipeRight: [],
           );
 
           context.read<OnboardingBloc>().add(
