@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:unicons/unicons.dart';
-import '../../models/user_match_model.dart';
+import '../../models/match_model.dart';
 
 class ChatScreen extends StatelessWidget {
   static const String routeName = '/chat';
