@@ -59,7 +59,11 @@ class ProfileScreen extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(8),
                                 image: DecorationImage(
                                   fit: BoxFit.cover,
-                                  image: NetworkImage(state.user.imageUrls[0]),
+                                  image: NetworkImage(context
+                                      .read<AuthBloc>()
+                                      .state
+                                      .user!
+                                      .imageUrls[0]),
                                 ),
                               ),
                             ),
@@ -71,7 +75,7 @@ class ProfileScreen extends StatelessWidget {
                         width: MediaQuery.of(context).size.width,
                         height: 50,
                         child: Text(
-                          state.user.name,
+                          context.read<AuthBloc>().state.user!.name,
                           style: Theme.of(context)
                               .primaryTextTheme
                               .headline2!
@@ -105,7 +109,7 @@ class ProfileScreen extends StatelessWidget {
                                     title: 'Profile Summary',
                                     icon: UniconsLine.edit),
                                 Text(
-                                  state.user.bio,
+                                  context.read<AuthBloc>().state.user!.bio,
                                   style: Theme.of(context)
                                       .textTheme
                                       .bodyText1!
@@ -150,7 +154,12 @@ class ProfileScreen extends StatelessWidget {
                         SizedBox(
                           height: 125,
                           child: ListView.builder(
-                              itemCount: state.user.imageUrls.length,
+                              itemCount: context
+                                  .read<AuthBloc>()
+                                  .state
+                                  .user!
+                                  .imageUrls
+                                  .length,
                               shrinkWrap: true,
                               scrollDirection: Axis.horizontal,
                               itemBuilder: (context, index) {
@@ -159,7 +168,11 @@ class ProfileScreen extends StatelessWidget {
                                   child: UserImage.small(
                                     width: 100,
                                     height: 125,
-                                    url: state.user.imageUrls[index],
+                                    url: context
+                                        .read<AuthBloc>()
+                                        .state
+                                        .user!
+                                        .imageUrls[index],
                                     border: Border.all(
                                       color: Theme.of(context).primaryColor,
                                       width: 2,
@@ -194,7 +207,7 @@ class ProfileScreen extends StatelessWidget {
                                   width: 2,
                                 ),
                                 Text(
-                                  state.user.location,
+                                  context.read<AuthBloc>().state.user!.location,
                                   style: Theme.of(context)
                                       .textTheme
                                       .headline4!

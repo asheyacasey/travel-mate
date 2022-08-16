@@ -16,8 +16,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   StreamSubscription<auth.User?>? _authUserSubscription;
   StreamSubscription<User?>? _userSubscription;
 
-  AuthBloc(
-      {required AuthRepository authRepository,
+  AuthBloc({
+      required AuthRepository authRepository,
       required DatabaseRepository databaseRepository})
       : _authRepository = authRepository,
         _databaseRepository = databaseRepository,
@@ -46,8 +46,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   ) {
     event.authUser != null
         ? emit(AuthState.authenticated(
-            authUser: event.authUser!, user: event.user!))
-        : emit(AuthState.unauthenticated());
+            authUser: event.authUser!,
+            user: event.user!
+    )) : emit(AuthState.unauthenticated());
   }
 
   @override

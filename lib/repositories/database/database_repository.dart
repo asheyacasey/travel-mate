@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:travel_mate/models/user_model.dart';
+import 'package:travel_mate/models/models.dart';
 import 'package:travel_mate/repositories/database/base_database_repository.dart';
 import 'package:travel_mate/repositories/storage/storage_repository.dart';
 
@@ -40,7 +40,9 @@ class DatabaseRepository extends BaseDatabaseRepository {
   }
 
   @override
-  Stream<List<User>> getUsers(User user) {
+  Stream<List<User>> getUsers(
+    User user,
+  ) {
     List<String> userFilter = List.from(user.swipeLeft!)
       ..addAll(user.swipeRight!)
       ..add(user.id!);
@@ -50,22 +52,20 @@ class DatabaseRepository extends BaseDatabaseRepository {
         .where('gender', isEqualTo: 'Female')
         .where(FieldPath.documentId, whereNotIn: userFilter)
         .snapshots()
-        .map((snap) => snap.docs
-            .map(
-              (doc) => User.fromSnapshot(doc),
-            )
-            .toList());
+        .map((snap) {
+      return snap.docs.map((doc) => User.fromSnapshot(doc)).toList();
+    });
   }
 
   @override
   Future<void> updateUserSwipe(
       String userId, String matchId, bool isSwipeRight) async {
     if (isSwipeRight) {
-      await _firebaseFirestore.collection('user').doc(userId).update({
+      await _firebaseFirestore.collection('users').doc(userId).update({
         'swipeRight': FieldValue.arrayUnion([matchId])
       });
     } else {
-      await _firebaseFirestore.collection('user').doc(userId).update({
+      await _firebaseFirestore.collection('users').doc(userId).update({
         'swipeLeft': FieldValue.arrayUnion([matchId])
       });
     }
@@ -81,8 +81,22 @@ class DatabaseRepository extends BaseDatabaseRepository {
     await _firebaseFirestore.collection('users').doc(matchId).update({
       'matches': FieldValue.arrayUnion([userId])
     });
+  }
 
+  @override
+  Stream<List<Match>> getMatches(User user) {
+    List<String> userFilter = List.from(user.matches!)..add('0');
 
-
+    return _firebaseFirestore
+        .collection('users')
+        .where(FieldPath.documentId, whereIn: userFilter)
+        .snapshots()
+        .map((snap) {
+      return snap.docs
+          .map(
+            (doc) => Match.fromSnapshot(doc, user.id!),
+          )
+          .toList();
+    });
   }
 }
