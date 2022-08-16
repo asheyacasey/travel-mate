@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:html';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -29,6 +30,16 @@ class MatchBloc extends Bloc<MatchEvent, MatchState> {
   }
 
   void _onUpdateMatches(UpdateMatches event, Emitter<MatchState> emit) {
-    if (event.matchedUsers == 0) {}
+    if (event.matchedUsers == 0) {
+      emit(MatchUnavailable());
+    } else {
+      emit(MatchLoaded(matches: event.matchedUsers));
+    }
+  }
+
+  @override
+  Future<void> close() async {
+    _databaseSubscription?.cancel();
+    super.close();
   }
 }
