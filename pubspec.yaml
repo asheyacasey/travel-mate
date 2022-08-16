@@ -42,6 +42,7 @@ dependencies:
   uuid: ^3.0.5
   google_fonts: ^3.0.1
   unicons: ^2.1.0
+  rxdart: ^0.27.5
 
 
 
