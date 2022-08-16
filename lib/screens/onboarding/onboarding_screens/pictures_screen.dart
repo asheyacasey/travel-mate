@@ -84,7 +84,7 @@ class Pictures extends StatelessWidget {
                 Column(
                   children: [
                     StepProgressIndicator(
-                      totalSteps: 6,
+                      totalSteps: 7,
                       currentStep: 4,
                       selectedColor: Theme.of(context).primaryColor,
                       unselectedColor: Theme.of(context).backgroundColor,

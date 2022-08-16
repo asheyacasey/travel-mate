@@ -72,7 +72,7 @@ class EmailVerification extends StatelessWidget {
           Column(
             children: [
               StepProgressIndicator(
-                totalSteps: 6,
+                totalSteps: 7,
                 currentStep: 2,
                 selectedColor: Theme.of(context).primaryColor,
                 unselectedColor: Theme.of(context).backgroundColor,

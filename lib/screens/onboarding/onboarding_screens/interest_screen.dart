@@ -7,12 +7,13 @@ import 'package:step_progress_indicator/step_progress_indicator.dart';
 import 'package:unicons/unicons.dart';
 
 import '../../../blocs/blocs.dart';
+import '../../../models/category_model.dart';
 import '../widgets/widgets.dart';
 
-class Location extends StatelessWidget {
+class Interest extends StatelessWidget {
   final TabController tabController;
 
-  const Location({
+  const Interest({
     Key? key,
     required this.tabController,
   }) : super(key: key);
@@ -47,7 +48,7 @@ class Location extends StatelessWidget {
                               color: Theme.of(context).primaryColor,
                             ),
                             child: Icon(
-                              UniconsLine.location_point,
+                              UniconsLine.heart,
                               size: 30,
                               color: Colors.white,
                             )),
@@ -55,7 +56,7 @@ class Location extends StatelessWidget {
                           width: 10,
                         ),
                         Text(
-                          'Where are you?',
+                          'My Interest',
                           style: Theme.of(context)
                               .primaryTextTheme
                               .headline2!
@@ -66,23 +67,14 @@ class Location extends StatelessWidget {
                     SizedBox(
                       height: 10,
                     ),
-                    CustomTextField(
-                      hint: 'Enter your location',
-                      onChanged: (value) {
-                        context.read<OnboardingBloc>().add(
-                              UpdateUser(
-                                user: state.user.copyWith(location: value),
-                              ),
-                            );
-                      },
-                    ),
+                    CustomCategoryFilter(categories: Category.categories,),
                   ],
                 ),
                 Column(
                   children: [
                     StepProgressIndicator(
                       totalSteps: 7,
-                      currentStep: 7,
+                      currentStep: 6,
                       selectedColor: Theme.of(context).primaryColor,
                       unselectedColor: Theme.of(context).backgroundColor,
                     ),
@@ -96,6 +88,51 @@ class Location extends StatelessWidget {
         } else {
           return Text('Something went wrong');
         }
+      },
+    );
+  }
+}
+
+class CustomCategoryFilter extends StatelessWidget {
+  final List<Category> categories;
+  const CustomCategoryFilter({
+    Key? key,
+    required this.categories,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      shrinkWrap: true,
+      itemCount: categories.length,
+      itemBuilder: (context, index) {
+        return Container(
+          width: double.infinity,
+          margin: const EdgeInsets.only(top: 10),
+          padding: const EdgeInsets.symmetric(
+            horizontal: 30,
+            vertical: 10,
+          ),
+          decoration: BoxDecoration(
+            color: Colors.white,borderRadius: BorderRadius.circular(5.0),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                categories[index].name,
+                style: Theme.of(context).textTheme.headline5,
+              ),
+              SizedBox(
+                height: 25,
+                child: Checkbox(
+                  value: false,
+                  onChanged: (bool? newValue) {},
+                ),
+              )
+            ],
+          ),
+        );
       },
     );
   }

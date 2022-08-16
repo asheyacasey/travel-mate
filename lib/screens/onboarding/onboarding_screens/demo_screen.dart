@@ -65,6 +65,23 @@ class Demographics extends StatelessWidget {
                       ),
                       SizedBox(height: 20),
                       CustomTextHeader(
+                        text: 'What\'s your name?',
+                      ),
+                      SizedBox(height: 10),
+                      CustomTextField(
+                        hint: 'Enter your name',
+                        onChanged: (value) {
+                          context.read<OnboardingBloc>().add(
+                            UpdateUser(
+                              user: state.user.copyWith(
+                                name: value,
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                      SizedBox(height: 20),
+                      CustomTextHeader(
                         text: 'Choose your Gender',
                       ),
                       SizedBox(height: 10),
@@ -117,19 +134,19 @@ class Demographics extends StatelessWidget {
                       ),
                       SizedBox(height: 20),
                       CustomTextHeader(
-                        text: 'What\'s your name?',
+                        text: 'Enter your Age',
                       ),
                       SizedBox(height: 10),
                       CustomTextField(
-                        hint: 'Enter your name',
+                        hint: 'Enter your Age',
                         onChanged: (value) {
                           context.read<OnboardingBloc>().add(
-                                UpdateUser(
-                                  user: state.user.copyWith(
-                                    name: value,
-                                  ),
-                                ),
-                              );
+                            UpdateUser(
+                              user: state.user.copyWith(
+                                age: int.parse(value),
+                              ),
+                            ),
+                          );
                         },
                       ),
                       SizedBox(height: 20),
@@ -150,29 +167,14 @@ class Demographics extends StatelessWidget {
                         },
                       ),
                       SizedBox(height: 20),
-                      CustomTextHeader(
-                        text: 'Enter your Age',
-                      ),
-                      SizedBox(height: 10),
-                      CustomTextField(
-                        hint: 'Enter your Age',
-                        onChanged: (value) {
-                          context.read<OnboardingBloc>().add(
-                                UpdateUser(
-                                  user: state.user.copyWith(
-                                    age: int.parse(value),
-                                  ),
-                                ),
-                              );
-                        },
-                      ),
+
                     ],
                   ),
                   SizedBox(height: 50),
                   Column(
                     children: [
                       StepProgressIndicator(
-                        totalSteps: 6,
+                        totalSteps: 7,
                         currentStep: 3,
                         selectedColor: Theme.of(context).primaryColor,
                         unselectedColor: Theme.of(context).backgroundColor,

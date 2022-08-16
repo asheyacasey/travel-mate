@@ -87,15 +87,18 @@ class _BiographyState extends State<Biography> {
                             .headline2!
                             .copyWith(color: Colors.black),
                       ),
-                      Column(
-                        CheckBox(title: '',),
-                      ),
+                      SizedBox(height: 40),
+
+
+
+
+
                     ],
                   ),
                   Column(
                     children: [
                       StepProgressIndicator(
-                        totalSteps: 6,
+                        totalSteps: 7,
                         currentStep: 5,
                         selectedColor: Theme.of(context).primaryColor,
                         unselectedColor: Theme.of(context).backgroundColor,
