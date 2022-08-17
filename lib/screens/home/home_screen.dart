@@ -213,11 +213,11 @@ class SwipeLoadedHomeScreen extends StatelessWidget {
                     print('Swiped Left');
                   },
                   child: ChoiceButton(
-                    height: 60,
-                    width: 60,
-                    size: 30,
+                    height: 70,
+                    width: 120,
+                    size: 40,
                     hasGradient: false,
-                    color: Colors.blueGrey,
+                    color: Colors.white,
                     icon: UniconsSolid.times_circle,
                   ),
                 ),
@@ -228,7 +228,7 @@ class SwipeLoadedHomeScreen extends StatelessWidget {
                     print('Swiped ');
                   },
                   child: PrimaryButton(
-                    width: 70,
+                    width: 120,
                     height: 70,
                     size: 40,
                     hasGradient: true,
@@ -236,14 +236,14 @@ class SwipeLoadedHomeScreen extends StatelessWidget {
                     icon: UniconsSolid.favorite,
                   ),
                 ),
-                ChoiceButton(
-                  height: 60,
-                  width: 60,
-                  size: 30,
-                  hasGradient: false,
-                  color: Theme.of(context).primaryColor,
-                  icon: UniconsSolid.check_circle,
-                ),
+                // ChoiceButton(
+                //   height: 60,
+                //   width: 60,
+                //   size: 30,
+                //   hasGradient: false,
+                //   color: Theme.of(context).primaryColor,
+                //   icon: UniconsSolid.check_circle,
+                // ),
               ],
             ),
           ),

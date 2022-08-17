@@ -16,6 +16,39 @@ class DatabaseRepository extends BaseDatabaseRepository {
         .map((snap) => User.fromSnapshot(snap));
   }
 
+
+  @override
+  Stream<List<User>> getUsers(User user) {
+    return _firebaseFirestore
+        .collection('users')
+        .where('gender', isEqualTo: _selectGender(user))
+        .snapshots()
+        .map((snap) {
+      return snap.docs.map((doc) => User.fromSnapshot(doc)).toList();
+    });
+  }
+
+  @override
+  Stream<List<User>> getUsersToSwipe(User user) {
+    return Rx.combineLatest2(getUser(user.id!), getUsers(user), (
+        User currentUser,
+        List<User> users,
+        ) {
+      return users.where((user){
+        if(currentUser.swipeLeft!.contains(user.id)){
+          return false;
+        } else if (currentUser.swipeRight!.contains(user.id)){
+          return false;
+        } else if (currentUser.matches!.contains(user.id)){
+          return false;
+        } else {
+          return true;
+        }
+      }).toList();
+    });
+  }
+
+
   @override
   Future<void> updateUserPictures(User user, String imageName) async {
     String downloadUrl =
@@ -40,39 +73,6 @@ class DatabaseRepository extends BaseDatabaseRepository {
         .then((value) => print('User document updated.'));
   }
 
-  @override
-  Stream<List<User>> getUsers(
-    User user,
-  ) {
-    return _firebaseFirestore
-        .collection('users')
-        .where('gender', isEqualTo: _selectGender(user))
-        .snapshots()
-        .map((snap) {
-      return snap.docs.map((doc) => User.fromSnapshot(doc)).toList();
-    });
-  }
-
-  @override
-  Stream<List<User>> getUsersToSwipe(User user) {
-    return Rx.combineLatest2(getUser(user.id!), getUsers(user), (
-      User currentUser,
-      List<User> users,
-    ) {
-      return users.where((user){
-       if(currentUser.swipeLeft!.contains(user.id)){
-         return false;
-       } else if (currentUser.swipeRight!.contains(user.id)){
-            return false;
-       } else if (currentUser.matches!.contains(user.id)){
-         return false;
-       } else {
-         return true;
-       }
-      }
-      ).toList();
-    });
-  }
 
   // this is the old getUser
 
