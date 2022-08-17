@@ -57,28 +57,28 @@ class UsersScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         ChoiceButton(
-                            width: 80,
-                            size: 30,
-                            height: 80,
-                            color: Colors.blueGrey,
-                            icon:  UniconsSolid.times_circle,
-                            hasGradient: true),
+                          height: 70,
+                          width: 120,
+                          size: 40,
+                          hasGradient: false,
+                          color: Colors.white,
+                          icon: UniconsSolid.times_circle,
+                        ),
                         PrimaryButton(
-                          width: 80,
-                          height: 80,
-                          size: 30,
+                          width: 120,
+                          height: 70,
+                          size: 40,
+                          hasGradient: true,
                           color: Colors.white,
                           icon: UniconsSolid.favorite,
-                          hasGradient: true,
-
                         ),
-                        ChoiceButton(
-                            width: 80,
-                            size: 30,
-                            height: 80,
-                            color: Theme.of(context).primaryColor,
-                            icon:  UniconsSolid.check_circle,
-                            hasGradient: true)
+                        // ChoiceButton(
+                        //     width: 80,
+                        //     size: 30,
+                        //     height: 80,
+                        //     color: Theme.of(context).primaryColor,
+                        //     icon:  UniconsSolid.check_circle,
+                        //     hasGradient: true)
                       ],
                     ),
                   ),
