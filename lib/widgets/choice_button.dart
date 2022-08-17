@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 class PrimaryButton extends StatelessWidget {
   const PrimaryButton(
       {Key? key,
-      required this.width,
-      required this.height,
-      required this.size,
-      required this.color,
-      required this.hasGradient,
-      required this.icon})
+        required this.width,
+        required this.height,
+        required this.size,
+        required this.color,
+        required this.hasGradient,
+        required this.icon})
       : super(key: key);
 
   final double width;
@@ -24,8 +24,9 @@ class PrimaryButton extends StatelessWidget {
       width: width,
       height: height,
       decoration: BoxDecoration(
-          shape: BoxShape.circle,
+          shape: BoxShape.rectangle,
           color: Theme.of(context).primaryColor,
+          borderRadius: BorderRadius.circular(8.0),
           boxShadow: [
             BoxShadow(
               color: Colors.grey.withAlpha(50),
@@ -67,8 +68,9 @@ class ChoiceButton extends StatelessWidget {
       width: width,
       height: height,
       decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: Colors.white,
+          shape: BoxShape.rectangle,
+          color: Colors.redAccent,
+          borderRadius: BorderRadius.circular(8.0),
           boxShadow: [
             BoxShadow(
               color: Colors.grey.withAlpha(50),
