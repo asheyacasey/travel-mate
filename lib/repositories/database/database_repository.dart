@@ -43,13 +43,19 @@ class DatabaseRepository extends BaseDatabaseRepository {
   Stream<List<User>> getUsers(
     User user,
   ) {
+    String genderFilter = user.gender;
+    if(genderFilter == 'Female'){
+      genderFilter = 'Male';
+    }else{
+      genderFilter = 'Female';
+    }
     List<String> userFilter = List.from(user.swipeLeft!)
       ..addAll(user.swipeRight!)
       ..add(user.id!);
 
     return _firebaseFirestore
         .collection('users')
-        .where('gender', isEqualTo: 'Female')
+        .where('gender', isEqualTo: genderFilter)
         .where(FieldPath.documentId, whereNotIn: userFilter)
         .snapshots()
         .map((snap) {
