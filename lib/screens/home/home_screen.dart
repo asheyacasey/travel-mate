@@ -70,6 +70,7 @@ class HomeScreen extends StatelessWidget {
 }
 
 class SwipedMatchedHomeScreen extends StatelessWidget {
+
   const SwipedMatchedHomeScreen({
     Key? key,
     required this.state,
@@ -104,7 +105,7 @@ class SwipedMatchedHomeScreen extends StatelessWidget {
                     padding: const EdgeInsets.all(5.0),
                     decoration: BoxDecoration(
                         gradient: LinearGradient(colors: [
-                      Theme.of(context).accentColor,
+                      Theme.of(context).colorScheme.secondary,
                       Theme.of(context).primaryColor,
                     ])),
                     child: CircleAvatar(
