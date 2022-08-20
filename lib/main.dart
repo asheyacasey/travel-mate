@@ -2,12 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:travel_mate/cubits/cubits.dart';
-import 'package:travel_mate/blocs/profile/profile_bloc.dart';
 import 'package:travel_mate/screens/screens.dart';
 import 'blocs/blocs.dart';
 import 'config/app_router.dart';
 import 'config/theme.dart';
-import 'cubits/signup/signup_cubit.dart';
 import 'firebase_options.dart';
 import 'repositories/repositories.dart';
 
@@ -15,6 +13,7 @@ import 'repositories/repositories.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
+    name: "travelmate-wonderpets",
     options: DefaultFirebaseOptions.currentPlatform,
   );
   runApp(const MyApp());

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:travel_mate/blocs/auth/auth_bloc.dart';
 import 'package:travel_mate/blocs/match/match_bloc.dart';
 import 'package:travel_mate/repositories/database/database_repository.dart';
-import 'package:travel_mate/screens/chat/chat_screen.dart';
 import 'package:travel_mate/widgets/custom_appbar.dart';
 import 'package:travel_mate/widgets/custom_elevated_button.dart';
 import 'package:travel_mate/widgets/user_image_small.dart';
