@@ -3,21 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>526446915145-kja5tjr5gvh8foku11cr1fo4esvgsen0.apps.googleusercontent.com</string>
+	<string>343526656309-8fv9dr11lc2b5tgkp3tq03h6ko5v349t.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.526446915145-kja5tjr5gvh8foku11cr1fo4esvgsen0</string>
+	<string>com.googleusercontent.apps.343526656309-8fv9dr11lc2b5tgkp3tq03h6ko5v349t</string>
 	<key>API_KEY</key>
-	<string>AIzaSyAN0Y0cQgHAAM0wsacgP9tfzu53oncIzaE</string>
+	<string>AIzaSyA_aFj6rs3P_f1d8kg2OBB8mOmtuC_N6lc</string>
 	<key>GCM_SENDER_ID</key>
-	<string>526446915145</string>
+	<string>343526656309</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.example.travelMate</string>
 	<key>PROJECT_ID</key>
-	<string>travel-mate-adfea</string>
+	<string>travelmate-wonderpets</string>
 	<key>STORAGE_BUCKET</key>
-	<string>travel-mate-adfea.appspot.com</string>
+	<string>travelmate-wonderpets.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -29,6 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:526446915145:ios:0fd579ee098274eab69998</string>
+	<string>1:343526656309:ios:4b030a4690aa3a789e247c</string>
 </dict>
 </plist>
