@@ -4,6 +4,10 @@
         android:label="travel_mate"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+
+        <meta-data android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBvM8gy2wxralXZ1pyOyfIhmR_o7FjGmLM"/>
+        
         <activity
             android:name=".MainActivity"
             android:exported="true"
