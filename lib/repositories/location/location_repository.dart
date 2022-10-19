@@ -11,7 +11,7 @@ class LocationRepository extends BaseLocationRepository {
   static const baseUrl = 'https://maps.googleapis.com/maps/api/place';
 
   @override
-  Future<Location?> getLocation(String location) async {
+  Future<Location> getLocation(String location) async {
     final String url =
         '$baseUrl/findplacefromtext/json?fields=place_id%2Cname%2Cgeometry&input=$location&inputtype=textquery&key=AIzaSyBvM8gy2wxralXZ1pyOyfIhmR_o7FjGmLM';
 
