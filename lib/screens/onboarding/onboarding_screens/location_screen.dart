@@ -3,15 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
+import 'package:travel_mate/models/location_model.dart';
 import 'package:unicons/unicons.dart';
 
 import '../../../blocs/blocs.dart';
 import '../widgets/widgets.dart';
 
-class Location extends StatelessWidget {
+class LocationTab extends StatelessWidget {
   final TabController tabController;
 
-  const Location({
+  const LocationTab({
     Key? key,
     required this.tabController,
   }) : super(key: key);

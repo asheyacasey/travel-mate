@@ -90,13 +90,12 @@ class ProfileScreen extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-
                         Container(
                           width: MediaQuery.of(context).size.width,
                           decoration: BoxDecoration(
-                              border: Border.all(
-                              color: Theme.of(context).primaryColor),
-                              borderRadius: BorderRadius.circular(8),
+                            border: Border.all(
+                                color: Theme.of(context).primaryColor),
+                            borderRadius: BorderRadius.circular(8),
                           ),
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
@@ -108,12 +107,9 @@ class ProfileScreen extends StatelessWidget {
                                 TitleWithIcon(
                                     title: 'Profile Summary',
                                     icon: UniconsLine.edit),
-                                Text(
-                                    context.read<AuthBloc>().state.user!.bio,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headline6
-                                )
+                                Text(context.read<AuthBloc>().state.user!.bio,
+                                    style:
+                                        Theme.of(context).textTheme.headline6)
                               ],
                             ),
                           ),
@@ -130,21 +126,21 @@ class ProfileScreen extends StatelessWidget {
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Padding(
-                           padding: const EdgeInsets.all(10.0),
-                           child: Column(
-                             mainAxisSize: MainAxisSize.max,
-                             mainAxisAlignment: MainAxisAlignment.start,
-                             crossAxisAlignment: CrossAxisAlignment.start,
-                             children: [
-                               TitleWithIcon(
-                                   title: 'I\'m interested in...',
-                                   icon: UniconsLine.edit),
-                               CustomTextContainer(
-                                   text: state.user.interests[0],
-                               ),
-                             ],
-                           ),
+                            padding: const EdgeInsets.all(10.0),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                TitleWithIcon(
+                                    title: 'I\'m interested in...',
+                                    icon: UniconsLine.edit),
+                                CustomTextContainer(
+                                  text: state.user.interests[0],
+                                ),
+                              ],
                             ),
+                          ),
                         ),
                         SizedBox(
                           height: 10,
@@ -206,7 +202,12 @@ class ProfileScreen extends StatelessWidget {
                                   width: 2,
                                 ),
                                 Text(
-                                  context.read<AuthBloc>().state.user!.location,
+                                  context
+                                      .read<AuthBloc>()
+                                      .state
+                                      .user!
+                                      .location
+                                      .name,
                                   style: Theme.of(context)
                                       .textTheme
                                       .headline4!
