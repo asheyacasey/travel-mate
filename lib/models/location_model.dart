@@ -29,7 +29,7 @@ class Location extends Equatable {
     );
   }
 
-  factory Location.fromSnapshot(Map<String, dynamic> json) {
+  factory Location.fromJson(Map<String, dynamic> json) {
     return Location(
       placeId: json['place_id'],
       name: json['name'],
