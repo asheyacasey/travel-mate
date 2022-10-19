@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:travel_mate/cubits/cubits.dart';
+import 'package:travel_mate/models/location_model.dart';
 import 'package:travel_mate/screens/screens.dart';
 import 'blocs/blocs.dart';
 import 'config/app_router.dart';
 import 'config/theme.dart';
 import 'firebase_options.dart';
 import 'repositories/repositories.dart';
-
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -35,6 +35,9 @@ class MyApp extends StatelessWidget {
         RepositoryProvider(
           create: (context) => DatabaseRepository(),
         ),
+        RepositoryProvider(
+          create: (context) => LocationRepository(),
+        )
       ],
       child: MultiBlocProvider(
         providers: [
@@ -42,7 +45,6 @@ class MyApp extends StatelessWidget {
             create: (context) => AuthBloc(
               databaseRepository: context.read<DatabaseRepository>(),
               authRepository: context.read<AuthRepository>(),
-
             ),
           ),
           BlocProvider<SignupCubit>(
@@ -57,6 +59,7 @@ class MyApp extends StatelessWidget {
             create: (context) => OnboardingBloc(
               databaseRepository: context.read<DatabaseRepository>(),
               storageRepostitory: context.read<StorageRepository>(),
+              locationRepository: context.read<LocationRepository>(),
             ),
           ),
           BlocProvider(

@@ -1,8 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
 import 'package:unicons/unicons.dart';
 
@@ -69,13 +68,47 @@ class Location extends StatelessWidget {
                     CustomTextField(
                       hint: 'Enter your location',
                       onChanged: (value) {
+                        Location location =
+                            state.user.location.copyWith(name: value);
+
                         context.read<OnboardingBloc>().add(
-                              UpdateUser(
-                                user: state.user.copyWith(location: value),
+                              UpdateUserLocation(
+                                location: location,
                               ),
                             );
                       },
+                      onFocusChanged: (hasFocus) {
+                        if (hasFocus) {
+                          return;
+                        } else {
+                          context.read<OnboardingBloc>().add(
+                                UpdateUserLocation(
+                                  isUpdateComplete: true,
+                                  location: state.user.location,
+                                ),
+                              );
+                        }
+                      },
                     ),
+                    SizedBox(height: 10),
+                    Expanded(
+                      child: GoogleMap(
+                        myLocationEnabled: true,
+                        myLocationButtonEnabled: false,
+                        onMapCreated: (GoogleMapController controller) {
+                          context
+                              .read<OnboardingBloc>()
+                              .add(UpdateUserLocation(controller: controller));
+                        },
+                        initialCameraPosition: CameraPosition(
+                            zoom: 10,
+                            target: LatLng(
+                              state.user.location.lat,
+                              state.user.location.lon,
+                            )),
+                      ),
+                    ),
+                    SizedBox(height: 10),
                   ],
                 ),
                 Column(
