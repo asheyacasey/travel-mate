@@ -6,16 +6,20 @@ import 'package:unicons/unicons.dart';
 
 class CustomTextField extends StatelessWidget {
   final TextEditingController? controller;
-  final String hint;
+  final String? hint;
+  final String? initialValue;
   final bool isPassword;
   final Function(String)? onChanged;
+  final EdgeInsets padding;
 
   const CustomTextField({
     Key? key,
     this.controller,
     this.isPassword = false,
-    required this.hint,
+    this.hint = '',
+    this.initialValue = '',
     this.onChanged,
+    this.padding = const EdgeInsets.symmetric(horizontal: 20),
   }) : super(key: key);
 
   @override
@@ -25,7 +29,7 @@ class CustomTextField extends StatelessWidget {
       decoration: InputDecoration(
         filled: true,
         fillColor: Colors.white,
-        hintText: hint,
+        hintText: initialValue,
         contentPadding:
             const EdgeInsets.only(bottom: 5.0, top: 12.5, left: 15.0),
         focusedBorder: OutlineInputBorder(

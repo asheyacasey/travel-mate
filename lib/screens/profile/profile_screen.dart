@@ -50,6 +50,7 @@ class ProfileScreen extends StatelessWidget {
             }
             if (state is ProfileLoaded) {
               return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(
                     height: 10,
@@ -133,6 +134,72 @@ class ProfileScreen extends StatelessWidget {
                             context.read<ProfileBloc>().add(
                                   EditProfile(
                                     isEditingOn: true,
+                                  ),
+                                );
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _TextField(
+                          title: 'Biography',
+                          value: context.read<AuthBloc>().state.user!.bio,
+                          onChanged: (value) {
+                            context.read<ProfileBloc>().add(
+                                  UpdateUserProfile(
+                                    user: context
+                                        .read<AuthBloc>()
+                                        .state
+                                        .user!
+                                        .copyWith(bio: value),
+                                  ),
+                                );
+                          },
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        _TextField(
+                          title: 'Age',
+                          value: '${context.read<AuthBloc>().state.user!.age}',
+                          onChanged: (value) {
+                            if (value == null) {
+                              return;
+                            }
+                            if (value == '') {
+                              return;
+                            }
+                            context.read<ProfileBloc>().add(
+                                  UpdateUserProfile(
+                                    user: context
+                                        .read<AuthBloc>()
+                                        .state
+                                        .user!
+                                        .copyWith(age: int.parse(value)),
+                                  ),
+                                );
+                          },
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        _TextField(
+                          title: 'Job Title',
+                          value:
+                              '${context.read<AuthBloc>().state.user!.jobTitle}',
+                          onChanged: (value) {
+                            context.read<ProfileBloc>().add(
+                                  UpdateUserProfile(
+                                    user: context
+                                        .read<AuthBloc>()
+                                        .state
+                                        .user!
+                                        .copyWith(jobTitle: value),
                                   ),
                                 );
                           },
@@ -299,37 +366,52 @@ class ProfileScreen extends StatelessWidget {
   }
 }
 
-class TitleWithIcon extends StatelessWidget {
+class _TextField extends StatelessWidget {
   final String title;
-  final IconData icon;
+  final String value;
+  final Function(String?) onChanged;
 
-  const TitleWithIcon({
+  const _TextField({
     Key? key,
     required this.title,
-    required this.icon,
+    required this.value,
+    required this.onChanged,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          title,
-          style: Theme.of(context)
-              .textTheme
-              .headline4!
-              .copyWith(fontWeight: FontWeight.w900),
-        ),
-        IconButton(
-          onPressed: () {},
-          icon: Icon(
-            icon,
-            color: Colors.grey,
-            size: 15,
-          ),
-        ),
-      ],
+    return BlocBuilder<ProfileBloc, ProfileState>(
+      builder: (context, state) {
+        state as ProfileLoaded;
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              title,
+              style: Theme.of(context)
+                  .textTheme
+                  .headline4!
+                  .copyWith(fontWeight: FontWeight.w900),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            state.isEditingOn
+                ? CustomTextField(
+                    initialValue: value,
+                    padding: EdgeInsets.zero,
+                  )
+                : Text(
+                    value,
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyText1!
+                        .copyWith(height: 1.5),
+                  ),
+            SizedBox(),
+          ],
+        );
+      },
     );
   }
 }
