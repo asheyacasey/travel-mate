@@ -96,7 +96,50 @@ class ProfileScreen extends StatelessWidget {
                     ],
                   ),
 
-                  
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      children: [
+                        CustomElevatedButton(
+                          text: 'View',
+                          beginColor: state.isEditingOn
+                              ? Colors.white
+                              : Theme.of(context).primaryColor,
+                          endColor: state.isEditingOn
+                              ? Colors.white
+                              : Theme.of(context).accentColor,
+                          textColor:
+                              state.isEditingOn ? Colors.black : Colors.white,
+                          width: MediaQuery.of(context).size.width * 0.45,
+                          onPressed: () {
+                            context.read<ProfileBloc>().add(
+                                  SaveProfile(user: state.user),
+                                );
+                          },
+                        ),
+                        SizedBox(width: 10),
+                        CustomElevatedButton(
+                          text: 'Edit',
+                          beginColor: state.isEditingOn
+                              ? Theme.of(context).primaryColor
+                              : Colors.white,
+                          endColor: state.isEditingOn
+                              ? Theme.of(context).accentColor
+                              : Colors.white,
+                          textColor:
+                              state.isEditingOn ? Colors.white : Colors.black,
+                          width: MediaQuery.of(context).size.width * 0.45,
+                          onPressed: () {
+                            context.read<ProfileBloc>().add(
+                                  EditProfile(
+                                    isEditingOn: true,
+                                  ),
+                                );
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
                   // Padding(
                   //   padding:
                   //       const EdgeInsets.only(left: 20, right: 20, bottom: 20),

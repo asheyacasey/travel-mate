@@ -16,7 +16,7 @@ class LoginScreen extends StatelessWidget {
         settings: RouteSettings(name: routeName),
         builder: (context) {
           return BlocProvider.of<AuthBloc>(context).state.status ==
-              AuthStatus.authenticated
+                  AuthStatus.authenticated
               ? HomeScreen()
               : LoginScreen();
         });
@@ -30,83 +30,82 @@ class LoginScreen extends StatelessWidget {
       //   title: 'TravelMate',
       //   hasAction: false,
       // ),
-      body: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 50.0),
-            child: Column(
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Welcome,',
-                        style: Theme.of(context)
-                            .primaryTextTheme
-                            .headline2!
-                            .copyWith(
-                            height: 1.8,
-                            color: Theme.of(context).primaryColor,
-                            fontSize: 36)),
-                    Text('TravelMate!',
-                        style: Theme.of(context)
-                            .primaryTextTheme
-                            .headline2!
-                            .copyWith(
-                            color: Theme.of(context).primaryColorLight,
-                            fontSize: 36)),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Text(
-                        'Start looking for the perfect travel date to your exciting journey!',
-                        style: Theme.of(context)
-                            .primaryTextTheme
-                            .bodyText1!
-                            .copyWith(
-                            color: Colors.grey,
-                            fontWeight: FontWeight.bold)),
-                    SizedBox(
-                      height: 50,
-                    ),
-                    EmailInput(),
-                    const SizedBox(height: 10),
-                    PasswordInput(),
-                    const SizedBox(height: 10),
-                    SizedBox(
-                      height: 30,
-                    ),
-                    CustomElevatedButton(
-                      text: 'Log In',
-                      beginColor: Colors.white,
-                      endColor: Colors.white,
-                      textColor: Colors.white,
-                      onPressed: () {
-                        context.read<LoginCubit>().logInWithCredentials();
-                      },
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    CustomElevatedButton2(
-                      text: 'Sign Up',
-                      beginColor: Theme.of(context).primaryColor,
-                      endColor: Theme.of(context).primaryColor,
-                      textColor: Colors.white,
-                      onPressed: () => Navigator.of(context).pushNamedAndRemoveUntil(
-                        OnboardingScreen.routeName,
-                        ModalRoute.withName(
-                          '/onboarding',
-                        ),
+      body:
+          Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 50.0),
+          child: Column(
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Welcome,',
+                      style: Theme.of(context)
+                          .primaryTextTheme
+                          .headline2!
+                          .copyWith(
+                              height: 1.8,
+                              color: Theme.of(context).primaryColor,
+                              fontSize: 36)),
+                  Text('TravelMate!',
+                      style: Theme.of(context)
+                          .primaryTextTheme
+                          .headline2!
+                          .copyWith(
+                              color: Theme.of(context).primaryColorLight,
+                              fontSize: 36)),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                      'Start looking for the perfect travel date to your exciting journey!',
+                      style: Theme.of(context)
+                          .primaryTextTheme
+                          .bodyText1!
+                          .copyWith(
+                              color: Colors.grey, fontWeight: FontWeight.bold)),
+                  SizedBox(
+                    height: 50,
+                  ),
+                  EmailInput(),
+                  const SizedBox(height: 10),
+                  PasswordInput(),
+                  const SizedBox(height: 10),
+                  SizedBox(
+                    height: 30,
+                  ),
+                  CustomElevatedButton(
+                    text: 'Log In',
+                    beginColor: Colors.white,
+                    endColor: Colors.white,
+                    textColor: Colors.white,
+                    width: MediaQuery.of(context).size.width,
+                    onPressed: () {
+                      context.read<LoginCubit>().logInWithCredentials();
+                    },
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  CustomElevatedButton2(
+                    text: 'Sign Up',
+                    beginColor: Theme.of(context).primaryColor,
+                    endColor: Theme.of(context).primaryColor,
+                    textColor: Colors.white,
+                    onPressed: () =>
+                        Navigator.of(context).pushNamedAndRemoveUntil(
+                      OnboardingScreen.routeName,
+                      ModalRoute.withName(
+                        '/onboarding',
                       ),
                     ),
-                  ],
-                ),
-              ],
-            ),
+                  ),
+                ],
+              ),
+            ],
           ),
-        ]
-      ),
+        ),
+      ]),
     );
   }
 }
@@ -126,9 +125,10 @@ class EmailInput extends StatelessWidget {
             fillColor: Colors.white,
             hintText: 'Email',
             contentPadding:
-            const EdgeInsets.only(bottom: 5.0, top: 12.5, left: 15.0),
+                const EdgeInsets.only(bottom: 5.0, top: 12.5, left: 15.0),
             focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Theme.of(context).primaryColorLight),
+              borderSide:
+                  BorderSide(color: Theme.of(context).primaryColorLight),
             ),
             enabledBorder: OutlineInputBorder(
                 borderSide: BorderSide(color: Color(0xFFF5C518), width: 2),
@@ -155,9 +155,10 @@ class PasswordInput extends StatelessWidget {
             fillColor: Colors.white,
             hintText: 'Password',
             contentPadding:
-            const EdgeInsets.only(bottom: 5.0, top: 12.5, left: 15.0),
+                const EdgeInsets.only(bottom: 5.0, top: 12.5, left: 15.0),
             focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Theme.of(context).primaryColorLight),
+              borderSide:
+                  BorderSide(color: Theme.of(context).primaryColorLight),
             ),
             enabledBorder: OutlineInputBorder(
                 borderSide: BorderSide(color: Color(0xFFF5C518), width: 2),

@@ -5,15 +5,17 @@ class CustomElevatedButton extends StatelessWidget {
   final Color beginColor;
   final Color endColor;
   final Color textColor;
+  final double width;
   final Function()? onPressed;
 
   const CustomElevatedButton(
       {Key? key,
-        required this.text,
-        required this.beginColor,
-        required this.endColor,
-        required this.textColor,
-        this.onPressed})
+      required this.text,
+      required this.beginColor,
+      required this.endColor,
+      required this.textColor,
+      this.width = 200,
+      this.onPressed})
       : super(key: key);
 
   @override
@@ -28,7 +30,7 @@ class CustomElevatedButton extends StatelessWidget {
         style: ElevatedButton.styleFrom(
           primary: Colors.transparent,
           elevation: 0,
-          // fixedSize: const Size(200, 40),
+          fixedSize: Size(width, 40),
         ),
         child: Container(
           width: double.infinity,
@@ -56,11 +58,11 @@ class CustomElevatedButton2 extends StatelessWidget {
 
   const CustomElevatedButton2(
       {Key? key,
-        required this.text,
-        required this.beginColor,
-        required this.endColor,
-        required this.textColor,
-        this.onPressed})
+      required this.text,
+      required this.beginColor,
+      required this.endColor,
+      required this.textColor,
+      this.onPressed})
       : super(key: key);
 
   @override
@@ -93,4 +95,3 @@ class CustomElevatedButton2 extends StatelessWidget {
     );
   }
 }
-
