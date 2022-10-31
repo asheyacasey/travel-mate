@@ -95,153 +95,155 @@ class ProfileScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                  Padding(
-                    padding:
-                        const EdgeInsets.only(left: 20, right: 20, bottom: 20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          width: MediaQuery.of(context).size.width,
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                                color: Theme.of(context).primaryColor),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                TitleWithIcon(
-                                    title: 'Profile Summary',
-                                    icon: UniconsLine.edit),
-                                Text(context.read<AuthBloc>().state.user!.bio,
-                                    style:
-                                        Theme.of(context).textTheme.headline6)
-                              ],
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Container(
-                          width: MediaQuery.of(context).size.width,
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: Theme.of(context).primaryColor,
-                            ),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                TitleWithIcon(
-                                    title: 'I\'m interested in...',
-                                    icon: UniconsLine.edit),
-                                CustomTextContainer(
-                                  text: state.user.interests[0],
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        TitleWithIcon(title: 'Photos', icon: UniconsLine.edit),
-                        SizedBox(
-                          height: 125,
-                          child: ListView.builder(
-                              itemCount: context
-                                  .read<AuthBloc>()
-                                  .state
-                                  .user!
-                                  .imageUrls
-                                  .length,
-                              shrinkWrap: true,
-                              scrollDirection: Axis.horizontal,
-                              itemBuilder: (context, index) {
-                                return Padding(
-                                  padding: const EdgeInsets.only(right: 5),
-                                  child: UserImage.small(
-                                    width: 100,
-                                    height: 125,
-                                    url: context
-                                        .read<AuthBloc>()
-                                        .state
-                                        .user!
-                                        .imageUrls[index],
-                                    border: Border.all(
-                                      color: Theme.of(context).primaryColor,
-                                      width: 2,
-                                    ),
-                                  ),
-                                );
-                              }),
-                        ),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        Container(
-                          width: MediaQuery.of(context).size.width,
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: Theme.of(context).primaryColor,
-                            ),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Row(
-                              children: [
-                                Container(
-                                  child: Icon(
-                                    UniconsLine.user_location,
-                                    color: Theme.of(context).primaryColor,
-                                    size: 30,
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 2,
-                                ),
-                                Text(
-                                  context.read<AuthBloc>().state.user!.location,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headline4!
-                                      .copyWith(height: 1.5),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            RepositoryProvider.of<AuthRepository>(context)
-                                .signOut();
-                          },
-                          child: Center(
-                            child: Text(
-                              'Sign Out',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headline5!
-                                  .copyWith(
-                                      color: Theme.of(context).primaryColor),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+
+                  
+                  // Padding(
+                  //   padding:
+                  //       const EdgeInsets.only(left: 20, right: 20, bottom: 20),
+                  //   child: Column(
+                  //     crossAxisAlignment: CrossAxisAlignment.start,
+                  //     children: [
+                  //       Container(
+                  //         width: MediaQuery.of(context).size.width,
+                  //         decoration: BoxDecoration(
+                  //           border: Border.all(
+                  //               color: Theme.of(context).primaryColor),
+                  //           borderRadius: BorderRadius.circular(8),
+                  //         ),
+                  //         child: Padding(
+                  //           padding: const EdgeInsets.all(8.0),
+                  //           child: Column(
+                  //             mainAxisSize: MainAxisSize.max,
+                  //             mainAxisAlignment: MainAxisAlignment.start,
+                  //             crossAxisAlignment: CrossAxisAlignment.start,
+                  //             children: [
+                  //               TitleWithIcon(
+                  //                   title: 'Profile Summary',
+                  //                   icon: UniconsLine.edit),
+                  //               Text(context.read<AuthBloc>().state.user!.bio,
+                  //                   style:
+                  //                       Theme.of(context).textTheme.headline6)
+                  //             ],
+                  //           ),
+                  //         ),
+                  //       ),
+                  //       SizedBox(
+                  //         height: 10,
+                  //       ),
+                  //       Container(
+                  //         width: MediaQuery.of(context).size.width,
+                  //         decoration: BoxDecoration(
+                  //           border: Border.all(
+                  //             color: Theme.of(context).primaryColor,
+                  //           ),
+                  //           borderRadius: BorderRadius.circular(8),
+                  //         ),
+                  //         child: Padding(
+                  //           padding: const EdgeInsets.all(10.0),
+                  //           child: Column(
+                  //             mainAxisSize: MainAxisSize.max,
+                  //             mainAxisAlignment: MainAxisAlignment.start,
+                  //             crossAxisAlignment: CrossAxisAlignment.start,
+                  //             children: [
+                  //               TitleWithIcon(
+                  //                   title: 'I\'m interested in...',
+                  //                   icon: UniconsLine.edit),
+                  //               CustomTextContainer(
+                  //                 text: state.user.interests[0],
+                  //               ),
+                  //             ],
+                  //           ),
+                  //         ),
+                  //       ),
+                  //       SizedBox(
+                  //         height: 10,
+                  //       ),
+                  //       TitleWithIcon(title: 'Photos', icon: UniconsLine.edit),
+                  //       SizedBox(
+                  //         height: 125,
+                  //         child: ListView.builder(
+                  //             itemCount: context
+                  //                 .read<AuthBloc>()
+                  //                 .state
+                  //                 .user!
+                  //                 .imageUrls
+                  //                 .length,
+                  //             shrinkWrap: true,
+                  //             scrollDirection: Axis.horizontal,
+                  //             itemBuilder: (context, index) {
+                  //               return Padding(
+                  //                 padding: const EdgeInsets.only(right: 5),
+                  //                 child: UserImage.small(
+                  //                   width: 100,
+                  //                   height: 125,
+                  //                   url: context
+                  //                       .read<AuthBloc>()
+                  //                       .state
+                  //                       .user!
+                  //                       .imageUrls[index],
+                  //                   border: Border.all(
+                  //                     color: Theme.of(context).primaryColor,
+                  //                     width: 2,
+                  //                   ),
+                  //                 ),
+                  //               );
+                  //             }),
+                  //       ),
+                  //       SizedBox(
+                  //         height: 15,
+                  //       ),
+                  //       Container(
+                  //         width: MediaQuery.of(context).size.width,
+                  //         decoration: BoxDecoration(
+                  //           border: Border.all(
+                  //             color: Theme.of(context).primaryColor,
+                  //           ),
+                  //           borderRadius: BorderRadius.circular(8),
+                  //         ),
+                  //         child: Padding(
+                  //           padding: const EdgeInsets.all(8.0),
+                  //           child: Row(
+                  //             children: [
+                  //               Container(
+                  //                 child: Icon(
+                  //                   UniconsLine.user_location,
+                  //                   color: Theme.of(context).primaryColor,
+                  //                   size: 30,
+                  //                 ),
+                  //               ),
+                  //               SizedBox(
+                  //                 width: 2,
+                  //               ),
+                  //               Text(
+                  //                 context.read<AuthBloc>().state.user!.location,
+                  //                 style: Theme.of(context)
+                  //                     .textTheme
+                  //                     .headline4!
+                  //                     .copyWith(height: 1.5),
+                  //               ),
+                  //             ],
+                  //           ),
+                  //         ),
+                  //       ),
+                  //       TextButton(
+                  //         onPressed: () {
+                  //           RepositoryProvider.of<AuthRepository>(context)
+                  //               .signOut();
+                  //         },
+                  //         child: Center(
+                  //           child: Text(
+                  //             'Sign Out',
+                  //             style: Theme.of(context)
+                  //                 .textTheme
+                  //                 .headline5!
+                  //                 .copyWith(
+                  //                     color: Theme.of(context).primaryColor),
+                  //           ),
+                  //         ),
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ),
                 ],
               );
             } else {
