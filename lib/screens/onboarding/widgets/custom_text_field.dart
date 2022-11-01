@@ -24,12 +24,13 @@ class CustomTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
+    return TextFormField(
       obscureText: isPassword ? true : false,
+      initialValue: initialValue,
       decoration: InputDecoration(
         filled: true,
         fillColor: Colors.white,
-        hintText: initialValue,
+        hintText: hint,
         contentPadding:
             const EdgeInsets.only(bottom: 5.0, top: 12.5, left: 15.0),
         focusedBorder: OutlineInputBorder(
