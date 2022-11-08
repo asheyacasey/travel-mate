@@ -92,22 +92,27 @@ class LocationTab extends StatelessWidget {
                       },
                     ),
                     SizedBox(height: 10),
-                    Expanded(
-                      child: GoogleMap(
-                        myLocationEnabled: true,
-                        myLocationButtonEnabled: false,
-                        onMapCreated: (GoogleMapController controller) {
-                          context
-                              .read<OnboardingBloc>()
-                              .add(UpdateUserLocation(controller: controller));
-                        },
-                        initialCameraPosition: CameraPosition(
-                            zoom: 10,
-                            target: LatLng(
-                              state.user.location.lat,
-                              state.user.location.lon,
-                            )),
-                      ),
+                    Column(
+                      children: [
+                        AspectRatio(
+                          aspectRatio: 1,
+                          child: GoogleMap(
+                            myLocationEnabled: true,
+                            myLocationButtonEnabled: false,
+                            onMapCreated: (GoogleMapController controller) {
+                              context.read<OnboardingBloc>().add(
+                                  UpdateUserLocation(controller: controller));
+                            },
+                            initialCameraPosition: CameraPosition(
+                              zoom: 10,
+                              target: LatLng(
+                                state.user.location.lat,
+                                state.user.location.lon,
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
                     ),
                     SizedBox(height: 10),
                   ],
