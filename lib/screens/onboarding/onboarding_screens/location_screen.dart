@@ -104,7 +104,7 @@ class LocationTab extends StatelessWidget {
                                   UpdateUserLocation(controller: controller));
                             },
                             initialCameraPosition: CameraPosition(
-                              zoom: 10,
+                              zoom: 15.5,
                               target: LatLng(
                                 state.user.location.lat,
                                 state.user.location.lon,

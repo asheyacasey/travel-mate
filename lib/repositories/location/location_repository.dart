@@ -5,7 +5,7 @@ import 'package:travel_mate/models/location_model.dart';
 import 'package:travel_mate/repositories/repositories.dart';
 
 class LocationRepository extends BaseLocationRepository {
-  final String key = 'API_KEY';
+  final String key = 'AIzaSyBvM8gy2wxralXZ1pyOyfIhmR_o7FjGmLM';
   final String types = 'geocode';
 
   static const baseUrl = 'https://maps.googleapis.com/maps/api/place';
