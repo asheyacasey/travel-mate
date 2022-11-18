@@ -16,7 +16,7 @@ class LoginScreen extends StatelessWidget {
         settings: RouteSettings(name: routeName),
         builder: (context) {
           return BlocProvider.of<AuthBloc>(context).state.status ==
-              AuthStatus.authenticated
+                  AuthStatus.authenticated
               ? HomeScreen()
               : LoginScreen();
         });
@@ -100,13 +100,13 @@ class LoginScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                  ],
-                ),
-              ],
-            ),
+                  ),
+                ],
+              ),
+            ],
           ),
-        ]
-      ),
+        ),
+      ]),
     );
   }
 }
@@ -126,9 +126,10 @@ class EmailInput extends StatelessWidget {
             fillColor: Colors.white,
             hintText: 'Email',
             contentPadding:
-            const EdgeInsets.only(bottom: 5.0, top: 12.5, left: 15.0),
+                const EdgeInsets.only(bottom: 5.0, top: 12.5, left: 15.0),
             focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Theme.of(context).primaryColorLight),
+              borderSide:
+                  BorderSide(color: Theme.of(context).primaryColorLight),
             ),
             enabledBorder: OutlineInputBorder(
                 borderSide: BorderSide(color: Color(0xFFF5C518), width: 2),
@@ -155,9 +156,10 @@ class PasswordInput extends StatelessWidget {
             fillColor: Colors.white,
             hintText: 'Password',
             contentPadding:
-            const EdgeInsets.only(bottom: 5.0, top: 12.5, left: 15.0),
+                const EdgeInsets.only(bottom: 5.0, top: 12.5, left: 15.0),
             focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Theme.of(context).primaryColorLight),
+              borderSide:
+                  BorderSide(color: Theme.of(context).primaryColorLight),
             ),
             enabledBorder: OutlineInputBorder(
                 borderSide: BorderSide(color: Color(0xFFF5C518), width: 2),

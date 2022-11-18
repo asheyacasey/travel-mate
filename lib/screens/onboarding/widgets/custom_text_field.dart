@@ -6,7 +6,8 @@ import 'package:unicons/unicons.dart';
 
 class CustomTextField extends StatelessWidget {
   final TextEditingController? controller;
-  final String hint;
+  final String? hint;
+  final String? initialValue;
   final bool isPassword;
   final Function(String)? onChanged;
   final Function(bool)? onFocusChanged;
@@ -18,6 +19,7 @@ class CustomTextField extends StatelessWidget {
     required this.hint,
     this.onFocusChanged,
     this.onChanged,
+    this.padding = const EdgeInsets.symmetric(horizontal: 20),
   }) : super(key: key);
 
   @override
