@@ -8,6 +8,7 @@ import 'package:travel_mate/screens/onboarding/onboarding_screens/email_screen.d
 import 'package:travel_mate/screens/onboarding/onboarding_screens/location_screen.dart';
 import 'package:travel_mate/screens/onboarding/onboarding_screens/pictures_screen.dart';
 
+import '../../models/models.dart';
 import '../../models/user_model.dart';
 import 'onboarding_screens/start_screen.dart';
 import 'onboarding_screens/email_screen.dart';
@@ -47,7 +48,7 @@ class OnboardingScreen extends StatelessWidget {
             interests: [],
             bio: '',
             jobTitle: '',
-            location: '',
+            location: Location.initialLocation,
             matches: [],
             swipeLeft: [],
             swipeRight: [],
@@ -71,7 +72,7 @@ class OnboardingScreen extends StatelessWidget {
                 Demographics(tabController: tabController),
                 Pictures(tabController: tabController),
                 Biography(tabController: tabController),
-                Location(tabController: tabController),
+                LocationTab(tabController: tabController),
               ]));
         }),
       ),

@@ -76,7 +76,7 @@ class LoginScreen extends StatelessWidget {
                     SizedBox(
                       height: 30,
                     ),
-                    CustomElevatedButton(
+                    CustomElevatedButton2(
                       text: 'Log In',
                       beginColor: Colors.white,
                       endColor: Colors.white,
