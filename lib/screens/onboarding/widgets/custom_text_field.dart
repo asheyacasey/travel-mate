@@ -11,12 +11,14 @@ class CustomTextField extends StatelessWidget {
   final bool isPassword;
   final Function(String)? onChanged;
   final Function(bool)? onFocusChanged;
+  final EdgeInsets padding;
 
   const CustomTextField({
     Key? key,
     this.controller,
     this.isPassword = false,
-    required this.hint,
+    this.hint = '',
+    this.initialValue = '',
     this.onFocusChanged,
     this.onChanged,
     this.padding = const EdgeInsets.symmetric(horizontal: 20),

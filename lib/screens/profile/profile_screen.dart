@@ -215,10 +215,10 @@ class ProfileScreen extends StatelessWidget {
                         SizedBox(
                           height: 10,
                         ),
-                        _Location(),
-                        SizedBox(
-                          height: 10,
-                        ),
+                        // _Location(),
+                        // SizedBox(
+                        //   height: 10,
+                        // ),
                         _Signout(),
                       ],
                     ),
@@ -549,55 +549,55 @@ class _Interests extends StatelessWidget {
   }
 }
 
-class _Location extends StatelessWidget {
-  const _Location({Key? key}) : super(key: key);
+// class _Location extends StatelessWidget {
+//   const _Location({Key? key}) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<ProfileBloc, ProfileState>(
-      builder: (context, state) {
-        state as ProfileLoaded;
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Location',
-              style: Theme.of(context)
-                  .textTheme
-                  .headline4!
-                  .copyWith(fontWeight: FontWeight.w900),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Container(
-              width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: Theme.of(context).primaryColor,
-                ),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    CustomTextContainer(
-                      text: context.read<AuthBloc>().state.user!.location,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        );
-      },
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return BlocBuilder<ProfileBloc, ProfileState>(
+//       builder: (context, state) {
+//         state as ProfileLoaded;
+//         return Column(
+//           crossAxisAlignment: CrossAxisAlignment.start,
+//           children: [
+//             Text(
+//               'Location',
+//               style: Theme.of(context)
+//                   .textTheme
+//                   .headline4!
+//                   .copyWith(fontWeight: FontWeight.w900),
+//             ),
+//             SizedBox(
+//               height: 10,
+//             ),
+//             Container(
+//               width: MediaQuery.of(context).size.width,
+//               decoration: BoxDecoration(
+//                 border: Border.all(
+//                   color: Theme.of(context).primaryColor,
+//                 ),
+//                 borderRadius: BorderRadius.circular(8),
+//               ),
+//               child: Padding(
+//                 padding: const EdgeInsets.all(10.0),
+//                 child: Column(
+//                   mainAxisSize: MainAxisSize.max,
+//                   mainAxisAlignment: MainAxisAlignment.start,
+//                   crossAxisAlignment: CrossAxisAlignment.start,
+//                   children: [
+//                     CustomTextContainer(
+//                       text: context.read<AuthBloc>().state.user!.location,
+//                     ),
+//                   ],
+//                 ),
+//               ),
+//             ),
+//           ],
+//         );
+//       },
+//     );
+//   }
+// }
 
 class _Signout extends StatelessWidget {
   const _Signout({Key? key}) : super(key: key);
