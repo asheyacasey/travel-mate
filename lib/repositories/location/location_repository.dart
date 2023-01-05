@@ -13,7 +13,7 @@ class LocationRepository extends BaseLocationRepository {
   @override
   Future<Location> getLocation(String location) async {
     final String url =
-        '$baseUrl/findplacefromtext/json?fields=place_id%2Cname%2Cgeometry&input=$location&inputtype=textquery&key=AIzaSyBvM8gy2wxralXZ1pyOyfIhmR_o7FjGmLM';
+        '$baseUrl/findplacefromtext/json?fields=place_id%2Cname%2Cgeometry&input=$location&inputtype=textquery&key=$key';
 
     var response = await http.get(Uri.parse(url));
     var json = convert.jsonDecode(response.body);

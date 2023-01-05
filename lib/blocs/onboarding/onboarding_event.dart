@@ -33,7 +33,7 @@ class UpdateUserLocation extends OnboardingEvent {
   final GoogleMapController? controller;
   final bool isUpdateComplete;
 
-  UpdateUserLocation({
+  const UpdateUserLocation({
     this.location,
     this.controller,
     this.isUpdateComplete = false,
