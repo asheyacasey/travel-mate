@@ -3,21 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>343526656309-8fv9dr11lc2b5tgkp3tq03h6ko5v349t.apps.googleusercontent.com</string>
+	<string>118101448204-rjr4l71tugpkgb7i30hqk6qfsr8no3rm.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.343526656309-8fv9dr11lc2b5tgkp3tq03h6ko5v349t</string>
+	<string>com.googleusercontent.apps.118101448204-rjr4l71tugpkgb7i30hqk6qfsr8no3rm</string>
 	<key>API_KEY</key>
-	<string>AIzaSyA_aFj6rs3P_f1d8kg2OBB8mOmtuC_N6lc</string>
+	<string>AIzaSyCq1ARFZxtzy7raHdy5HyeAeCsZ_wTsRH0</string>
 	<key>GCM_SENDER_ID</key>
-	<string>343526656309</string>
+	<string>118101448204</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.example.travelMate</string>
 	<key>PROJECT_ID</key>
-	<string>travelmate-wonderpets</string>
+	<string>travel-mate-db-8b295</string>
 	<key>STORAGE_BUCKET</key>
-	<string>travelmate-wonderpets.appspot.com</string>
+	<string>travel-mate-db-8b295.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -29,6 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:343526656309:ios:4b030a4690aa3a789e247c</string>
+	<string>1:118101448204:ios:19fe4e94da3a86dcfe8029</string>
 </dict>
 </plist>
