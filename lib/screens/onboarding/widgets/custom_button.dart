@@ -28,7 +28,8 @@ class CustomButton extends StatelessWidget {
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           elevation: 0,
-          primary: Colors.transparent,
+          backgroundColor: Colors.transparent,
+          //primary: Colors.transparent,
         ),
         onPressed: () async {
           if (tabController.index == 5) {
