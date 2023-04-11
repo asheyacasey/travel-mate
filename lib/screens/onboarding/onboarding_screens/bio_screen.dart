@@ -9,8 +9,9 @@ import '../widgets/widgets.dart';
 
 class Biography extends StatelessWidget {
   final TabController tabController;
+  String? interest;
 
-  const Biography({
+  Biography({
     Key? key,
     required this.tabController,
   }) : super(key: key);
@@ -79,25 +80,35 @@ class Biography extends StatelessWidget {
                           .headline2!
                           .copyWith(color: Colors.black),
                     ),
-                    Row(
-                      children: [
-                        CustomTextContainer(text: 'MOVIES'),
-                        CustomTextContainer(text: 'HIKING'),
-                        CustomTextContainer(text: 'MUSIC'),
-                        CustomTextContainer(text: 'BIKING'),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        CustomTextContainer(text: 'KARAOKE'),
-                        CustomTextContainer(text: 'FREE DIVING'),
-                        CustomTextContainer(text: 'FOOD TRIP'),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        CustomTextContainer(text: 'MUSEUMS'),
-                      ],
+                    // Row(
+                    //   children: [
+                    //     CustomTextContainer(text: 'MOVIES'),
+                    //     CustomTextContainer(text: 'HIKING'),
+                    //     CustomTextContainer(text: 'MUSIC'),
+                    //     CustomTextContainer(text: 'BIKING'),
+                    //   ],
+                    // ),
+                    // Row(
+                    //   children: [
+                    //     CustomTextContainer(text: 'KARAOKE'),
+                    //     CustomTextContainer(text: 'FREE DIVING'),
+                    //     CustomTextContainer(text: 'FOOD TRIP'),
+                    //   ],
+                    // ),
+                    // Row(
+                    //   children: [
+                    //     CustomTextContainer(text: 'MUSEUMS'),
+                    //   ],
+                    // ),
+                    CustomTextField(
+                      hint: 'Add an interest',
+                      onChanged: (value) {
+                        interest = value;
+                      },
+                      onFocusChanged: (value) {
+                        context.read<OnboardingBloc>().add(UpdateUserInterest(
+                            user: state.user, interest: interest));
+                      },
                     ),
                   ],
                 ),

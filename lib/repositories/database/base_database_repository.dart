@@ -1,3 +1,5 @@
+import 'package:travel_mate/blocs/blocs.dart';
+
 import '../../models/models.dart';
 
 abstract class BaseDatabaseRepository {
@@ -7,6 +9,7 @@ abstract class BaseDatabaseRepository {
   Stream<List<Match>> getMatches(User user);
   Future<void> createUser(User user);
   Future<void> updateUser(User user);
+  Future<void> UpdateUserInterest(User user, String? interest);
   Future<void> updateUserPictures(User user, String imageName);
   Future<void> updateUserSwipe(
       String userId, String matchId, bool isSwipeRight);

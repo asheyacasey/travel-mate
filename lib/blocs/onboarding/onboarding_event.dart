@@ -56,6 +56,16 @@ class UpdateUser extends OnboardingEvent {
   List<Object?> get props => [user];
 }
 
+class UpdateUserInterest extends OnboardingEvent {
+  final User user;
+  final String? interest;
+
+  UpdateUserInterest({required this.user, this.interest});
+
+  @override
+  List<Object?> get props => [user, interest];
+}
+
 class UpdateUserImages extends OnboardingEvent {
   final User? user;
   final XFile image;

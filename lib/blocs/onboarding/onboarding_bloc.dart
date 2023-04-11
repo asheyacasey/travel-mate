@@ -28,6 +28,7 @@ class OnboardingBloc extends Bloc<OnboardingEvent, OnboardingState> {
     on<StartOnboarding>(_onStartOnboarding);
     on<UpdateUser>(_onUpdateUser);
     on<UpdateUserImages>(_onUpdateUserImages);
+    on<UpdateUserInterest>(_onUpdateUserInterest);
     //on<UpdateUserLocation>(_onUpdateUserLocation);
   }
 
@@ -45,6 +46,16 @@ class OnboardingBloc extends Bloc<OnboardingEvent, OnboardingState> {
   ) {
     if (state is OnboardingLoaded) {
       _databaseRepository.updateUser(event.user);
+      emit(OnboardingLoaded(user: event.user));
+    }
+  }
+
+  void _onUpdateUserInterest(
+    UpdateUserInterest event,
+    Emitter<OnboardingState> emit,
+  ) {
+    if (state is OnboardingLoaded) {
+      _databaseRepository.UpdateUserInterest(event.user, event.interest);
       emit(OnboardingLoaded(user: event.user));
     }
   }

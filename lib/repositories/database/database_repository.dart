@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:travel_mate/blocs/blocs.dart';
 import 'package:travel_mate/models/models.dart';
 import 'package:travel_mate/repositories/database/base_database_repository.dart';
 import 'package:travel_mate/repositories/storage/storage_repository.dart';
@@ -38,6 +39,13 @@ class DatabaseRepository extends BaseDatabaseRepository {
         .doc(user.id)
         .update(user.toMap())
         .then((value) => print('User document updated.'));
+  }
+
+  @override
+  Future<void> UpdateUserInterest(User user, String? interest) {
+    return _firebaseFirestore.collection('users').doc(user.id).update({
+      'interests': FieldValue.arrayUnion([interest])
+    }).then((value) => print('User document updated.'));
   }
 
   @override
@@ -106,20 +114,16 @@ class DatabaseRepository extends BaseDatabaseRepository {
 
   @override
   Stream<List<Match>> getMatches(User user) {
-
     return Rx.combineLatest2(getUser(user.id!), getUsers(user), (
-        User currentUser,
-        List<User> users,
-        ) {
+      User currentUser,
+      List<User> users,
+    ) {
       return users
           .where((user) => currentUser.matches!.contains(user.id))
           .map((user) => Match(userId: user.id!, matchedUser: user))
           .toList();
-    }
-    );
-
+    });
   }
-
 
   _selectGender(User user) {
     return (user.gender == 'Female') ? 'Male' : 'Female';
