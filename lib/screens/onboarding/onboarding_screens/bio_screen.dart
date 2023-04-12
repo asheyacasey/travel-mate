@@ -134,7 +134,14 @@ class Biography extends StatelessWidget {
                         itemCount: interestsCount,
                         itemBuilder: (BuildContext context, int index) {
                           return (interestsCount > index)
-                              ? Text(interests[index])
+                              ? ListTile(
+                                  title: Text(interests[index]),
+                                  trailing: IconButton(
+                                      onPressed: () {
+                                        print('removing from the list now');
+                                      },
+                                      icon: Icon(Icons.close)),
+                                )
                               : Text('');
                         },
                       ),
