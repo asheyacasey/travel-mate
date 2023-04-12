@@ -27,6 +27,8 @@ class Biography extends StatelessWidget {
         }
 
         if (state is OnboardingLoaded) {
+          var interests = state.user.interests;
+          var interestsCount = interests.length;
           return Padding(
             padding:
                 const EdgeInsets.symmetric(horizontal: 30.0, vertical: 50.0),
@@ -100,15 +102,42 @@ class Biography extends StatelessWidget {
                     //     CustomTextContainer(text: 'MUSEUMS'),
                     //   ],
                     // ),
-                    CustomTextField(
-                      hint: 'Add an interest',
-                      onChanged: (value) {
-                        interest = value;
-                      },
-                      onFocusChanged: (value) {
-                        context.read<OnboardingBloc>().add(UpdateUserInterest(
-                            user: state.user, interest: interest));
-                      },
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: CustomTextField(
+                            hint: 'Add an interest',
+                            onChanged: (value) {
+                              interest = value;
+                            },
+                          ),
+                        ),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        ElevatedButton(
+                            onPressed: () {
+                              context.read<OnboardingBloc>().add(
+                                  UpdateUserInterest(
+                                      user: state.user, interest: interest));
+                            },
+                            child: const Text('Add')),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 350,
+                      child: GridView.builder(
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2, childAspectRatio: 5),
+                        itemCount: interestsCount,
+                        itemBuilder: (BuildContext context, int index) {
+                          return (interestsCount > index)
+                              ? Text(interests[index])
+                              : Text('');
+                        },
+                      ),
                     ),
                   ],
                 ),
