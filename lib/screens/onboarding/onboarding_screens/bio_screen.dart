@@ -9,8 +9,9 @@ import '../widgets/widgets.dart';
 
 class Biography extends StatelessWidget {
   final TabController tabController;
+  String? interest;
 
-  const Biography({
+  Biography({
     Key? key,
     required this.tabController,
   }) : super(key: key);
@@ -26,6 +27,8 @@ class Biography extends StatelessWidget {
         }
 
         if (state is OnboardingLoaded) {
+          var interests = state.user.interests;
+          var interestsCount = interests.length;
           return Padding(
             padding:
                 const EdgeInsets.symmetric(horizontal: 30.0, vertical: 50.0),
@@ -79,25 +82,73 @@ class Biography extends StatelessWidget {
                           .headline2!
                           .copyWith(color: Colors.black),
                     ),
+                    // Row(
+                    //   children: [
+                    //     CustomTextContainer(text: 'MOVIES'),
+                    //     CustomTextContainer(text: 'HIKING'),
+                    //     CustomTextContainer(text: 'MUSIC'),
+                    //     CustomTextContainer(text: 'BIKING'),
+                    //   ],
+                    // ),
+                    // Row(
+                    //   children: [
+                    //     CustomTextContainer(text: 'KARAOKE'),
+                    //     CustomTextContainer(text: 'FREE DIVING'),
+                    //     CustomTextContainer(text: 'FOOD TRIP'),
+                    //   ],
+                    // ),
+                    // Row(
+                    //   children: [
+                    //     CustomTextContainer(text: 'MUSEUMS'),
+                    //   ],
+                    // ),
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        CustomTextContainer(text: 'MOVIES'),
-                        CustomTextContainer(text: 'HIKING'),
-                        CustomTextContainer(text: 'MUSIC'),
-                        CustomTextContainer(text: 'BIKING'),
+                        Expanded(
+                          child: CustomTextField(
+                            hint: 'Add an interest',
+                            onChanged: (value) {
+                              interest = value;
+                            },
+                          ),
+                        ),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        ElevatedButton(
+                            onPressed: () {
+                              context.read<OnboardingBloc>().add(
+                                  UpdateUserInterest(
+                                      user: state.user, interest: interest));
+                            },
+                            child: const Text('Add')),
                       ],
                     ),
-                    Row(
-                      children: [
-                        CustomTextContainer(text: 'KARAOKE'),
-                        CustomTextContainer(text: 'FREE DIVING'),
-                        CustomTextContainer(text: 'FOOD TRIP'),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        CustomTextContainer(text: 'MUSEUMS'),
-                      ],
+                    SizedBox(
+                      height: 350,
+                      child: GridView.builder(
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2, childAspectRatio: 5),
+                        itemCount: interestsCount,
+                        itemBuilder: (BuildContext context, int index) {
+                          return (interestsCount > index)
+                              ? ListTile(
+                                  title: Text(interests[index]),
+                                  trailing: IconButton(
+                                      onPressed: () {
+                                        String word = interests[index];
+                                        context.read<OnboardingBloc>().add(
+                                            UpdateUserInterest(
+                                                user: state.user,
+                                                interest: word));
+                                      },
+                                      icon: Icon(Icons.close)),
+                                )
+                              : Text('');
+                        },
+                      ),
                     ),
                   ],
                 ),
