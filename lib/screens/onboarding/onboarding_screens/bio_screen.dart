@@ -138,7 +138,11 @@ class Biography extends StatelessWidget {
                                   title: Text(interests[index]),
                                   trailing: IconButton(
                                       onPressed: () {
-                                        print('removing from the list now');
+                                        String word = interests[index];
+                                        context.read<OnboardingBloc>().add(
+                                            UpdateUserInterest(
+                                                user: state.user,
+                                                interest: word));
                                       },
                                       icon: Icon(Icons.close)),
                                 )

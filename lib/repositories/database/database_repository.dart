@@ -42,10 +42,25 @@ class DatabaseRepository extends BaseDatabaseRepository {
   }
 
   @override
-  Future<void> UpdateUserInterest(User user, String? interest) {
-    return _firebaseFirestore.collection('users').doc(user.id).update({
-      'interests': FieldValue.arrayUnion([interest])
-    }).then((value) => print('User document updated.'));
+  Future<void> UpdateUserInterest(User user, String? interest) async {
+    final docRef = _firebaseFirestore.collection('users').doc(user.id);
+    final docSnapshot = await docRef.get();
+
+    if (docSnapshot.exists) {
+      final currentInterests = List<String>.from(docSnapshot.get('interests'));
+
+      if (currentInterests.contains(interest)) {
+        await docRef.update({
+          'interests': FieldValue.arrayRemove([interest])
+        });
+        print('Removed $interest from interests of user ${user.id}');
+      } else {
+        await docRef.update({
+          'interests': FieldValue.arrayUnion([interest])
+        });
+        print('Added $interest to interests of user ${user.id}');
+      }
+    }
   }
 
   @override
