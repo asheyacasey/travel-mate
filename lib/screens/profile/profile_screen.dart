@@ -530,15 +530,12 @@ class _Interests extends StatelessWidget {
               ),
               child: Padding(
                 padding: const EdgeInsets.all(10.0),
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    CustomTextContainer(
-                      text: state.user.interests[0],
-                    ),
-                  ],
+                child: Wrap(
+                  spacing: 10.0,
+                  runSpacing: 10.0,
+                  children: state.user.interests
+                      .map((interest) => CustomTextContainer(text: interest))
+                      .toList(),
                 ),
               ),
             ),
@@ -613,6 +610,8 @@ class _Signout extends StatelessWidget {
             TextButton(
               onPressed: () {
                 RepositoryProvider.of<AuthRepository>(context).signOut();
+                Navigator.pushNamedAndRemoveUntil(
+                    context, '/login', (route) => false);
               },
               child: Center(
                 child: Text(
