@@ -74,7 +74,7 @@ class Biography extends StatelessWidget {
                             );
                       },
                     ),
-                    SizedBox(height: 100),
+                    SizedBox(height: 50),
                     Text(
                       'I\'m interested in...',
                       style: Theme.of(context)
@@ -126,25 +126,27 @@ class Biography extends StatelessWidget {
                       ],
                     ),
                     SizedBox(
-                      height: 350,
+                      height: 200,
                       child: GridView.builder(
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 2, childAspectRatio: 5),
+                                crossAxisCount: 1, childAspectRatio: 8),
                         itemCount: interestsCount,
                         itemBuilder: (BuildContext context, int index) {
                           return (interestsCount > index)
-                              ? ListTile(
-                                  title: Text(interests[index]),
-                                  trailing: IconButton(
-                                      onPressed: () {
-                                        String word = interests[index];
-                                        context.read<OnboardingBloc>().add(
-                                            UpdateUserInterest(
-                                                user: state.user,
-                                                interest: word));
-                                      },
-                                      icon: Icon(Icons.close)),
+                              ? Flexible(
+                                  child: ListTile(
+                                    title: Text(interests[index]),
+                                    trailing: IconButton(
+                                        onPressed: () {
+                                          String word = interests[index];
+                                          context.read<OnboardingBloc>().add(
+                                              UpdateUserInterest(
+                                                  user: state.user,
+                                                  interest: word));
+                                        },
+                                        icon: Icon(Icons.close)),
+                                  ),
                                 )
                               : Text('');
                         },
