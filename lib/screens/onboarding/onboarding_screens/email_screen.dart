@@ -64,13 +64,22 @@ class Email extends StatelessWidget {
                     SizedBox(
                       height: 5,
                     ),
-                    CustomTextField(
-                      hint: 'Enter your email',
-                      onChanged: (value) {
-                        context.read<SignupCubit>().emailChanged(value);
-                        email = value;
-                        print(email);
-                        print(state.email);
+                    BlocBuilder<SignupCubit, SignupState>(
+                      buildWhen: (previous, current) =>
+                          previous.email != current.email,
+                      builder: (context, state) {
+                        return CustomTextField(
+                          hint: 'Enter your email',
+                          errorText: state.email.invalid
+                              ? 'The email is invalid'
+                              : null,
+                          onChanged: (value) {
+                            context.read<SignupCubit>().emailChanged(value);
+                            email = value;
+                            print(email);
+                            print(state.email);
+                          },
+                        );
                       },
                     ),
                     SizedBox(
@@ -78,14 +87,20 @@ class Email extends StatelessWidget {
                     ),
                     CustomTextHeader(text: 'Create a Password'),
                     SizedBox(height: 5),
-                    CustomTextField(
-                      hint: 'Enter your password',
-                      isPassword: true,
-                      onChanged: (value) {
-                        context.read<SignupCubit>().passwordChanged(value);
-                        pass = value;
-                        print('The pass is ${pass}');
-                        print(state.password);
+                    BlocBuilder<SignupCubit, SignupState>(
+                      buildWhen: (previous, current) =>
+                          previous.password != current.password,
+                      builder: (context, state) {
+                        return CustomTextField(
+                          hint: 'Enter your password',
+                          isPassword: true,
+                          onChanged: (value) {
+                            context.read<SignupCubit>().passwordChanged(value);
+                            pass = value;
+                            print('The pass is ${pass}');
+                            print(state.password);
+                          },
+                        );
                       },
                     ),
                     SizedBox(
@@ -96,6 +111,9 @@ class Email extends StatelessWidget {
                     CustomTextField(
                       isPassword: true,
                       hint: 'Enter your password',
+                      errorText: state.password.invalid
+                          ? 'The password must contain atleast 8 characters'
+                          : null,
                       onChanged: (value) {
                         context.read<SignupCubit>().passwordChanged(value);
                         confirmPass = value;

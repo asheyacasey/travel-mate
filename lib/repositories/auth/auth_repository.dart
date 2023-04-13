@@ -41,6 +41,8 @@ class AuthRepository extends BaseAuthRepository {
         email: email,
         password: password,
       );
+    } on auth.FirebaseAuthException catch (error) {
+      throw Exception(error.message);
     } catch (_) {}
   }
 }

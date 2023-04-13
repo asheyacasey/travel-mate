@@ -1,11 +1,10 @@
-import 'package:flutter/cupertino.dart';
+import 'package:formz/formz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:travel_mate/blocs/auth/auth_bloc.dart';
 import 'package:travel_mate/cubits/cubits.dart';
 import 'package:travel_mate/screens/home/home_screen.dart';
 import 'package:travel_mate/screens/onboarding/onboarding_screen.dart';
-import 'package:travel_mate/widgets/custom_appbar.dart';
 import 'package:travel_mate/widgets/custom_elevated_button.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -30,90 +29,128 @@ class LoginScreen extends StatelessWidget {
       //   title: 'TravelMate',
       //   hasAction: false,
       // ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 30.0, vertical: 50.0),
-            child: Column(
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Welcome,',
-                        style: Theme.of(context)
-                            .primaryTextTheme
-                            .headline2!
-                            .copyWith(
-                                height: 1.8,
-                                color: Theme.of(context).primaryColor,
-                                fontSize: 36)),
-                    Text('TravelMate!',
-                        style: Theme.of(context)
-                            .primaryTextTheme
-                            .headline2!
-                            .copyWith(
-                                color: Theme.of(context).primaryColorLight,
-                                fontSize: 36)),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Text(
-                        'Start looking for the perfect travel date to your exciting journey!',
-                        style: Theme.of(context)
-                            .primaryTextTheme
-                            .bodyText1!
-                            .copyWith(
-                                color: Colors.grey,
-                                fontWeight: FontWeight.bold)),
-                    SizedBox(
-                      height: 50,
-                    ),
-                    EmailInput(),
-                    const SizedBox(height: 10),
-                    PasswordInput(),
-                    const SizedBox(height: 10),
-                    SizedBox(
-                      height: 30,
-                    ),
-                    CustomElevatedButton2(
-                      text: 'Log In',
-                      beginColor: Colors.white,
-                      endColor: Colors.white,
-                      textColor: Colors.white,
-                      onPressed: () {
-                        context.read<LoginCubit>().logInWithCredentials();
-                      },
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    CustomElevatedButton2(
-                      text: 'Sign Up',
-                      beginColor: Theme.of(context).primaryColor,
-                      endColor: Theme.of(context).primaryColor,
-                      textColor: Colors.white,
-                      onPressed: () =>
-                          Navigator.of(context).pushNamedAndRemoveUntil(
-                        OnboardingScreen.routeName,
-                        ModalRoute.withName(
-                          '/onboarding',
+      body: BlocListener<LoginCubit, LoginState>(
+        listener: (context, state) {
+          if (state.status.isSubmissionFailure) {
+            ScaffoldMessenger.of(context)
+              ..showSnackBar(SnackBar(
+                content: Text(state.errorMessage ?? 'Auth Failure'),
+              ));
+          }
+        },
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 30.0, vertical: 50.0),
+              child: Column(
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Welcome,',
+                          style: Theme.of(context)
+                              .primaryTextTheme
+                              .headline2!
+                              .copyWith(
+                                  height: 1.8,
+                                  color: Theme.of(context).primaryColor,
+                                  fontSize: 36)),
+                      Text('TravelMate!',
+                          style: Theme.of(context)
+                              .primaryTextTheme
+                              .headline2!
+                              .copyWith(
+                                  color: Theme.of(context).primaryColorLight,
+                                  fontSize: 36)),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Text(
+                          'Start looking for the perfect travel date to your exciting journey!',
+                          style: Theme.of(context)
+                              .primaryTextTheme
+                              .bodyText1!
+                              .copyWith(
+                                  color: Colors.grey,
+                                  fontWeight: FontWeight.bold)),
+                      SizedBox(
+                        height: 50,
+                      ),
+                      _EmailInput(),
+                      const SizedBox(height: 10),
+                      _PasswordInput(),
+                      const SizedBox(height: 10),
+                      SizedBox(
+                        height: 30,
+                      ),
+                      _LoginButton(),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      CustomElevatedButton2(
+                        text: 'Sign Up',
+                        beginColor: Theme.of(context).primaryColor,
+                        endColor: Theme.of(context).primaryColor,
+                        textColor: Colors.white,
+                        onPressed: () =>
+                            Navigator.of(context).pushNamedAndRemoveUntil(
+                          OnboardingScreen.routeName,
+                          ModalRoute.withName(
+                            '/onboarding',
+                          ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              ],
+                    ],
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 }
 
-class EmailInput extends StatelessWidget {
+class _LoginButton extends StatelessWidget {
+  const _LoginButton({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<LoginCubit, LoginState>(
+      buildWhen: (previous, current) {
+        return previous.status != current.status;
+      },
+      builder: (context, state) {
+        return state.status == FormzStatus.submissionInProgress
+            ? CircularProgressIndicator()
+            : CustomElevatedButton2(
+                text: 'Log In',
+                beginColor: Colors.white,
+                endColor: Colors.white,
+                textColor: Colors.white,
+                onPressed: () {
+                  state.status == FormzStatus.valid
+                      ? context.read<LoginCubit>().logInWithCredentials()
+                      : ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              'Please check your email and password',
+                            ),
+                          ),
+                        );
+                },
+              );
+      },
+    );
+  }
+}
+
+class _EmailInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<LoginCubit, LoginState>(
@@ -123,7 +160,10 @@ class EmailInput extends StatelessWidget {
           onChanged: (email) {
             context.read<LoginCubit>().emailChanged(email);
           },
+          keyboardType: TextInputType.emailAddress,
           decoration: InputDecoration(
+            labelText: 'Email',
+            errorText: state.email.invalid ? 'The email is invalid.' : null,
             filled: true,
             fillColor: Colors.white,
             hintText: 'Email',
@@ -143,7 +183,7 @@ class EmailInput extends StatelessWidget {
   }
 }
 
-class PasswordInput extends StatelessWidget {
+class _PasswordInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<LoginCubit, LoginState>(
@@ -153,7 +193,12 @@ class PasswordInput extends StatelessWidget {
           onChanged: (password) {
             context.read<LoginCubit>().passwordChanged(password);
           },
+          keyboardType: TextInputType.emailAddress,
           decoration: InputDecoration(
+            labelText: 'Password',
+            errorText: state.email.invalid
+                ? 'The password must contain at least 8 characters'
+                : null,
             filled: true,
             fillColor: Colors.white,
             hintText: 'Password',
