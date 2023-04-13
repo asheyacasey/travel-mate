@@ -8,6 +8,7 @@ class CustomTextField extends StatelessWidget {
   final TextEditingController? controller;
   final String? hint;
   final String? initialValue;
+  final String? errorText;
   final bool isPassword;
   final Function(String)? onChanged;
   final Function(bool)? onFocusChanged;
@@ -19,6 +20,7 @@ class CustomTextField extends StatelessWidget {
     this.isPassword = false,
     this.hint = '',
     this.initialValue = '',
+    this.errorText,
     this.onFocusChanged,
     this.onChanged,
     this.padding = const EdgeInsets.symmetric(horizontal: 20),
@@ -32,6 +34,7 @@ class CustomTextField extends StatelessWidget {
         decoration: InputDecoration(
           filled: true,
           fillColor: Colors.white,
+          errorText: errorText,
           hintText: hint,
           contentPadding:
               const EdgeInsets.only(bottom: 5.0, top: 12.5, left: 15.0),

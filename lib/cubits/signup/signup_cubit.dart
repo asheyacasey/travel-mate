@@ -2,11 +2,10 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:travel_mate/models/user_model.dart';
+import 'package:form_inputs/form_inputs.dart';
 import 'package:travel_mate/repositories/auth/auth_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
-
-import '../../blocs/onboarding/onboarding_bloc.dart';
+import 'package:formz/formz.dart';
 
 part 'signup_state.dart';
 
@@ -18,34 +17,40 @@ class SignupCubit extends Cubit<SignupState> {
         super(SignupState.initial());
 
   void emailChanged(String value) {
-    emit(state.copyWith(email: value, status: SignupStatus.initial));
+    final email = Email.dirty(value);
+
+    emit(
+      state.copyWith(
+        email: email,
+        status: Formz.validate([email, state.password]),
+      ),
+    );
   }
 
   void passwordChanged(String value) {
-    emit(state.copyWith(password: value, status: SignupStatus.initial));
+    final password = Password.dirty(value);
+
+    emit(
+      state.copyWith(
+        password: password,
+        status: Formz.validate([state.email, password]),
+      ),
+    );
   }
 
   Future<void> signupWithCredentials(BuildContext context) async {
-    if (!state.isFormValid || state.status == SignupStatus.submitting) return;
-    emit(
-      state.copyWith(status: SignupStatus.submitting),
-    );
+    if (!state.status.isValidated) return;
+
+    emit(state.copyWith(status: FormzStatus.submissionInProgress));
     try {
-      var user = await _authRepository.signUp(
-          email: state.email, password: state.password);
-      emit(
-        state.copyWith(
-          status: SignupStatus.success,
-          user: user,
-        ),
+      await _authRepository.logInWithEmailAndPassword(
+        email: state.email.value,
+        password: state.password.value,
       );
-    } on auth.FirebaseAuthException catch (e) {
-      print(e.message);
-      emit(
-        state.copyWith(
-          status: SignupStatus.error,
-        ),
-      );
+
+      emit(state.copyWith(status: FormzStatus.submissionSuccess));
+    } catch (_) {
+      emit(state.copyWith(status: FormzStatus.submissionFailure));
     }
   }
 }
