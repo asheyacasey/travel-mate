@@ -1,11 +1,10 @@
-import 'package:flutter/cupertino.dart';
+import 'package:formz/formz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:travel_mate/blocs/auth/auth_bloc.dart';
 import 'package:travel_mate/cubits/cubits.dart';
 import 'package:travel_mate/screens/home/home_screen.dart';
 import 'package:travel_mate/screens/onboarding/onboarding_screen.dart';
-import 'package:travel_mate/widgets/custom_appbar.dart';
 import 'package:travel_mate/widgets/custom_elevated_button.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -79,22 +78,14 @@ class LoginScreen extends StatelessWidget {
                       SizedBox(
                         height: 50,
                       ),
-                      EmailInput(),
+                      _EmailInput(),
                       const SizedBox(height: 10),
-                      PasswordInput(),
+                      _PasswordInput(),
                       const SizedBox(height: 10),
                       SizedBox(
                         height: 30,
                       ),
-                      CustomElevatedButton2(
-                        text: 'Log In',
-                        beginColor: Colors.white,
-                        endColor: Colors.white,
-                        textColor: Colors.white,
-                        onPressed: () {
-                          context.read<LoginCubit>().logInWithCredentials();
-                        },
-                      ),
+                      _LoginButton(),
                       SizedBox(
                         height: 20,
                       ),
@@ -123,7 +114,43 @@ class LoginScreen extends StatelessWidget {
   }
 }
 
-class EmailInput extends StatelessWidget {
+class _LoginButton extends StatelessWidget {
+  const _LoginButton({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<LoginCubit, LoginState>(
+      buildWhen: (previous, current) {
+        return previous.status != current.status;
+      },
+      builder: (context, state) {
+        return state.status == FormzStatus.submissionInProgress
+            ? CircularProgressIndicator()
+            : CustomElevatedButton2(
+                text: 'Log In',
+                beginColor: Colors.white,
+                endColor: Colors.white,
+                textColor: Colors.white,
+                onPressed: () {
+                  state.status == FormzStatus.valid
+                      ? context.read<LoginCubit>().logInWithCredentials()
+                      : ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              'Check your email and password: ${state.status}',
+                            ),
+                          ),
+                        );
+                },
+              );
+      },
+    );
+  }
+}
+
+class _EmailInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<LoginCubit, LoginState>(
@@ -133,7 +160,10 @@ class EmailInput extends StatelessWidget {
           onChanged: (email) {
             context.read<LoginCubit>().emailChanged(email);
           },
+          keyboardType: TextInputType.emailAddress,
           decoration: InputDecoration(
+            labelText: 'Email',
+            errorText: state.email.invalid ? 'The email is invalid.' : null,
             filled: true,
             fillColor: Colors.white,
             hintText: 'Email',
@@ -153,7 +183,7 @@ class EmailInput extends StatelessWidget {
   }
 }
 
-class PasswordInput extends StatelessWidget {
+class _PasswordInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<LoginCubit, LoginState>(
@@ -163,7 +193,12 @@ class PasswordInput extends StatelessWidget {
           onChanged: (password) {
             context.read<LoginCubit>().passwordChanged(password);
           },
+          keyboardType: TextInputType.emailAddress,
           decoration: InputDecoration(
+            labelText: 'Password',
+            errorText: state.email.invalid
+                ? 'The password must contain at least 8 characters'
+                : null,
             filled: true,
             fillColor: Colors.white,
             hintText: 'Password',
