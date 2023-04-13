@@ -30,84 +30,94 @@ class LoginScreen extends StatelessWidget {
       //   title: 'TravelMate',
       //   hasAction: false,
       // ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 30.0, vertical: 50.0),
-            child: Column(
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Welcome,',
-                        style: Theme.of(context)
-                            .primaryTextTheme
-                            .headline2!
-                            .copyWith(
-                                height: 1.8,
-                                color: Theme.of(context).primaryColor,
-                                fontSize: 36)),
-                    Text('TravelMate!',
-                        style: Theme.of(context)
-                            .primaryTextTheme
-                            .headline2!
-                            .copyWith(
-                                color: Theme.of(context).primaryColorLight,
-                                fontSize: 36)),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Text(
-                        'Start looking for the perfect travel date to your exciting journey!',
-                        style: Theme.of(context)
-                            .primaryTextTheme
-                            .bodyText1!
-                            .copyWith(
-                                color: Colors.grey,
-                                fontWeight: FontWeight.bold)),
-                    SizedBox(
-                      height: 50,
-                    ),
-                    EmailInput(),
-                    const SizedBox(height: 10),
-                    PasswordInput(),
-                    const SizedBox(height: 10),
-                    SizedBox(
-                      height: 30,
-                    ),
-                    CustomElevatedButton2(
-                      text: 'Log In',
-                      beginColor: Colors.white,
-                      endColor: Colors.white,
-                      textColor: Colors.white,
-                      onPressed: () {
-                        context.read<LoginCubit>().logInWithCredentials();
-                      },
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    CustomElevatedButton2(
-                      text: 'Sign Up',
-                      beginColor: Theme.of(context).primaryColor,
-                      endColor: Theme.of(context).primaryColor,
-                      textColor: Colors.white,
-                      onPressed: () =>
-                          Navigator.of(context).pushNamedAndRemoveUntil(
-                        OnboardingScreen.routeName,
-                        ModalRoute.withName(
-                          '/onboarding',
+      body: BlocListener<LoginCubit, LoginState>(
+        listener: (context, state) {
+          if (state.status.error) {
+            ScaffoldMessenger.of(context)
+              ..showSnackBar(SnackBar(
+                content: Text(state.errorMessage ?? 'Auth Failure'),
+              ));
+          }
+        },
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 30.0, vertical: 50.0),
+              child: Column(
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Welcome,',
+                          style: Theme.of(context)
+                              .primaryTextTheme
+                              .headline2!
+                              .copyWith(
+                                  height: 1.8,
+                                  color: Theme.of(context).primaryColor,
+                                  fontSize: 36)),
+                      Text('TravelMate!',
+                          style: Theme.of(context)
+                              .primaryTextTheme
+                              .headline2!
+                              .copyWith(
+                                  color: Theme.of(context).primaryColorLight,
+                                  fontSize: 36)),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Text(
+                          'Start looking for the perfect travel date to your exciting journey!',
+                          style: Theme.of(context)
+                              .primaryTextTheme
+                              .bodyText1!
+                              .copyWith(
+                                  color: Colors.grey,
+                                  fontWeight: FontWeight.bold)),
+                      SizedBox(
+                        height: 50,
+                      ),
+                      EmailInput(),
+                      const SizedBox(height: 10),
+                      PasswordInput(),
+                      const SizedBox(height: 10),
+                      SizedBox(
+                        height: 30,
+                      ),
+                      CustomElevatedButton2(
+                        text: 'Log In',
+                        beginColor: Colors.white,
+                        endColor: Colors.white,
+                        textColor: Colors.white,
+                        onPressed: () {
+                          context.read<LoginCubit>().logInWithCredentials();
+                        },
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      CustomElevatedButton2(
+                        text: 'Sign Up',
+                        beginColor: Theme.of(context).primaryColor,
+                        endColor: Theme.of(context).primaryColor,
+                        textColor: Colors.white,
+                        onPressed: () =>
+                            Navigator.of(context).pushNamedAndRemoveUntil(
+                          OnboardingScreen.routeName,
+                          ModalRoute.withName(
+                            '/onboarding',
+                          ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              ],
+                    ],
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

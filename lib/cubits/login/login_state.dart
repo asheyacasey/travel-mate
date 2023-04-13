@@ -7,6 +7,7 @@ class LoginState extends Equatable {
   final String email;
   final String password;
   final LoginStatus status;
+  final String? errorMessage;
   final auth.User? user;
 
   bool get isFormValid => email.isNotEmpty && password.isNotEmpty;
@@ -15,6 +16,7 @@ class LoginState extends Equatable {
     required this.email,
     required this.password,
     required this.status,
+    this.errorMessage,
     this.user,
   });
 
@@ -23,6 +25,7 @@ class LoginState extends Equatable {
       email: '',
       password: '',
       status: LoginStatus.initial,
+      errorMessage: null,
       user: null,
     );
   }
@@ -31,18 +34,20 @@ class LoginState extends Equatable {
   bool get stringify => true;
 
   @override
-  List<Object?> get props => [email, password, status, user];
+  List<Object?> get props => [email, password, status, errorMessage, user];
 
   LoginState copyWith({
     String? email,
     String? password,
     LoginStatus? status,
+    String? errorMessage,
     auth.User? user,
   }) {
     return LoginState(
       email: email ?? this.email,
       password: password ?? this.password,
       status: status ?? this.status,
+      errorMessage: errorMessage ?? this.errorMessage,
       user: user ?? this.user,
     );
   }
