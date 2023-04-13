@@ -139,7 +139,7 @@ class _LoginButton extends StatelessWidget {
                       : ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             content: Text(
-                              'Check your email and password: ${state.status}',
+                              'Please check your email and password',
                             ),
                           ),
                         );
