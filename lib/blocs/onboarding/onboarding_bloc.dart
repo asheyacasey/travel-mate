@@ -15,15 +15,15 @@ part 'onboarding_state.dart';
 class OnboardingBloc extends Bloc<OnboardingEvent, OnboardingState> {
   final DatabaseRepository _databaseRepository;
   final StorageRepository _storageRepository;
-  //final LocationRepository _locationRepository;
+  final LocationRepository _locationRepository;
 
   OnboardingBloc({
     required DatabaseRepository databaseRepository,
     required StorageRepository storageRepostitory,
-    //required LocationRepository locationRepository,
+    required LocationRepository locationRepository,
   })  : _databaseRepository = databaseRepository,
         _storageRepository = storageRepostitory,
-        //_locationRepository = locationRepository,
+        _locationRepository = locationRepository,
         super(OnboardingLoading()) {
     on<StartOnboarding>(_onStartOnboarding);
     on<UpdateUser>(_onUpdateUser);
