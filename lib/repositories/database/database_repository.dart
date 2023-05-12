@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:travel_mate/blocs/blocs.dart';
 import 'package:travel_mate/models/models.dart';
@@ -135,7 +136,26 @@ class DatabaseRepository extends BaseDatabaseRepository {
     ) {
       return users
           .where((user) => currentUser.matches!.contains(user.id))
-          .map((user) => Match(userId: user.id!, matchedUser: user))
+          .map(
+            (user) => Match(
+              userId: user.id!,
+              matchUser: user,
+              chat: Chat(id: '1', userIds: [
+                '1',
+                '2'
+              ], messages: [
+                Message(
+                  senderId: '1',
+                  receiverId: '2',
+                  message: 'Hey, how are you doing?',
+                  dateTime: DateTime.now(),
+                  timeString: DateFormat('jm').format(
+                    DateTime.now(),
+                  ),
+                )
+              ]),
+            ),
+          )
           .toList();
     });
   }

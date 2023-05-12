@@ -8,6 +8,7 @@ import 'package:travel_mate/widgets/user_image_small.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../models/models.dart';
+import '../chat/chat_screen.dart';
 
 class MatchesScreen extends StatelessWidget {
   static const String routeName = '/matches';
@@ -113,35 +114,35 @@ class ChatsList extends StatelessWidget {
       itemBuilder: (context, index) {
         return InkWell(
           onTap: () {
-            // Navigator.pushNamed(context, ChatScreen.routeName,
-            //     arguments: activeMatches[index]);
+            Navigator.pushNamed(context, ChatScreen.routeName,
+                arguments: activeMatches[index]);
           },
           child: Row(
             children: [
               UserImageSmall(
                 height: 70,
                 width: 70,
-                imageUrl: activeMatches[index].matchedUser.imageUrls[0],
+                imageUrl: activeMatches[index].matchUser.imageUrls[0],
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    activeMatches[index].matchedUser.name,
+                    activeMatches[index].matchUser.name,
                     style: Theme.of(context).textTheme.headline5,
                   ),
                   SizedBox(
                     height: 5,
                   ),
                   Text(
-                    activeMatches[index].chat![0].messages[0].message,
+                    activeMatches[index].chat.messages[0].message,
                     style: Theme.of(context).textTheme.headline6,
                   ),
                   SizedBox(
                     height: 5,
                   ),
                   Text(
-                    activeMatches[index].chat![0].messages[0].timeString,
+                    activeMatches[index].chat.messages[0].timeString,
                     style: Theme.of(context).textTheme.bodyText1,
                   ),
                 ],
@@ -176,9 +177,9 @@ class MatchesList extends StatelessWidget {
               UserImageSmall(
                 height: 70,
                 width: 70,
-                imageUrl: inactiveMatches[index].matchedUser.imageUrls[0],
+                imageUrl: inactiveMatches[index].matchUser.imageUrls[0],
               ),
-              Text(inactiveMatches[index].matchedUser.name,
+              Text(inactiveMatches[index].matchUser.name,
                   style: Theme.of(context).textTheme.headline5),
             ],
           );
