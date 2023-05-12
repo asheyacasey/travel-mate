@@ -7,6 +7,8 @@ abstract class BaseDatabaseRepository {
   Stream<List<User>> getUsersToSwipe(User user);
   Stream<List<User>> getUsers(User user); // <-- String userId, String gender
   Stream<List<Match>> getMatches(User user);
+  Stream<Chat> getChat(String chatId);
+  Stream<List<Chat>> getChats(String userId);
   Future<void> createUser(User user);
   Future<void> updateUser(User user);
   Future<void> UpdateUserInterest(User user, String? interest);
@@ -14,4 +16,5 @@ abstract class BaseDatabaseRepository {
   Future<void> updateUserSwipe(
       String userId, String matchId, bool isSwipeRight);
   Future<void> updateUserMatch(String userId, String matchId);
+  Future<void> addMessage(String chatId, Message message);
 }

@@ -39,10 +39,12 @@ class MatchesScreen extends StatelessWidget {
             );
           }
           if (state is MatchLoaded) {
-            final inactiveMatches =
-                state.matches.where((match) => match.chat == null).toList();
-            final activeMatches =
-                state.matches.where((match) => match.chat != null).toList();
+            final inactiveMatches = state.matches
+                .where((match) => match.chat.messages.length == 0)
+                .toList();
+            final activeMatches = state.matches
+                .where((match) => match.chat.messages.length > 0)
+                .toList();
 
             return SingleChildScrollView(
               child: Padding(
@@ -55,7 +57,6 @@ class MatchesScreen extends StatelessWidget {
                       style: Theme.of(context).textTheme.headline4,
                     ),
                     MatchesList(inactiveMatches: inactiveMatches),
-                    SizedBox(height: 10),
                     Text(
                       'Conversations',
                       style: Theme.of(context).textTheme.headline4,
@@ -172,16 +173,22 @@ class MatchesList extends StatelessWidget {
         shrinkWrap: true,
         itemCount: inactiveMatches.length,
         itemBuilder: (context, index) {
-          return Column(
-            children: [
-              UserImageSmall(
-                height: 70,
-                width: 70,
-                imageUrl: inactiveMatches[index].matchUser.imageUrls[0],
-              ),
-              Text(inactiveMatches[index].matchUser.name,
-                  style: Theme.of(context).textTheme.headline5),
-            ],
+          return InkWell(
+            onTap: () {
+              Navigator.pushNamed(context, ChatScreen.routeName,
+                  arguments: inactiveMatches[index]);
+            },
+            child: Column(
+              children: [
+                UserImageSmall(
+                  height: 70,
+                  width: 70,
+                  imageUrl: inactiveMatches[index].matchUser.imageUrls[0],
+                ),
+                Text(inactiveMatches[index].matchUser.name,
+                    style: Theme.of(context).textTheme.headline5),
+              ],
+            ),
           );
         },
       ),

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:travel_mate/blocs/auth/auth_bloc.dart';
+import 'package:travel_mate/blocs/blocs.dart';
+import 'package:travel_mate/repositories/database/database_repository.dart';
 import 'package:unicons/unicons.dart';
 import 'package:travel_mate/models/models.dart';
 
@@ -10,7 +12,12 @@ class ChatScreen extends StatelessWidget {
   static Route route({required Match match}) {
     return MaterialPageRoute(
       settings: RouteSettings(name: routeName),
-      builder: (context) => ChatScreen(match: match),
+      builder: (context) => BlocProvider<ChatBloc>(
+        create: (context) => ChatBloc(
+          databaseRepository: context.read<DatabaseRepository>(),
+        )..add(LoadChat(match.chat.id)),
+        child: ChatScreen(match: match),
+      ),
     );
   }
 
@@ -20,27 +27,41 @@ class ChatScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var messageCount = (match.chat == null) ? 0 : match.chat.messages.length;
     return Scaffold(
       appBar: _CustomAppBar(match: match),
-      body: Column(
-        children: [
-          ListView.builder(
-            shrinkWrap: true,
-            itemCount: match.chat.messages.length,
-            itemBuilder: (context, index) {
-              return ListTile(
-                title: _Message(
-                  message: match.chat.messages[index].message,
-                  isFromCurrentUser: match.chat.messages[index].senderId ==
-                      context.read<AuthBloc>().state.authUser!.uid,
+      body: BlocBuilder<ChatBloc, ChatState>(
+        builder: (context, state) {
+          if (state is ChatLoading) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          if (state is ChatLoaded) {
+            return Column(
+              children: [
+                ListView.builder(
+                  reverse: true,
+                  shrinkWrap: true,
+                  itemCount: state.chat.messages.length,
+                  itemBuilder: (context, index) {
+                    List<Message> messages = state.chat.messages;
+                    return ListTile(
+                      title: _Message(
+                        message: messages[index].message,
+                        isFromCurrentUser: messages[index].senderId ==
+                            context.read<AuthBloc>().state.authUser!.uid,
+                      ),
+                    );
+                  },
                 ),
-              );
-            },
-          ),
-          Spacer(),
-          _MessageInput(match: match),
-        ],
+                Spacer(),
+                _MessageInput(match: match),
+              ],
+            );
+          } else {
+            return Text('Something went wrong.');
+          }
+        },
       ),
     );
   }
@@ -90,6 +111,7 @@ class _MessageInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    TextEditingController controller = TextEditingController();
     return Container(
       padding: EdgeInsets.all(5),
       height: 100,
@@ -97,6 +119,7 @@ class _MessageInput extends StatelessWidget {
         children: [
           Expanded(
             child: TextField(
+              controller: controller,
               decoration: InputDecoration(
                 filled: true,
                 fillColor: Colors.white,
@@ -119,7 +142,17 @@ class _MessageInput extends StatelessWidget {
             ),
             child: IconButton(
               icon: Icon(UniconsLine.message),
-              onPressed: () {},
+              onPressed: () {
+                context.read<ChatBloc>()
+                  ..add(
+                    AddMessage(
+                      userId: match.userId,
+                      matchUserId: match.matchUser.id!,
+                      message: controller.text,
+                    ),
+                  );
+                controller.clear();
+              },
               color: Colors.white,
             ),
           ),
@@ -149,7 +182,7 @@ class _Message extends StatelessWidget {
         : Theme.of(context).primaryColor;
 
     TextStyle? textStyle = isFromCurrentUser
-        ? Theme.of(context).textTheme.headline6
+        ? Theme.of(context).textTheme.headline6!.copyWith(color: Colors.black)
         : Theme.of(context).textTheme.headline6!.copyWith(color: Colors.white);
     return Align(
       alignment: alignment,

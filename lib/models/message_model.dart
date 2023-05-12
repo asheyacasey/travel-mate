@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:intl/intl.dart';
 
@@ -21,7 +22,7 @@ class Message extends Equatable {
       senderId: json['senderId'],
       receiverId: json['receiverId'],
       message: json['message'],
-      dateTime: json['dateTime'],
+      dateTime: (json['dateTime'] as Timestamp).toDate(),
       timeString: DateFormat('HH:mm').format(
         json['dateTime'].toDate(),
       ),
