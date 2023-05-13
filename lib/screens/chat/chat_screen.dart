@@ -136,6 +136,60 @@ class _MessageInput extends StatelessWidget {
                 ),
               ),
             ),
+            IconButton(
+              icon: Icon(Icons.add),
+              onPressed: () {
+                showModalBottomSheet(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return Container(
+                      height: 300,
+                      child: ListView.builder(
+                        itemCount: itineraryOptions.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return ListTile(
+                            title: Text(itineraryOptions[index]['name']),
+                            onTap: () {
+                              Navigator.pop(context);
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title:
+                                        Text(itineraryOptions[index]['name']),
+                                    content: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        for (var place
+                                            in itineraryOptions[index]
+                                                ['places'])
+                                          ListTile(
+                                            title: Text(place['name']),
+                                            subtitle:
+                                                Text(place['departureTime']),
+                                          ),
+                                      ],
+                                    ),
+                                    actions: <Widget>[
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        child: const Text('OK'),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            },
+                          );
+                        },
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
             Container(
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
@@ -163,6 +217,33 @@ class _MessageInput extends StatelessWidget {
     );
   }
 }
+
+List<Map<String, dynamic>> itineraryOptions = [
+  {
+    'name': 'Option 1',
+    'places': [
+      {'name': 'Central Park', 'departureTime': '10:00 AM'},
+      {'name': 'Empire State Building', 'departureTime': '1:00 PM'},
+      {'name': 'Statue of Liberty', 'departureTime': '4:00 PM'},
+    ],
+  },
+  {
+    'name': 'Option 2',
+    'places': [
+      {'name': 'Brooklyn Bridge', 'departureTime': '9:00 AM'},
+      {'name': 'One World Trade Center', 'departureTime': '12:00 PM'},
+      {'name': 'The High Line', 'departureTime': '3:00 PM'},
+    ],
+  },
+  {
+    'name': 'Option 3',
+    'places': [
+      {'name': 'The Metropolitan Museum of Art', 'departureTime': '11:00 AM'},
+      {'name': 'Top of the Rock Observation Deck', 'departureTime': '2:00 PM'},
+      {'name': 'Central Park Zoo', 'departureTime': '5:00 PM'},
+    ],
+  },
+];
 
 class _Message extends StatelessWidget {
   const _Message({
