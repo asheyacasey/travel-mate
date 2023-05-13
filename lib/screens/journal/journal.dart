@@ -4,10 +4,8 @@ import 'package:travel_mate/screens/journal/dialog_box.dart';
 import 'package:travel_mate/widgets/widgets.dart';
 import 'package:unicons/unicons.dart';
 
-class MainJournal extends StatelessWidget {
+class MainJournal extends StatefulWidget {
   static const String routeName = '/mainJournal';
-
-  final _controller = TextEditingController();
 
   static Route route() {
     return MaterialPageRoute(
@@ -16,14 +14,19 @@ class MainJournal extends StatelessWidget {
     );
   }
 
+  @override
+  State<MainJournal> createState() => _MainJournalState();
+}
+
+class _MainJournalState extends State<MainJournal> {
+  final _controller = TextEditingController();
+
   /**
    * dynamically creating a list
    */
-  final List _posts = [
-    'Journal 1',
-    'Journal 2',
-    'Journal 3',
-    'Journal 4',
+  List _posts = [
+    ["Journal 1"],
+    ["Journal 2"],
   ];
 
   /**
@@ -35,9 +38,19 @@ class MainJournal extends StatelessWidget {
       builder: (context) {
         return DialogBox(
           controller: _controller,
+          onSave: saveJournal,
+          onCancel: () => Navigator.of(context).pop(),
         );
       },
     );
+  }
+
+  void saveJournal() {
+    setState(() {
+      _posts.add([_controller.text, false]);
+      _controller.clear();
+    });
+    Navigator.of(context).pop();
   }
 
   @override
@@ -53,9 +66,7 @@ class MainJournal extends StatelessWidget {
       body: ListView.builder(
         itemCount: _posts.length,
         itemBuilder: (context, index) {
-          return JournalContents(
-            child: _posts[index],
-          );
+          return JournalContents(journalName: _posts[index][0]);
         },
       ),
     );

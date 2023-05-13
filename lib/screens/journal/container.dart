@@ -1,24 +1,19 @@
 import 'package:flutter/material.dart';
 
 class JournalContents extends StatelessWidget {
-  final String child;
+  final String journalName;
 
-  JournalContents({required this.child});
+  JournalContents({required this.journalName});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Container(
-        height: 200,
-        child: Center(
-          child: Text(
-            child,
-            style: TextStyle(fontSize: 40),
-          ),
-        ),
+        padding: EdgeInsets.all(24),
+        child: Text(journalName),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(10),
           color: Colors.green[200],
         ),
       ),

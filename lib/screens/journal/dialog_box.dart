@@ -3,7 +3,15 @@ import 'package:travel_mate/screens/journal/buttons.dart';
 
 class DialogBox extends StatelessWidget {
   final controller;
-  const DialogBox({Key? key, required this.controller}) : super(key: key);
+  VoidCallback onSave;
+  VoidCallback onCancel;
+
+  DialogBox(
+      {Key? key,
+      required this.controller,
+      required this.onSave,
+      required this.onCancel})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -28,14 +36,14 @@ class DialogBox extends StatelessWidget {
               children: [
                 DialogButton(
                   text: "Save",
-                  onPressed: () {},
+                  onPressed: onSave,
                 ),
                 SizedBox(
                   width: 20,
                 ),
                 DialogButton(
                   text: "Cancel",
-                  onPressed: () {},
+                  onPressed: onCancel,
                 ),
               ],
             ),
