@@ -8,8 +8,12 @@ class JournalDatabase {
   //run this method if first time opening the app
   void createInitialData() {
     posts = [
-      ["post 1"],
-      ["post 2"],
+      [
+        "I love drinking coffee by the beach. This make me feel calm while watching the waves crash by"
+      ],
+      [
+        "I love watching movies and my experience in the Director's Club made me love movies even more"
+      ],
     ];
   }
 
