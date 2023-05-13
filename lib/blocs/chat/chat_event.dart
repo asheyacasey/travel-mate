@@ -29,10 +29,14 @@ class AddMessage extends ChatEvent {
   final String userId;
   final String matchUserId;
   final String message;
+  final String? itinerary;
 
   AddMessage(
-      {required this.userId, required this.matchUserId, required this.message});
+      {required this.userId,
+      required this.matchUserId,
+      required this.message,
+      this.itinerary});
 
   @override
-  List<Object?> get props => [userId, matchUserId, message];
+  List<Object?> get props => [userId, matchUserId, message, itinerary];
 }

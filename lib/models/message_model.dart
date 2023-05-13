@@ -6,6 +6,7 @@ class Message extends Equatable {
   final String senderId;
   final String receiverId;
   final String message;
+  final String? itinerary;
   final DateTime dateTime;
   final String timeString;
 
@@ -13,6 +14,7 @@ class Message extends Equatable {
     required this.senderId,
     required this.receiverId,
     required this.message,
+    this.itinerary,
     required this.dateTime,
     required this.timeString,
   });
@@ -22,6 +24,7 @@ class Message extends Equatable {
       senderId: json['senderId'],
       receiverId: json['receiverId'],
       message: json['message'],
+      itinerary: json['itinerary'],
       dateTime: (json['dateTime'] as Timestamp).toDate(),
       timeString: DateFormat('HH:mm').format(
         json['dateTime'].toDate(),
@@ -34,6 +37,7 @@ class Message extends Equatable {
       'senderId': senderId,
       'receiverId': receiverId,
       'message': message,
+      'itinerary': itinerary,
       'dateTime': dateTime,
     };
   }
@@ -43,6 +47,7 @@ class Message extends Equatable {
         senderId,
         receiverId,
         message,
+        itinerary,
         dateTime,
         timeString,
       ];
