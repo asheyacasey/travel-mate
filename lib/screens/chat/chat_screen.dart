@@ -39,22 +39,23 @@ class ChatScreen extends StatelessWidget {
           if (state is ChatLoaded) {
             return Column(
               children: [
-                ListView.builder(
-                  reverse: true,
-                  shrinkWrap: true,
-                  itemCount: state.chat.messages.length,
-                  itemBuilder: (context, index) {
-                    List<Message> messages = state.chat.messages;
-                    return ListTile(
-                      title: _Message(
-                        message: messages[index].message,
-                        isFromCurrentUser: messages[index].senderId ==
-                            context.read<AuthBloc>().state.authUser!.uid,
-                      ),
-                    );
-                  },
+                Expanded(
+                  child: ListView.builder(
+                    reverse: true,
+                    shrinkWrap: true,
+                    itemCount: state.chat.messages.length,
+                    itemBuilder: (context, index) {
+                      List<Message> messages = state.chat.messages;
+                      return ListTile(
+                        title: _Message(
+                          message: messages[index].message,
+                          isFromCurrentUser: messages[index].senderId ==
+                              context.read<AuthBloc>().state.authUser!.uid,
+                        ),
+                      );
+                    },
+                  ),
                 ),
-                Spacer(),
                 _MessageInput(match: match),
               ],
             );
@@ -113,50 +114,51 @@ class _MessageInput extends StatelessWidget {
   Widget build(BuildContext context) {
     TextEditingController controller = TextEditingController();
     return Container(
-      padding: EdgeInsets.all(5),
-      height: 100,
-      child: Row(
-        children: [
-          Expanded(
-            child: TextField(
-              controller: controller,
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: Colors.white,
-                hintText: 'Type a message',
-                contentPadding:
-                    const EdgeInsets.only(left: 20, bottom: 5, top: 5),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.white),
-                ),
-                enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.white),
+      padding: EdgeInsets.all(5.0),
+      child: SingleChildScrollView(
+        child: Row(
+          children: [
+            Expanded(
+              child: TextField(
+                controller: controller,
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Colors.white,
+                  hintText: 'Type a message',
+                  contentPadding:
+                      const EdgeInsets.only(left: 20, bottom: 5, top: 5),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white),
+                  ),
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white),
+                  ),
                 ),
               ),
             ),
-          ),
-          Container(
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: Theme.of(context).primaryColor,
+            Container(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Theme.of(context).primaryColor,
+              ),
+              child: IconButton(
+                icon: Icon(UniconsLine.message),
+                onPressed: () {
+                  context.read<ChatBloc>()
+                    ..add(
+                      AddMessage(
+                        userId: match.userId,
+                        matchUserId: match.matchUser.id!,
+                        message: controller.text,
+                      ),
+                    );
+                  controller.clear();
+                },
+                color: Colors.white,
+              ),
             ),
-            child: IconButton(
-              icon: Icon(UniconsLine.message),
-              onPressed: () {
-                context.read<ChatBloc>()
-                  ..add(
-                    AddMessage(
-                      userId: match.userId,
-                      matchUserId: match.matchUser.id!,
-                      message: controller.text,
-                    ),
-                  );
-                controller.clear();
-              },
-              color: Colors.white,
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
