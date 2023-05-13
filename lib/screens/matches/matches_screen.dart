@@ -79,7 +79,7 @@ class MatchesScreen extends StatelessWidget {
                 ),
                 CustomElevatedButton(
                   text: 'Back To Home Screen',
-                  beginColor: Theme.of(context).accentColor,
+                  beginColor: Theme.of(context).colorScheme.secondary,
                   endColor: Theme.of(context).primaryColor,
                   textColor: Colors.white,
                   onPressed: () {

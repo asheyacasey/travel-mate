@@ -67,7 +67,7 @@ class ChatScreen extends StatelessWidget {
   }
 }
 
-class _CustomAppBar extends StatelessWidget with PreferredSizeWidget {
+class _CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   const _CustomAppBar({
     Key? key,
     required this.match,
