@@ -125,28 +125,28 @@ class ChatsList extends StatelessWidget {
                 width: 70,
                 imageUrl: activeMatches[index].matchUser.imageUrls[0],
               ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    activeMatches[index].matchUser.name,
-                    style: Theme.of(context).textTheme.headline5,
-                  ),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  Text(
-                    activeMatches[index].chat.messages[0].message,
-                    style: Theme.of(context).textTheme.headline6,
-                  ),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  Text(
-                    activeMatches[index].chat.messages[0].timeString,
-                    style: Theme.of(context).textTheme.bodyText1,
-                  ),
-                ],
+              SizedBox(width: 10),
+              Flexible(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      activeMatches[index].matchUser.name,
+                      style: Theme.of(context).textTheme.headline5,
+                    ),
+                    SizedBox(height: 5),
+                    Text(
+                      activeMatches[index].chat.messages[0].message,
+                      style: Theme.of(context).textTheme.headline6,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    SizedBox(height: 5),
+                    Text(
+                      activeMatches[index].chat.messages[0].timeString,
+                      style: Theme.of(context).textTheme.bodyText1,
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
