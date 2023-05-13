@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:travel_mate/screens/journal/container.dart';
+import 'package:travel_mate/screens/journal/database.dart';
 import 'package:travel_mate/screens/journal/dialog_box.dart';
 import 'package:travel_mate/widgets/widgets.dart';
 import 'package:unicons/unicons.dart';
@@ -20,14 +22,19 @@ class MainJournal extends StatefulWidget {
 
 class _MainJournalState extends State<MainJournal> {
   final _controller = TextEditingController();
+  JournalDatabase jd = JournalDatabase();
+  final _mybox = Hive.box('mybox');
 
-  /**
-   * dynamically creating a list
-   */
-  List _posts = [
-    ["Journal 1"],
-    ["Journal 2"],
-  ];
+  @override
+  void initState() {
+    if (_mybox.get("POSTS") == null) {
+      jd.createInitialData();
+    } else {
+      jd.loadData();
+    }
+
+    super.initState();
+  }
 
   /**
    * creating the journal
@@ -47,10 +54,18 @@ class _MainJournalState extends State<MainJournal> {
 
   void saveJournal() {
     setState(() {
-      _posts.add([_controller.text, false]);
+      jd.posts.add([_controller.text, false]);
       _controller.clear();
     });
     Navigator.of(context).pop();
+    jd.updateDatabase();
+  }
+
+  void deletePost(int index) {
+    setState(() {
+      jd.posts.removeAt(index);
+    });
+    jd.updateDatabase();
   }
 
   @override
@@ -64,9 +79,12 @@ class _MainJournalState extends State<MainJournal> {
         child: Icon(UniconsLine.plus),
       ),
       body: ListView.builder(
-        itemCount: _posts.length,
+        itemCount: jd.posts.length,
         itemBuilder: (context, index) {
-          return JournalContents(journalName: _posts[index][0]);
+          return JournalContents(
+            journalName: jd.posts[index][0],
+            deleteFunction: (context) => deletePost(index),
+          );
         },
       ),
     );
