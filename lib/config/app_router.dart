@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:travel_mate/models/models.dart';
+import 'package:travel_mate/screens/journal/journal.dart';
 import 'package:travel_mate/screens/screens.dart';
 
 import '../models/match_model.dart';
@@ -33,6 +34,8 @@ class AppRouter {
                 settings.arguments as User); // user: settings.arguments as User
       case OnboardingScreen.routeName:
         return OnboardingScreen.route();
+      case MainJournal.routeName:
+        return MainJournal.route();
       case MatchesScreen.routeName:
         return MatchesScreen.route();
       case ProfileScreen.routeName:
