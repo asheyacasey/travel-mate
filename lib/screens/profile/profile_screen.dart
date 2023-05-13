@@ -108,7 +108,7 @@ class ProfileScreen extends StatelessWidget {
                               : Theme.of(context).primaryColor,
                           endColor: state.isEditingOn
                               ? Colors.white
-                              : Theme.of(context).accentColor,
+                              : Theme.of(context).colorScheme.secondary,
                           textColor:
                               state.isEditingOn ? Colors.black : Colors.white,
                           width: MediaQuery.of(context).size.width * 0.45,
@@ -125,7 +125,7 @@ class ProfileScreen extends StatelessWidget {
                               ? Theme.of(context).primaryColor
                               : Colors.white,
                           endColor: state.isEditingOn
-                              ? Theme.of(context).accentColor
+                              ? Theme.of(context).colorScheme.secondary
                               : Colors.white,
                           textColor:
                               state.isEditingOn ? Colors.white : Colors.black,

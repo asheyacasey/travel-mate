@@ -22,9 +22,9 @@ class MatchBloc extends Bloc<MatchEvent, MatchState> {
 
   void _onLoadMatches(LoadMatches event, Emitter<MatchState> emit) {
     _databaseSubscription =
-        _databaseRepository.getMatches(event.user).listen((matchedUsers) {
-      print('Matched Users are: $matchedUsers');
-      add(UpdateMatches(matchedUsers: matchedUsers));
+        _databaseRepository.getMatches(event.user).listen((otherUsers) {
+      print('Matched Users are: $otherUsers');
+      add(UpdateMatches(matchedUsers: otherUsers));
     });
   }
 
