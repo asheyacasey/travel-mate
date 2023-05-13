@@ -48,6 +48,7 @@ class ChatScreen extends StatelessWidget {
                       List<Message> messages = state.chat.messages;
                       return ListTile(
                         title: _Message(
+                          match: match,
                           message: messages[index].message,
                           itinerary: messages[index].itinerary,
                           isFromCurrentUser: messages[index].senderId ==
@@ -267,11 +268,13 @@ class _Message extends StatelessWidget {
   const _Message({
     Key? key,
     required this.message,
+    required this.match,
     this.itinerary,
     required this.isFromCurrentUser,
   }) : super(key: key);
 
   final String message;
+  final Match match;
   final bool isFromCurrentUser;
   final String? itinerary;
 
@@ -287,19 +290,143 @@ class _Message extends StatelessWidget {
     TextStyle? textStyle = isFromCurrentUser
         ? Theme.of(context).textTheme.headline6!.copyWith(color: Colors.black)
         : Theme.of(context).textTheme.headline6!.copyWith(color: Colors.white);
-    return Align(
-      alignment: alignment,
-      child: Container(
-        padding: const EdgeInsets.all(8),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8.0),
-          color: color,
+
+    // Check if itinerary is not null
+    if (itinerary != null) {
+      return GestureDetector(
+        onTap: () {
+          showModalBottomSheet(
+            context: context,
+            builder: (BuildContext context) {
+              return Container(
+                height: MediaQuery.of(context).size.height * 0.3,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      width: double.infinity,
+                      color: Theme.of(context).primaryColor,
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 8, horizontal: 16),
+                      child: Text(
+                        message,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    Expanded(
+                      child: SingleChildScrollView(
+                        child: Text(
+                          itinerary!,
+                          style: TextStyle(
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          );
+        },
+        child: Row(
+          children: [
+            Expanded(
+              flex: 2,
+              child: Container(
+                width: MediaQuery.of(context).size.width * 0.5,
+                height: MediaQuery.of(context).size.height * 0.1,
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8.0),
+                  color: color,
+                ),
+                child: Center(
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.5,
+                      child: Text(
+                        message,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            !isFromCurrentUser
+                ? Expanded(
+                    flex: 1,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        CircleAvatar(
+                          radius: 20,
+                          backgroundColor: Colors.greenAccent,
+                          child: IconButton(
+                            onPressed: () {
+                              context.read<ChatBloc>()
+                                ..add(
+                                  AddMessage(
+                                    userId: match.userId,
+                                    matchUserId: match.matchUser.id!,
+                                    message:
+                                        '$message INVITATION HAS BEEN ACCEPTED.',
+                                  ),
+                                );
+                            },
+                            icon: Icon(Icons.check),
+                          ),
+                        ),
+                        CircleAvatar(
+                          radius: 20,
+                          backgroundColor: Colors.redAccent,
+                          child: IconButton(
+                            onPressed: () {
+                              context.read<ChatBloc>()
+                                ..add(
+                                  AddMessage(
+                                    userId: match.userId,
+                                    matchUserId: match.matchUser.id!,
+                                    message:
+                                        '$message INVITATION HAS BEEN DECLINED.',
+                                  ),
+                                );
+                            },
+                            icon: Icon(Icons.close),
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                : SizedBox(),
+          ],
         ),
-        child: Text(
-          itinerary != null ? itinerary! : message,
-          style: textStyle,
+      );
+    } else {
+      return Align(
+        alignment: alignment,
+        child: Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8.0),
+            color: color,
+          ),
+          child: Text(
+            message,
+            style: textStyle,
+          ),
         ),
-      ),
-    );
+      );
+    }
   }
 }
