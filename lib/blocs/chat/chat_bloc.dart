@@ -28,6 +28,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
           senderId: event.userId,
           receiverId: event.matchUserId,
           message: event.message,
+          itinerary: event.itinerary,
           dateTime: DateTime.now(),
           timeString: DateFormat('HH:mm').format(DateTime.now()));
 

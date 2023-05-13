@@ -49,6 +49,7 @@ class ChatScreen extends StatelessWidget {
                       return ListTile(
                         title: _Message(
                           message: messages[index].message,
+                          itinerary: messages[index].itinerary,
                           isFromCurrentUser: messages[index].senderId ==
                               context.read<AuthBloc>().state.authUser!.uid,
                         ),
@@ -113,6 +114,7 @@ class _MessageInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     TextEditingController controller = TextEditingController();
+    String? finalOption;
     return Container(
       padding: EdgeInsets.all(5.0),
       child: SingleChildScrollView(
@@ -154,30 +156,45 @@ class _MessageInput extends StatelessWidget {
                               showDialog(
                                 context: context,
                                 builder: (BuildContext context) {
-                                  return AlertDialog(
-                                    title:
-                                        Text(itineraryOptions[index]['name']),
-                                    content: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        for (var place
-                                            in itineraryOptions[index]
-                                                ['places'])
-                                          ListTile(
-                                            title: Text(place['name']),
-                                            subtitle:
-                                                Text(place['departureTime']),
+                                  return Builder(
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        title: Text(
+                                            itineraryOptions[index]['name']),
+                                        content: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            for (var place
+                                                in itineraryOptions[index]
+                                                    ['places'])
+                                              ListTile(
+                                                title: Text(place['name']),
+                                                subtitle: Text(
+                                                    place['departureTime']),
+                                              ),
+                                          ],
+                                        ),
+                                        actions: <Widget>[
+                                          TextButton(
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                            child: const Text('Cancel'),
                                           ),
-                                      ],
-                                    ),
-                                    actions: <Widget>[
-                                      TextButton(
-                                        onPressed: () {
-                                          Navigator.pop(context);
-                                        },
-                                        child: const Text('OK'),
-                                      ),
-                                    ],
+                                          TextButton(
+                                            child: Text('Save'),
+                                            onPressed: () {
+                                              finalOption =
+                                                  'Places: \n${itineraryOptions[index]['places'].map((place) => "- ${place['name']}\n- Departure Time: ${place['departureTime']}\n\n").join()}';
+                                              controller.text =
+                                                  itineraryOptions[index]
+                                                      ['name'];
+                                              Navigator.of(context).pop();
+                                            },
+                                          ),
+                                        ],
+                                      );
+                                    },
                                   );
                                 },
                               );
@@ -204,6 +221,7 @@ class _MessageInput extends StatelessWidget {
                         userId: match.userId,
                         matchUserId: match.matchUser.id!,
                         message: controller.text,
+                        itinerary: finalOption,
                       ),
                     );
                   controller.clear();
@@ -249,11 +267,13 @@ class _Message extends StatelessWidget {
   const _Message({
     Key? key,
     required this.message,
+    this.itinerary,
     required this.isFromCurrentUser,
   }) : super(key: key);
 
   final String message;
   final bool isFromCurrentUser;
+  final String? itinerary;
 
   @override
   Widget build(BuildContext context) {
@@ -276,7 +296,7 @@ class _Message extends StatelessWidget {
           color: color,
         ),
         child: Text(
-          message,
+          itinerary != null ? itinerary! : message,
           style: textStyle,
         ),
       ),
