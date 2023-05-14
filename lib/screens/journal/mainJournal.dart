@@ -1,4 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:travel_mate/screens/journal/journal_data.dart';
 import 'package:travel_mate/widgets/custom_appbar.dart';
 
 class MainJournal extends StatefulWidget {
@@ -19,8 +22,26 @@ class MainJournal extends StatefulWidget {
 class _MainJournalState extends State<MainJournal> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: CustomAppBar(title: 'Journal'),
+    return ChangeNotifierProvider(
+      create: (context) => JournalData(),
+      builder: (context, child) => Consumer<JournalData>(
+        builder: (context, value, child) => Scaffold(
+          backgroundColor: CupertinoColors.systemGroupedBackground,
+          appBar: CustomAppBar(title: 'Journal'),
+          body: Column(
+            children: [
+              CupertinoListSection.insetGrouped(
+                children: List.generate(
+                  value.getAllJournals().length,
+                  (index) => CupertinoListTile(
+                    title: Text(value.getAllJournals()[index].text),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

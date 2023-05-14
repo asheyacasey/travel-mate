@@ -1,11 +1,13 @@
+import 'package:flutter/material.dart';
 import 'package:travel_mate/screens/journal/journal.dart';
 
-class JournalData {
+class JournalData extends ChangeNotifier {
   /**
    * overall list of journals
    */
   List<Journal> allJournals = [
     Journal(id: 0, text: 'First Journal'),
+    Journal(id: 1, text: 'Second Journal'),
   ];
 
   /**
@@ -20,6 +22,7 @@ class JournalData {
    */
   void addNewJournal(Journal journal) {
     allJournals.add(journal);
+    notifyListeners();
   }
 
   /**
@@ -34,6 +37,7 @@ class JournalData {
         allJournals[i].text = text;
       }
     }
+    notifyListeners();
   }
 
   /**
@@ -41,5 +45,6 @@ class JournalData {
    */
   void deleteJournal(Journal journal) {
     allJournals.remove(journal);
+    notifyListeners();
   }
 }
