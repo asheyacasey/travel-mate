@@ -6,8 +6,8 @@ class Message extends Equatable {
   final String senderId;
   final String receiverId;
   final String message;
-  final String? itinerary;
   final int? itineraryAccept;
+  final Map<String, dynamic>? itinerary;
   final DateTime dateTime;
   final String timeString;
 

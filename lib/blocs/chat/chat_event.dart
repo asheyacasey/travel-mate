@@ -29,7 +29,7 @@ class AddMessage extends ChatEvent {
   final String userId;
   final String matchUserId;
   final String message;
-  final String? itinerary;
+  final Map<String, dynamic>? itinerary;
   final int? index;
 
   AddMessage(
@@ -47,7 +47,7 @@ class UpdateMessage extends ChatEvent {
   final String userId;
   final String matchUserId;
   final String message;
-  final String? itinerary;
+  final Map<String, dynamic>? itinerary;
   final int? isAccepted;
 
   UpdateMessage(

@@ -116,7 +116,7 @@ class _MessageInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     TextEditingController controller = TextEditingController();
-    String? finalOption;
+    Map<String, dynamic>? finalOption;
     return Container(
       padding: EdgeInsets.all(5.0),
       child: SingleChildScrollView(
@@ -187,7 +187,7 @@ class _MessageInput extends StatelessWidget {
                                             child: Text('Save'),
                                             onPressed: () {
                                               finalOption =
-                                                  'Places: \n${itineraryOptions[index]['places'].map((place) => "- ${place['name']}\n- Departure Time: ${place['departureTime']}\n\n").join()}';
+                                                  itineraryOptions[index];
                                               controller.text =
                                                   itineraryOptions[index]
                                                       ['name'];
@@ -279,7 +279,7 @@ class _Message extends StatelessWidget {
   final String message;
   final Match match;
   final bool isFromCurrentUser;
-  final String? itinerary;
+  final Map<String, dynamic>? itinerary;
   final int? isAccepted;
 
   @override
@@ -295,45 +295,34 @@ class _Message extends StatelessWidget {
         ? Theme.of(context).textTheme.headline6!.copyWith(color: Colors.black)
         : Theme.of(context).textTheme.headline6!.copyWith(color: Colors.white);
 
-    // Check if itinerary is not null
     if (itinerary != null) {
       return GestureDetector(
         onTap: () {
           if (isFromCurrentUser || isAccepted == 1) {
-            showModalBottomSheet(
+            showDialog(
               context: context,
               builder: (BuildContext context) {
-                return Container(
-                  height: MediaQuery.of(context).size.height * 0.3,
-                  child: Column(
+                return AlertDialog(
+                  title: Text(itinerary?['name']),
+                  content: Column(
+                    mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Container(
-                        width: double.infinity,
-                        color: Theme.of(context).primaryColor,
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 8, horizontal: 16),
-                        child: Text(
-                          message,
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                          ),
+                      for (var place in itinerary?['places'])
+                        ListTile(
+                          title: Text(place['name']),
+                          subtitle: Text(place['departureTime']),
                         ),
-                      ),
-                      const SizedBox(height: 16),
-                      Expanded(
-                        child: SingleChildScrollView(
-                          child: Text(
-                            itinerary!,
-                            style: TextStyle(
-                              color: Colors.black,
-                            ),
-                          ),
-                        ),
-                      ),
                     ],
                   ),
+                  actions: [
+                    TextButton(
+                      child: Text('OK'),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ],
                 );
               },
             );
@@ -390,7 +379,7 @@ class _Message extends StatelessWidget {
                                     matchUserId: match.userId,
                                     itinerary: itinerary,
                                     isAccepted: 1,
-                                    message: 'Open invitation..',
+                                    message: message,
                                   ),
                                 );
                             },
