@@ -7,6 +7,7 @@ class Modal extends StatelessWidget {
   Widget build(BuildContext context) {
     return AlertDialog(
       content: Container(
+        height: 300,
         child: Text('testinggggggggggg.......'),
       ),
     );

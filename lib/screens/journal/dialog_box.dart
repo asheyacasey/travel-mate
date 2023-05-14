@@ -18,9 +18,9 @@ class DialogBox extends StatelessWidget {
     return AlertDialog(
       backgroundColor: Colors.green[100],
       content: Container(
-        height: 220,
+        height: 320,
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             TextField(
               controller: controller,
@@ -28,8 +28,25 @@ class DialogBox extends StatelessWidget {
               maxLines: null,
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
+                hintText: "Title",
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            TextField(
+              style: TextStyle(
+                fontSize: 14,
+              ),
+              keyboardType: TextInputType.multiline,
+              maxLines: null,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
                 hintText: "How are you feeling today?",
               ),
+            ),
+            SizedBox(
+              height: 130,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
