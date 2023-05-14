@@ -3,6 +3,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:travel_mate/screens/journal/container.dart';
 import 'package:travel_mate/screens/journal/database.dart';
 import 'package:travel_mate/screens/journal/dialog_box.dart';
+import 'package:travel_mate/screens/journal/modal.dart';
 import 'package:travel_mate/widgets/widgets.dart';
 import 'package:unicons/unicons.dart';
 
@@ -81,10 +82,24 @@ class _MainJournalState extends State<MainJournal> {
       body: ListView.builder(
         itemCount: jd.posts.length,
         itemBuilder: (context, index) {
-          return JournalContents(
-            journalName: jd.posts[index][0],
-            deleteFunction: (context) => deletePost(index),
+          return GestureDetector(
+            onTap: () {
+              showModalBottomSheet(
+                context: context,
+                builder: ((context) {
+                  return Modal();
+                }),
+              );
+            },
+            child: JournalContents(
+              journalName: jd.posts[index][0],
+              deleteFunction: (context) => deletePost(index),
+            ),
           );
+          // return JournalContents(
+          //   journalName: jd.posts[index][0],
+          //   deleteFunction: (context) => deletePost(index),
+          // );
         },
       ),
     );
