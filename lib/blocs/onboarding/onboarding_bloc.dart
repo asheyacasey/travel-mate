@@ -15,21 +15,21 @@ part 'onboarding_state.dart';
 class OnboardingBloc extends Bloc<OnboardingEvent, OnboardingState> {
   final DatabaseRepository _databaseRepository;
   final StorageRepository _storageRepository;
-  //final LocationRepository _locationRepository;
+  final LocationRepository _locationRepository;
 
   OnboardingBloc({
     required DatabaseRepository databaseRepository,
     required StorageRepository storageRepostitory,
-    //required LocationRepository locationRepository,
+    required LocationRepository locationRepository,
   })  : _databaseRepository = databaseRepository,
         _storageRepository = storageRepostitory,
-        //_locationRepository = locationRepository,
+        _locationRepository = locationRepository,
         super(OnboardingLoading()) {
     on<StartOnboarding>(_onStartOnboarding);
     on<UpdateUser>(_onUpdateUser);
     on<UpdateUserImages>(_onUpdateUserImages);
     on<UpdateUserInterest>(_onUpdateUserInterest);
-    //on<UpdateUserLocation>(_onUpdateUserLocation);
+    on<UpdateUserLocation>(_onUpdateUserLocation);
   }
 
   void _onStartOnboarding(
@@ -75,35 +75,35 @@ class OnboardingBloc extends Bloc<OnboardingEvent, OnboardingState> {
     }
   }
 
-  // void _onUpdateUserLocation(
-  //   UpdateUserLocation event,
-  //   Emitter<OnboardingState> emit,
-  // ) async {
-  //   final state = this.state as OnboardingLoaded;
+  void _onUpdateUserLocation(
+    UpdateUserLocation event,
+    Emitter<OnboardingState> emit,
+  ) async {
+    final state = this.state as OnboardingLoaded;
 
-  //   if (event.isUpdateComplete && event.location != null) {
-  //     print('Getting the location with the Places API');
+    if (event.isUpdateComplete && event.location != null) {
+      print('Getting the location with the Places API');
 
-  //     final Location location =
-  //         await _locationRepository.getLocation(event.location!.name);
+      final Location location =
+          await _locationRepository.getLocation(event.location!.name);
 
-  //     state.controller!.animateCamera(
-  //       CameraUpdate.newLatLng(
-  //         LatLng(
-  //           location.lat,
-  //           location.lon,
-  //         ),
-  //       ),
-  //     );
+      state.controller!.animateCamera(
+        CameraUpdate.newLatLng(
+          LatLng(
+            location.lat,
+            location.lon,
+          ),
+        ),
+      );
 
-  //     _databaseRepository.getUser(state.user.id!).listen((user) {
-  //       add(UpdateUser(user: state.user.copyWith(location: location)));
-  //     });
-  //   } else {
-  //     emit(OnboardingLoaded(
-  //       user: state.user.copyWith(location: event.location),
-  //       controller: event.controller ?? state.controller,
-  //     ));
-  //   }
-  // }
+      _databaseRepository.getUser(state.user.id!).listen((user) {
+        add(UpdateUser(user: state.user.copyWith(location: location)));
+      });
+    } else {
+      emit(OnboardingLoaded(
+        user: state.user.copyWith(location: event.location),
+        controller: event.controller ?? state.controller,
+      ));
+    }
+  }
 }

@@ -1,5 +1,5 @@
-// import 'package:travel_mate/models/location_model.dart';
+import 'package:travel_mate/models/location_model.dart';
 
-// abstract class BaseLocationRepository {
-//   Future<Location?> getLocation(String placeId);
-// }
+abstract class BaseLocationRepository {
+  Future<Location?> getLocation(String placeId);
+}
