@@ -1,3 +1,6 @@
+import 'dart:math';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:travel_mate/blocs/auth/auth_bloc.dart';
@@ -51,6 +54,7 @@ class ChatScreen extends StatelessWidget {
                           match: match,
                           message: messages[index].message,
                           itinerary: messages[index].itinerary,
+                          isAccepted: messages[index].itineraryAccept,
                           isFromCurrentUser: messages[index].senderId ==
                               context.read<AuthBloc>().state.authUser!.uid,
                         ),
@@ -105,10 +109,7 @@ class _CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 }
 
 class _MessageInput extends StatelessWidget {
-  const _MessageInput({
-    Key? key,
-    required this.match,
-  }) : super(key: key);
+  const _MessageInput({Key? key, required this.match}) : super(key: key);
 
   final Match match;
 
@@ -216,6 +217,7 @@ class _MessageInput extends StatelessWidget {
               child: IconButton(
                 icon: Icon(UniconsLine.message),
                 onPressed: () {
+                  var random = Random();
                   context.read<ChatBloc>()
                     ..add(
                       AddMessage(
@@ -270,6 +272,7 @@ class _Message extends StatelessWidget {
     required this.message,
     required this.match,
     this.itinerary,
+    this.isAccepted,
     required this.isFromCurrentUser,
   }) : super(key: key);
 
@@ -277,6 +280,7 @@ class _Message extends StatelessWidget {
   final Match match;
   final bool isFromCurrentUser;
   final String? itinerary;
+  final int? isAccepted;
 
   @override
   Widget build(BuildContext context) {
@@ -295,43 +299,48 @@ class _Message extends StatelessWidget {
     if (itinerary != null) {
       return GestureDetector(
         onTap: () {
-          showModalBottomSheet(
-            context: context,
-            builder: (BuildContext context) {
-              return Container(
-                height: MediaQuery.of(context).size.height * 0.3,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      width: double.infinity,
-                      color: Theme.of(context).primaryColor,
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 8, horizontal: 16),
-                      child: Text(
-                        message,
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    Expanded(
-                      child: SingleChildScrollView(
+          if (isFromCurrentUser || isAccepted == 1) {
+            showModalBottomSheet(
+              context: context,
+              builder: (BuildContext context) {
+                return Container(
+                  height: MediaQuery.of(context).size.height * 0.3,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        width: double.infinity,
+                        color: Theme.of(context).primaryColor,
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 8, horizontal: 16),
                         child: Text(
-                          itinerary!,
+                          message,
                           style: TextStyle(
                             color: Colors.black,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              );
-            },
-          );
+                      const SizedBox(height: 16),
+                      Expanded(
+                        child: SingleChildScrollView(
+                          child: Text(
+                            itinerary!,
+                            style: TextStyle(
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            );
+          } else
+            () {
+              SizedBox();
+            };
         },
         child: Row(
           children: [
@@ -363,7 +372,7 @@ class _Message extends StatelessWidget {
                 ),
               ),
             ),
-            !isFromCurrentUser
+            !isFromCurrentUser && isAccepted == null
                 ? Expanded(
                     flex: 1,
                     child: Row(
@@ -376,11 +385,12 @@ class _Message extends StatelessWidget {
                             onPressed: () {
                               context.read<ChatBloc>()
                                 ..add(
-                                  AddMessage(
-                                    userId: match.userId,
-                                    matchUserId: match.matchUser.id!,
-                                    message:
-                                        '$message INVITATION HAS BEEN ACCEPTED.',
+                                  UpdateMessage(
+                                    userId: match.matchUser.id!,
+                                    matchUserId: match.userId,
+                                    itinerary: itinerary,
+                                    isAccepted: 1,
+                                    message: 'Open invitation..',
                                   ),
                                 );
                             },
@@ -394,11 +404,12 @@ class _Message extends StatelessWidget {
                             onPressed: () {
                               context.read<ChatBloc>()
                                 ..add(
-                                  AddMessage(
-                                    userId: match.userId,
-                                    matchUserId: match.matchUser.id!,
-                                    message:
-                                        '$message INVITATION HAS BEEN DECLINED.',
+                                  UpdateMessage(
+                                    userId: match.matchUser.id!,
+                                    matchUserId: match.userId,
+                                    itinerary: itinerary,
+                                    isAccepted: 0,
+                                    message: 'Invitation closed.',
                                   ),
                                 );
                             },
