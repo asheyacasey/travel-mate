@@ -413,20 +413,54 @@ class _Message extends StatelessWidget {
         ),
       );
     } else {
-      return Align(
-        alignment: alignment,
-        child: Container(
-          padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8.0),
-            color: color,
+      if (!isFromCurrentUser) {
+        return Container(
+          child: Row(
+            children: [
+              CircleAvatar(
+                radius: 15,
+                backgroundImage: NetworkImage(match.matchUser.imageUrls[0]),
+              ),
+              SizedBox(
+                width: 5,
+              ),
+              Expanded(
+                child: Container(
+                  child: Align(
+                    alignment: alignment,
+                    child: Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8.0),
+                        color: color,
+                      ),
+                      child: Text(
+                        message,
+                        style: textStyle,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
-          child: Text(
-            message,
-            style: textStyle,
+        );
+      } else {
+        return Align(
+          alignment: alignment,
+          child: Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8.0),
+              color: color,
+            ),
+            child: Text(
+              message,
+              style: textStyle,
+            ),
           ),
-        ),
-      );
+        );
+      }
     }
   }
 }
