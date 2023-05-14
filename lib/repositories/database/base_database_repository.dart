@@ -17,4 +17,5 @@ abstract class BaseDatabaseRepository {
       String userId, String matchId, bool isSwipeRight);
   Future<void> updateUserMatch(String userId, String matchId);
   Future<void> addMessage(String chatId, Message message);
+  Future<void> updateMessage(String chatId, Message message);
 }
