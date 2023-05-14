@@ -23,10 +23,18 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       ),
       title: Text(
         title,
-        style: Theme.of(context).primaryTextTheme.headline2,
+        style: Theme.of(context).primaryTextTheme.displayMedium,
       ),
       actions: hasAction
           ? [
+              IconButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/mainJournal');
+                  },
+                  icon: Icon(
+                    UniconsLine.notes,
+                    color: Theme.of(context).primaryColor,
+                  )),
               IconButton(
                   onPressed: () {
                     Navigator.pushNamed(context, '/matches');
