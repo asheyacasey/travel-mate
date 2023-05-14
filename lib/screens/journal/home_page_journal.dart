@@ -15,39 +15,47 @@ class JournalHomePage extends StatefulWidget {
   State<JournalHomePage> createState() => _JournalHomePageState();
 }
 
-void createNewJournal(BuildContext context) {
-  //creating a new ID
-  int id =
-      Provider.of<JournalData>(context, listen: false).getAllJournals().length;
+class _JournalHomePageState extends State<JournalHomePage> {
+  @override
+  void initState() {
+    super.initState();
+    Provider.of<JournalData>(context, listen: false).initializeJournals();
+  }
 
-  //create a blank journal
-  Journal newJournal = Journal(
-    id: id,
-    text: '',
-  );
+  void createNewJournal(BuildContext context) {
+    //creating a new ID
+    int id = Provider.of<JournalData>(context, listen: false)
+        .getAllJournals()
+        .length;
 
-  //go to edit the journal
-  goToJournalPage(newJournal, true, context);
-}
+    //create a blank journal
+    Journal newJournal = Journal(
+      id: id,
+      text: '',
+    );
+
+    //go to edit the journal
+    goToJournalPage(newJournal, true, context);
+  }
 
 //go to journal editing page
-void goToJournalPage(Journal journal, bool isNewJournal, BuildContext context) {
-  Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => EditingJournalPage(
-          journal: journal,
-          isNewJournal: isNewJournal,
-        ),
-      ));
-}
+  void goToJournalPage(
+      Journal journal, bool isNewJournal, BuildContext context) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => EditingJournalPage(
+            journal: journal,
+            isNewJournal: isNewJournal,
+          ),
+        ));
+  }
 
 //delete the journal
-void deleteJournal(Journal journal, BuildContext context) {
-  Provider.of<JournalData>(context, listen: false).deleteJournal(journal);
-}
+  void deleteJournal(Journal journal, BuildContext context) {
+    Provider.of<JournalData>(context, listen: false).deleteJournal(journal);
+  }
 
-class _JournalHomePageState extends State<JournalHomePage> {
   @override
   Widget build(BuildContext context) {
     var color = const Color(0xFFB0DB2D);
@@ -76,16 +84,31 @@ class _JournalHomePageState extends State<JournalHomePage> {
                         fontWeight: FontWeight.bold),
                   ),
                 ),
-                CupertinoListSection.insetGrouped(
-                  children: List.generate(
-                    value.getAllJournals().length,
-                    (index) => CupertinoListTile(
-                      title: Text(value.getAllJournals()[index].text),
-                      onTap: () => goToJournalPage(
-                          value.getAllJournals()[index], false, context),
-                    ),
-                  ),
-                ),
+                value.getAllJournals().length == 0
+                    ? Padding(
+                        padding: EdgeInsets.only(top: 50),
+                        child: Center(
+                          child: Text(
+                            'Nothing here...',
+                            style: TextStyle(color: Colors.grey[400]),
+                          ),
+                        ),
+                      )
+                    : CupertinoListSection.insetGrouped(
+                        children: List.generate(
+                          value.getAllJournals().length,
+                          (index) => CupertinoListTile(
+                            title: Text(value.getAllJournals()[index].text),
+                            onTap: () => goToJournalPage(
+                                value.getAllJournals()[index], false, context),
+                            trailing: IconButton(
+                              icon: Icon(Icons.delete),
+                              onPressed: () => deleteJournal(
+                                  value.getAllJournals()[index], context),
+                            ),
+                          ),
+                        ),
+                      ),
               ],
             ),
           )),

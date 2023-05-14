@@ -1,14 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:travel_mate/screens/journal/journal.dart';
+import 'package:travel_mate/screens/journal/localDatabase.dart';
 
 class JournalData extends ChangeNotifier {
   /**
+   * hive database
+   */
+  final db = LocalDatabase();
+
+  /**
    * overall list of journals
    */
-  List<Journal> allJournals = [
-    Journal(id: 0, text: 'First Journal'),
-    Journal(id: 1, text: 'Second Journal'),
-  ];
+  List<Journal> allJournals = [];
+
+  /**
+   * initialize list in db
+   */
+  void initializeJournals() {
+    allJournals = db.loadJournal();
+  }
 
   /**
    * getting the journals
