@@ -19,6 +19,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     on<LoadChat>(_onLoadChat);
     on<UpdateChat>(_onUpdateChat);
     on<AddMessage>(_onAddMessage);
+    on<UpdateMessage>(_onUpdateMessage);
   }
 
   void _onAddMessage(AddMessage event, Emitter<ChatState> emit) {
@@ -33,6 +34,24 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
           timeString: DateFormat('HH:mm').format(DateTime.now()));
 
       _databaseRepository.addMessage(state.chat.id, message);
+
+      emit(ChatLoaded(chat: state.chat));
+    }
+  }
+
+  void _onUpdateMessage(UpdateMessage event, Emitter<ChatState> emit) {
+    if (state is ChatLoaded) {
+      final state = this.state as ChatLoaded;
+      final Message message = Message(
+          senderId: event.userId,
+          receiverId: event.matchUserId,
+          message: event.message,
+          itinerary: event.itinerary,
+          itineraryAccept: event.isAccepted,
+          dateTime: DateTime.now(),
+          timeString: DateFormat('HH:mm').format(DateTime.now()));
+
+      _databaseRepository.updateMessage(state.chat.id, message);
 
       emit(ChatLoaded(chat: state.chat));
     }

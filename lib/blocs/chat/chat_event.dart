@@ -29,14 +29,35 @@ class AddMessage extends ChatEvent {
   final String userId;
   final String matchUserId;
   final String message;
-  final String? itinerary;
+  final Map<String, dynamic>? itinerary;
+  final int? index;
 
   AddMessage(
       {required this.userId,
       required this.matchUserId,
       required this.message,
-      this.itinerary});
+      this.itinerary,
+      this.index});
 
   @override
-  List<Object?> get props => [userId, matchUserId, message, itinerary];
+  List<Object?> get props => [userId, matchUserId, message, itinerary, index];
+}
+
+class UpdateMessage extends ChatEvent {
+  final String userId;
+  final String matchUserId;
+  final String message;
+  final Map<String, dynamic>? itinerary;
+  final int? isAccepted;
+
+  UpdateMessage(
+      {required this.userId,
+      required this.matchUserId,
+      required this.message,
+      this.itinerary,
+      this.isAccepted});
+
+  @override
+  List<Object?> get props =>
+      [userId, matchUserId, message, itinerary, isAccepted];
 }

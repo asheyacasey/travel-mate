@@ -180,6 +180,15 @@ class DatabaseRepository extends BaseDatabaseRepository {
   }
 
   @override
+  Future<void> updateMessage(String chatId, Message message) {
+    return _firebaseFirestore.collection('chats').doc(chatId).update({
+      'messages': FieldValue.arrayUnion([
+        message.toJson(),
+      ])
+    });
+  }
+
+  @override
   Stream<Chat> getChat(String chatId) {
     return _firebaseFirestore.collection('chats').doc(chatId).snapshots().map(
         (doc) => Chat.fromJson(doc.data() as Map<String, dynamic>, id: doc.id));
