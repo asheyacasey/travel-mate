@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:travel_mate/screens/journal/journal_data.dart';
 import 'package:travel_mate/widgets/custom_appbar.dart';
+import 'package:unicons/unicons.dart';
+
+import 'journal.dart';
 
 class MainJournal extends StatefulWidget {
   const MainJournal({super.key});
@@ -20,14 +23,29 @@ class MainJournal extends StatefulWidget {
 }
 
 class _MainJournalState extends State<MainJournal> {
+  void createNewJournal(BuildContext context) {
+    //creating a new ID
+    int id = Provider.of<JournalData>(context, listen: false)
+        .getAllJournals()
+        .length;
+
+    Journal newJournal = Journal(id: id, text: '');
+  }
+
   @override
   Widget build(BuildContext context) {
+    var color = const Color(0xFFB0DB2D);
     return ChangeNotifierProvider(
       create: (context) => JournalData(),
       builder: (context, child) => Consumer<JournalData>(
         builder: (context, value, child) => Scaffold(
           backgroundColor: CupertinoColors.systemGroupedBackground,
           appBar: CustomAppBar(title: 'Journal'),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () => createNewJournal(context),
+            child: Icon(UniconsLine.plus),
+            backgroundColor: color,
+          ),
           body: Column(
             children: [
               CupertinoListSection.insetGrouped(
