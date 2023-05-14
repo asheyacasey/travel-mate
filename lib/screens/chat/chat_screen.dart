@@ -379,7 +379,7 @@ class _Message extends StatelessWidget {
                                     matchUserId: match.userId,
                                     itinerary: itinerary,
                                     isAccepted: 1,
-                                    message: message,
+                                    message: 'Open Invitation',
                                   ),
                                 );
                             },
