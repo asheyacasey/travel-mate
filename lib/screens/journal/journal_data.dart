@@ -33,6 +33,7 @@ class JournalData extends ChangeNotifier {
   void addNewJournal(Journal journal) {
     allJournals.add(journal);
     notifyListeners();
+    db.savedJournals(allJournals);
   }
 
   /**
@@ -48,6 +49,7 @@ class JournalData extends ChangeNotifier {
       }
     }
     notifyListeners();
+    db.savedJournals(allJournals);
   }
 
   /**
@@ -56,5 +58,6 @@ class JournalData extends ChangeNotifier {
   void deleteJournal(Journal journal) {
     allJournals.remove(journal);
     notifyListeners();
+    db.savedJournals(allJournals);
   }
 }
