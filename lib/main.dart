@@ -3,7 +3,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:travel_mate/cubits/cubits.dart';
-import 'package:travel_mate/models/location_model.dart';
 import 'package:travel_mate/screens/screens.dart';
 import 'blocs/blocs.dart';
 import 'config/app_router.dart';
