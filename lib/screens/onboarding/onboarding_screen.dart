@@ -48,7 +48,7 @@ class OnboardingScreen extends StatelessWidget {
             interests: [],
             bio: '',
             jobTitle: '',
-            //location: Location.initialLocation,
+            location: Location.initialLocation,
             matches: [],
             swipeLeft: [],
             swipeRight: [],
@@ -62,7 +62,7 @@ class OnboardingScreen extends StatelessWidget {
       child: DefaultTabController(
         length: tabs.length,
         child: Builder(builder: (BuildContext context) {
-          final TabController tabController = DefaultTabController.of(context)!;
+          final TabController tabController = DefaultTabController.of(context);
           return Scaffold(
               resizeToAvoidBottomInset: false,
               body: TabBarView(children: [
@@ -72,7 +72,7 @@ class OnboardingScreen extends StatelessWidget {
                 Demographics(tabController: tabController),
                 Pictures(tabController: tabController),
                 Biography(tabController: tabController),
-                //LocationTab(tabController: tabController),
+                LocationTab(tabController: tabController),
               ]));
         }),
       ),
