@@ -1,3 +1,42 @@
+import 'package:flutter/material.dart';
+import 'package:travel_mate/screens/onboarding/onboarding_screens/location_screens/mainMapScreen.dart';
+
+class LocationScreen extends StatefulWidget {
+  const LocationScreen({super.key});
+
+  @override
+  State<LocationScreen> createState() => _LocationScreenState();
+}
+
+class _LocationScreenState extends State<LocationScreen> {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Maps',
+      home: MainMapScreen(),
+    );
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // // ignore_for_file: public_member_api_docs, sort_constructors_first
 // import 'package:flutter/material.dart';
 // import 'package:flutter_bloc/flutter_bloc.dart';

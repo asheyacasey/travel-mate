@@ -5,6 +5,7 @@ import 'package:travel_mate/screens/screens.dart';
 
 import '../models/match_model.dart';
 import '../models/user_model.dart';
+import '../screens/onboarding/onboarding_screens/location_screens/mainMapScreen.dart';
 import '../screens/splash/splash_screen.dart';
 import '../screens/home/home_screen.dart';
 
@@ -34,6 +35,8 @@ class AppRouter {
                 settings.arguments as User); // user: settings.arguments as User
       case OnboardingScreen.routeName:
         return OnboardingScreen.route();
+      case MainMapScreen.routeName:
+        return MainMapScreen.route();
       case MainJournal.routeName:
         return MainJournal.route();
       case MatchesScreen.routeName:

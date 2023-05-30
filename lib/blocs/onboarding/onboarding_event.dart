@@ -20,7 +20,7 @@ class StartOnboarding extends OnboardingEvent {
       interests: [],
       bio: '',
       jobTitle: '',
-      //location: Location.initialLocation,
+      location: '',
     ),
   });
 
@@ -29,19 +29,19 @@ class StartOnboarding extends OnboardingEvent {
 }
 
 class UpdateUserLocation extends OnboardingEvent {
-  //final Location? location;
+  final String? location;
   final GoogleMapController? controller;
   final bool isUpdateComplete;
 
   UpdateUserLocation({
-    //this.location,
+    this.location,
     this.controller,
     this.isUpdateComplete = false,
   });
 
   @override
   List<Object?> get props => [
-        //location,
+        location,
         controller,
         isUpdateComplete,
       ];
