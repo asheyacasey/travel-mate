@@ -115,7 +115,7 @@ class Demographics extends StatelessWidget {
                           ],
                         ),
                       ),
-                      SizedBox(height: 50),
+                      SizedBox(height: 25),
                       CustomTextHeader(
                         text: 'What\'s your name?',
                       ),
@@ -132,7 +132,7 @@ class Demographics extends StatelessWidget {
                               );
                         },
                       ),
-                      SizedBox(height: 50),
+                      SizedBox(height: 25),
                       CustomTextHeader(
                         text: 'What\'s your job?',
                       ),
@@ -149,7 +149,7 @@ class Demographics extends StatelessWidget {
                               );
                         },
                       ),
-                      SizedBox(height: 50),
+                      SizedBox(height: 25),
                       CustomTextHeader(
                         text: 'Enter your Age',
                       ),
@@ -166,6 +166,7 @@ class Demographics extends StatelessWidget {
                               );
                         },
                       ),
+                      SizedBox(height: 30),
                     ],
                   ),
                   Column(

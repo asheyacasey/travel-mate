@@ -30,7 +30,7 @@ class CustomElevatedButton extends StatelessWidget {
         style: ElevatedButton.styleFrom(
           primary: Colors.transparent,
           elevation: 0,
-          fixedSize: Size(width, 40),
+          //fixedSize: Size(width, 40),
         ),
         child: Container(
           width: double.infinity,
