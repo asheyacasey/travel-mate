@@ -87,7 +87,7 @@ class SwipeBloc extends Bloc<SwipeEvent, SwipeState> {
           String userId = _authBloc.state.authUser!.uid;
           List<User> users = List.from(state.users)..remove(event.user);
 
-       await _databaseRepository.updateUserSwipe( // <-- Kani ay
+       await _databaseRepository.updateUserSwipe(
              _authBloc.state.authUser!.uid,
              //  userId,
               event.user.id!,

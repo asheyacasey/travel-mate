@@ -64,17 +64,12 @@ class DatabaseRepository extends BaseDatabaseRepository {
     }
   }
 
+
   @override
-  Stream<List<User>> getUsers(
-    User user,
-  ) {
-    // List<String> userFilter = List.from(user.swipeLeft!)
-    //   ..addAll(user.swipeRight!)
-    //   ..add(user.id!);
+  Stream<List<User>> getUsers(User user) {
+
     return _firebaseFirestore
         .collection('users')
-        // .where('gender', isEqualTo: 'Female')
-        // .where(FieldPath.documentId, whereNotIn: userFilter)
         .where('gender', isEqualTo: _selectGender(user))
         .snapshots()
         .map((snap) {
@@ -82,9 +77,25 @@ class DatabaseRepository extends BaseDatabaseRepository {
     });
   }
 
+  Stream<List<User>> getUsersWithMatchingInterests(User user) {
+    return _firebaseFirestore
+        .collection('users')
+        .where('gender', isEqualTo: _selectGender(user))
+        .snapshots()
+        .map((snap) {
+      return snap.docs
+          .where((doc) =>
+            user.interests.contains(doc.get('interest')) &&
+            doc.get('gender') == _selectGender(user))
+            .map((doc) => User.fromSnapshot(doc))
+            .toList();
+    });
+  }
+
+
   @override
   Stream<List<User>> getUsersToSwipe(User user) {
-    return Rx.combineLatest2(getUser(user.id!), getUsers(user), (
+    return Rx.combineLatest2(getUser(user.id!), getUsersWithMatchingInterests(user), (
       User currentUser,
       List<User> users,
     ) {
@@ -132,6 +143,8 @@ class DatabaseRepository extends BaseDatabaseRepository {
         }
       ])
     });
+
+
     // Add the match in the other user document too.
     await _firebaseFirestore.collection('users').doc(matchId).update({
       'matches': FieldValue.arrayUnion([
