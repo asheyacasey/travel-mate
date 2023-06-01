@@ -85,10 +85,9 @@ class DatabaseRepository extends BaseDatabaseRepository {
         .map((snap) {
       return snap.docs
           .where((doc) =>
-            user.interests.contains(doc.get('interest')) &&
-            doc.get('gender') == _selectGender(user))
-            .map((doc) => User.fromSnapshot(doc))
-            .toList();
+          user.interests.contains(doc.get('interest')))
+          .map((doc) => User.fromSnapshot(doc))
+          .toList();
     });
   }
 
