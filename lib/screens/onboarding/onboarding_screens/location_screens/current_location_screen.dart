@@ -10,10 +10,15 @@ class CurrentLocation extends StatefulWidget {
 }
 
 class _CurrentLocationState extends State<CurrentLocation> {
+  final PageController _pageController = PageController(initialPage: 0);
+  int _currentPageIndex = 0;
+  bool _isPageScrollable = false;
   late GoogleMapController googleMapController;
 
   static const CameraPosition initialCameraPosition = CameraPosition(
-      target: LatLng(37.42736133580664, -122.085749655962), zoom: 14.0);
+    target: LatLng(37.42736133580664, -122.085749655962),
+    zoom: 14.0,
+  );
 
   Set<Marker> markers = {};
 
@@ -24,14 +29,32 @@ class _CurrentLocationState extends State<CurrentLocation> {
         title: Text('Current User Location'),
         centerTitle: true,
       ),
-      body: GoogleMap(
-        initialCameraPosition: initialCameraPosition,
-        markers: markers,
-        zoomControlsEnabled: false,
-        mapType: MapType.normal,
-        onMapCreated: (GoogleMapController controller) {
-          googleMapController = controller;
+      body: PageView(
+        controller: _pageController,
+        onPageChanged: (index) {
+          setState(() {
+            _currentPageIndex = index;
+          });
         },
+        physics: _isPageScrollable
+            ? AlwaysScrollableScrollPhysics()
+            : NeverScrollableScrollPhysics(),
+        children: [
+          SingleChildScrollView(
+            child: SizedBox(
+              height: MediaQuery.of(context).size.height,
+              child: GoogleMap(
+                initialCameraPosition: initialCameraPosition,
+                markers: markers,
+                zoomControlsEnabled: false,
+                mapType: MapType.normal,
+                onMapCreated: (GoogleMapController controller) {
+                  googleMapController = controller;
+                },
+              ),
+            ),
+          ),
+        ],
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () async {
@@ -40,8 +63,9 @@ class _CurrentLocationState extends State<CurrentLocation> {
           googleMapController.animateCamera(
             CameraUpdate.newCameraPosition(
               CameraPosition(
-                  target: LatLng(position.latitude, position.longitude),
-                  zoom: 14.0),
+                target: LatLng(position.latitude, position.longitude),
+                zoom: 14.0,
+              ),
             ),
           );
 
@@ -49,8 +73,9 @@ class _CurrentLocationState extends State<CurrentLocation> {
 
           markers.add(
             Marker(
-                markerId: MarkerId("currentLocation"),
-                position: LatLng(position.latitude, position.longitude)),
+              markerId: MarkerId("currentLocation"),
+              position: LatLng(position.latitude, position.longitude),
+            ),
           );
 
           setState(() {});
