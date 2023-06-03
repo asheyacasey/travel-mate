@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:travel_mate/screens/onboarding/onboarding_screens/location_screens/current_location_screen.dart';
 import 'package:travel_mate/screens/onboarding/onboarding_screens/location_screens/simple_google_map.dart';
 
 class MainMapScreen extends StatefulWidget {
@@ -39,6 +40,18 @@ class _MainMapScreenState extends State<MainMapScreen> {
                 );
               },
               child: Text("Simple Map Location"),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (BuildContext context) {
+                      return const CurrentLocation();
+                    },
+                  ),
+                );
+              },
+              child: Text("Current Location"),
             ),
           ],
         ),
