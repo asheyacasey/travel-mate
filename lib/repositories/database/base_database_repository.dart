@@ -1,5 +1,3 @@
-import 'package:travel_mate/blocs/blocs.dart';
-
 import '../../models/models.dart';
 
 abstract class BaseDatabaseRepository {

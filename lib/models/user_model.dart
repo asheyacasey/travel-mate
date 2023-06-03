@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
-import 'package:travel_mate/models/location_model.dart';
 
 class User extends Equatable {
   final String? id;

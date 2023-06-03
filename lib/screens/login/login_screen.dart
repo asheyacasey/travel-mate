@@ -5,7 +5,6 @@ import 'package:travel_mate/blocs/auth/auth_bloc.dart';
 import 'package:travel_mate/cubits/cubits.dart';
 import 'package:travel_mate/screens/home/home_screen.dart';
 import 'package:travel_mate/screens/onboarding/onboarding_screen.dart';
-import 'package:travel_mate/widgets/custom_appbar.dart';
 import 'package:travel_mate/widgets/custom_elevated_button.dart';
 
 class LoginScreen extends StatelessWidget {

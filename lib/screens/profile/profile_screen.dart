@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:travel_mate/screens/login/login_screen.dart';
-import 'package:travel_mate/screens/onboarding/onboarding_screen.dart';
 import 'package:travel_mate/screens/onboarding/widgets/widgets.dart';
 import 'package:travel_mate/widgets/widgets.dart';
-import 'package:unicons/unicons.dart';
 
 import '../../blocs/blocs.dart';
 import '../../repositories/repositories.dart';

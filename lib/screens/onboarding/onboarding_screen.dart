@@ -11,7 +11,6 @@ import 'package:travel_mate/screens/onboarding/onboarding_screens/pictures_scree
 import '../../models/models.dart';
 import '../../models/user_model.dart';
 import 'onboarding_screens/start_screen.dart';
-import 'onboarding_screens/email_screen.dart';
 
 class OnboardingScreen extends StatelessWidget {
   static const String routeName = '/onboarding';
@@ -61,7 +60,7 @@ class OnboardingScreen extends StatelessWidget {
       child: DefaultTabController(
         length: tabs.length,
         child: Builder(builder: (BuildContext context) {
-          final TabController tabController = DefaultTabController.of(context)!;
+          final TabController tabController = DefaultTabController.of(context);
           return Scaffold(
               resizeToAvoidBottomInset: false,
               body: TabBarView(children: [

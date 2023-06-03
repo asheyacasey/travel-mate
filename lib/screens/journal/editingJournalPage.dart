@@ -1,10 +1,10 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:provider/provider.dart';
 import 'package:travel_mate/screens/journal/journal.dart';
 import 'package:travel_mate/screens/journal/journal_data.dart';
-
-import '../../widgets/widgets.dart';
 
 class EditingJournalPage extends StatefulWidget {
   Journal journal;

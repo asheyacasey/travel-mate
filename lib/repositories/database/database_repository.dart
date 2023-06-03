@@ -1,7 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:intl/intl.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:travel_mate/blocs/blocs.dart';
 import 'package:travel_mate/models/models.dart';
 import 'package:travel_mate/repositories/database/base_database_repository.dart';
 import 'package:travel_mate/repositories/storage/storage_repository.dart';
