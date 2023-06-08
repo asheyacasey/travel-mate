@@ -69,7 +69,7 @@ class OnboardingScreen extends StatelessWidget {
                 Demographics(tabController: tabController),
                 Pictures(tabController: tabController),
                 Biography(tabController: tabController),
-                LocationScreen(),
+                LocationScreen(tabController: tabController),
               ]));
         }),
       ),

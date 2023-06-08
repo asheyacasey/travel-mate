@@ -1,7 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
 import 'package:travel_mate/blocs/blocs.dart';
@@ -56,12 +54,12 @@ class Pictures extends StatelessWidget {
                       'Profile Photo',
                       style: Theme.of(context)
                           .primaryTextTheme
-                          .headline2!
+                          .displayMedium!
                           .copyWith(color: Colors.black),
                     ),
                     Text(
                       'Add at least 2 photos to continue',
-                      style: Theme.of(context).textTheme.headline6!.copyWith(
+                      style: Theme.of(context).textTheme.titleLarge!.copyWith(
                           fontWeight: FontWeight.w900, color: Colors.grey),
                     ),
                     SizedBox(height: 10),
@@ -87,7 +85,7 @@ class Pictures extends StatelessWidget {
                       totalSteps: 6,
                       currentStep: 4,
                       selectedColor: Theme.of(context).primaryColor,
-                      unselectedColor: Theme.of(context).backgroundColor,
+                      unselectedColor: Theme.of(context).colorScheme.background,
                     ),
                     SizedBox(height: 10),
                     CustomButton(

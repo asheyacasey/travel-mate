@@ -11,6 +11,7 @@ class CurrentLocation extends StatefulWidget {
 
 class _CurrentLocationState extends State<CurrentLocation> {
   final PageController _pageController = PageController(initialPage: 0);
+  // ignore: unused_field
   int _currentPageIndex = 0;
   bool _isPageScrollable = false;
   late GoogleMapController googleMapController;

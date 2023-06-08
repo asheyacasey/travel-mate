@@ -3,18 +3,6 @@ import 'package:travel_mate/models/models.dart';
 import 'package:travel_mate/screens/journal/mainJournal.dart';
 import 'package:travel_mate/screens/screens.dart';
 
-import '../models/match_model.dart';
-import '../models/user_model.dart';
-import '../screens/onboarding/onboarding_screens/location_screens/mainMapScreen.dart';
-import '../screens/splash/splash_screen.dart';
-import '../screens/home/home_screen.dart';
-
-import '../screens/chat/chat_screen.dart';
-import '../screens/matches/matches_screen.dart';
-import '../screens/onboarding/onboarding_screen.dart';
-import '../screens/profile/profile_screen.dart';
-import '../screens/user/user_screen.dart';
-
 class AppRouter {
   static Route onGenerateRoute(RouteSettings settings) {
     print('The Route is: ${settings.name}');
@@ -35,8 +23,8 @@ class AppRouter {
                 settings.arguments as User); // user: settings.arguments as User
       case OnboardingScreen.routeName:
         return OnboardingScreen.route();
-      case MainMapScreen.routeName:
-        return MainMapScreen.route();
+      // case LocationScreen.routeName:
+      //   return MainMapScreen.route();
       case MainJournal.routeName:
         return MainJournal.route();
       case MatchesScreen.routeName:
