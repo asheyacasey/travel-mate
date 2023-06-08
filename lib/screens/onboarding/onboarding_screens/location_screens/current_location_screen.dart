@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class CurrentLocation extends StatefulWidget {
@@ -15,6 +16,9 @@ class _CurrentLocationState extends State<CurrentLocation> {
   int _currentPageIndex = 0;
   bool _isPageScrollable = false;
   late GoogleMapController googleMapController;
+  // Add a variable to hold the user's location
+  LatLng? userLocation;
+
 
   Set<Marker> markers = {};
 
@@ -22,8 +26,16 @@ class _CurrentLocationState extends State<CurrentLocation> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Current User Location'),
-        centerTitle: true,
+        backgroundColor: Color(0xFFB0DB2D),
+        title: Text(
+          'Current Traveler Location',
+          style: GoogleFonts.manrope(
+            textStyle: TextStyle(
+              fontFamily: 'Manrope',
+              fontSize: 16,
+            ),
+          ),
+        ),
       ),
       body: PageView(
         controller: _pageController,
@@ -56,18 +68,32 @@ class _CurrentLocationState extends State<CurrentLocation> {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          _getUserLocation(); // Update camera position when button is pressed
-        },
-        label: Text("Current Location"),
-        icon: Icon(Icons.location_history),
+      floatingActionButton: Container(
+        child: SizedBox(
+          child: FloatingActionButton.extended(
+            onPressed: () {
+              _getUserLocation(); // Update camera position when button is pressed
+            },
+            backgroundColor: Color(0xFF80B500), // Set the background color
+            label: Text(
+              "Save my location",
+              style: GoogleFonts.manrope(
+                textStyle: TextStyle(
+                  fontFamily: 'Manrope',
+                ),
+              ),
+            ),
+            icon: Icon(Icons.location_history),
+          ),
+        ),
       ),
     );
   }
 
   void _getUserLocation() async {
     Position position = await _determinePosition();
+    // Update the userLocation variable with the current position
+    userLocation = LatLng(position.latitude, position.longitude);
 
     googleMapController.moveCamera (
       CameraUpdate.newCameraPosition(

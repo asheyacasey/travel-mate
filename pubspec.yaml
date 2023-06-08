@@ -51,6 +51,7 @@ dependencies:
   geolocator: ^9.0.2
   location: ^4.4.0
   permission_handler: ^10.2.0
+  geocoding: ^2.0.0
 
 
 
