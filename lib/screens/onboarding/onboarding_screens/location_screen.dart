@@ -3,7 +3,6 @@ import 'package:step_progress_indicator/step_progress_indicator.dart';
 
 import '../widgets/custom_button.dart';
 import 'location_screens/current_location_screen.dart';
-import 'location_screens/simple_google_map.dart';
 
 class LocationScreen extends StatelessWidget {
   final TabController tabController;
@@ -24,18 +23,6 @@ class LocationScreen extends StatelessWidget {
         width: MediaQuery.of(context).size.width,
         child: Column(
           children: [
-            ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (BuildContext context) {
-                      return const SimpleMapLocation();
-                    },
-                  ),
-                );
-              },
-              child: Text("Simple Map Location"),
-            ),
             ElevatedButton(
               onPressed: () {
                 Navigator.of(context).push(
