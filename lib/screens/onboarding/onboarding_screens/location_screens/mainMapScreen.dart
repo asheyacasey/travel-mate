@@ -68,18 +68,6 @@ class _MainMapScreenState extends State<MainMapScreen> {
             ),
 
             SizedBox(height: 10),
-            // ElevatedButton(
-            //   onPressed: () {
-            //     Navigator.of(context).push(
-            //       MaterialPageRoute(
-            //         builder: (BuildContext context) {
-            //           return const SimpleMapLocation();
-            //         },
-            //       ),
-            //     );
-            //   },
-            //   child: Text("Simple Map Location"),
-            // ),
             Container(
               width: double.infinity,
               child: SizedBox(
@@ -99,21 +87,19 @@ class _MainMapScreenState extends State<MainMapScreen> {
                       borderRadius: BorderRadius.circular(30),
                     ),
                     primary: Color(0xFFB0DB2D),
+                    elevation: 0, // Adjust the elevation value to move the shadow
                   ),
                   child: Text(
                     "Get My Current Location",
                     style: TextStyle(
                       fontFamily: 'Manrope',
-                      fontWeight: FontWeight.w900,
-                      fontSize: 16, // Adjust the font size as needed
+                      fontWeight: FontWeight.w400,
+                      fontSize: 16,
                     ),
                   ),
                 ),
               ),
             ),
-
-
-
           ],
         ),
       ),
