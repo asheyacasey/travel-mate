@@ -27,11 +27,12 @@ class Pictures extends StatelessWidget {
           );
         }
         if (state is OnboardingLoaded) {
+          print("Confirm image is added now");
           var images = state.user.imageUrls;
           var imageCount = images.length;
+
           return Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 30.0, vertical: 50.0),
+            padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 50.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               mainAxisSize: MainAxisSize.max,
@@ -40,17 +41,18 @@ class Pictures extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                        width: 50,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Theme.of(context).primaryColor,
-                        ),
-                        child: Icon(
-                          UniconsLine.scenery,
-                          // size: 40,
-                          color: Colors.white,
-                        )),
+                      width: 50,
+                      height: 50,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Theme.of(context).primaryColor,
+                      ),
+                      child: Icon(
+                        UniconsLine.scenery,
+                        // size: 40,
+                        color: Colors.white,
+                      ),
+                    ),
                     SizedBox(height: 10),
                     Text(
                       'Profile Photo',
@@ -62,22 +64,22 @@ class Pictures extends StatelessWidget {
                     Text(
                       'Add at least 2 photos to continue',
                       style: Theme.of(context).textTheme.headline6!.copyWith(
-                          fontWeight: FontWeight.w900, color: Colors.grey),
+                        fontWeight: FontWeight.w900,
+                        color: Colors.grey,
+                      ),
                     ),
                     SizedBox(height: 10),
-                    SizedBox(
-                      height: 350,
-                      child: GridView.builder(
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 3, childAspectRatio: 0.66),
-                        itemCount: 6,
-                        itemBuilder: (BuildContext context, int index) {
-                          return (imageCount > index)
-                              ? CustomImageContainer(imageUrl: images[index])
-                              : CustomImageContainer();
-                        },
-                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          height: 200,
+                          width: 200,
+                          child: (imageCount > 0)
+                              ? CustomImageContainer(imageUrl: images[0])
+                              : CustomImageContainer(),
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -91,7 +93,9 @@ class Pictures extends StatelessWidget {
                     ),
                     SizedBox(height: 10),
                     CustomButton(
-                        tabController: tabController, text: 'NEXT STEP')
+                      tabController: tabController,
+                      text: 'NEXT STEP',
+                    ),
                   ],
                 ),
               ],

@@ -75,6 +75,7 @@ class Biography extends StatelessWidget {
                       },
                     ),
                     SizedBox(height: 50),
+
                     Text(
                       'I\'m interested in...',
                       style: Theme.of(context)
@@ -82,26 +83,6 @@ class Biography extends StatelessWidget {
                           .headline2!
                           .copyWith(color: Colors.black),
                     ),
-                    // Row(
-                    //   children: [
-                    //     CustomTextContainer(text: 'MOVIES'),
-                    //     CustomTextContainer(text: 'HIKING'),
-                    //     CustomTextContainer(text: 'MUSIC'),
-                    //     CustomTextContainer(text: 'BIKING'),
-                    //   ],
-                    // ),
-                    // Row(
-                    //   children: [
-                    //     CustomTextContainer(text: 'KARAOKE'),
-                    //     CustomTextContainer(text: 'FREE DIVING'),
-                    //     CustomTextContainer(text: 'FOOD TRIP'),
-                    //   ],
-                    // ),
-                    // Row(
-                    //   children: [
-                    //     CustomTextContainer(text: 'MUSEUMS'),
-                    //   ],
-                    // ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
