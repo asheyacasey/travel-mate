@@ -111,7 +111,8 @@ class SwipedMatchedHomeScreen extends StatelessWidget {
                     child: CircleAvatar(
                       radius: 45,
                       backgroundImage: NetworkImage(
-                        context.read<AuthBloc>().state.user!.imageUrls[0],
+                        context.read<AuthBloc>().state.user!.imageUrl ?? '',
+
                       ),
                     ),
                   ),
@@ -128,7 +129,7 @@ class SwipedMatchedHomeScreen extends StatelessWidget {
                     child: CircleAvatar(
                       radius: 45,
                       backgroundImage: NetworkImage(
-                        state.user.imageUrls[0],
+                        state.user.imageUrl ?? '',
                       ),
                       //gi try nako remove to ang '!'
                     ),

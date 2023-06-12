@@ -7,7 +7,7 @@ class User extends Equatable {
   final String name;
   final int age;
   final String gender;
-  final List<dynamic> imageUrls;
+  final String imageUrl;
   final List<dynamic> interests;
   final String bio;
   final String jobTitle;
@@ -21,7 +21,7 @@ class User extends Equatable {
       required this.name,
       required this.age,
       required this.gender,
-      required this.imageUrls,
+      required this.imageUrl,
       required this.interests,
       required this.bio,
       required this.jobTitle,
@@ -30,28 +30,6 @@ class User extends Equatable {
       this.swipeLeft,
       this.matches});
 
-  // static User fromSnapshot(DocumentSnapshot snap) {
-  //   User user = User(
-  //       id: snap.id,
-  //       name: snap['name'],
-  //       age: snap['age'],
-  //       gender: snap['gender'],
-  //       imageUrls: snap['imageUrls'],
-  //       interests: snap['interests'],
-  //       bio: snap['bio'],
-  //       jobTitle: snap['jobTitle'],
-  //       location: snap['location'],
-  //       swipeLeft: (snap['swipeLeft'] as List)
-  //           .map((swipeLeft) => swipeLeft as String)
-  //           .toList(),
-  //       swipeRight: (snap['swipeRight'] as List)
-  //           .map((swipeRight) => swipeRight as String)
-  //           .toList(),
-  //       matches: (snap['matches'] as List)
-  //           .map((matches) => matches as String)
-  //           .toList());
-  //   return user;
-  // }
 
   static User fromSnapshot(DocumentSnapshot snap) {
     User user = User(
@@ -59,7 +37,7 @@ class User extends Equatable {
         name: snap['name'],
         age: snap['age'],
         gender: snap['gender'],
-        imageUrls: snap['imageUrls'],
+        imageUrl: snap['imageUrl'],
         interests: snap['interests'],
         bio: snap['bio'],
         jobTitle: snap['jobTitle'],
@@ -81,7 +59,7 @@ class User extends Equatable {
       'name': name,
       'age': age,
       'gender': gender,
-      'imageUrls': imageUrls,
+      'imageUrl': imageUrl,
       'interests': interests,
       'bio': bio,
       'jobTitle': jobTitle,
@@ -97,7 +75,7 @@ class User extends Equatable {
     String? name,
     int? age,
     String? gender,
-    List<dynamic>? imageUrls,
+    String? imageUrl,
     List<dynamic>? interests,
     String? bio,
     String? jobTitle,
@@ -111,7 +89,7 @@ class User extends Equatable {
       name: name ?? this.name,
       age: age ?? this.age,
       gender: gender ?? this.gender,
-      imageUrls: imageUrls ?? this.imageUrls,
+      imageUrl: imageUrl ?? this.imageUrl,
       interests: interests ?? this.interests,
       bio: bio ?? this.bio,
       jobTitle: jobTitle ?? this.jobTitle,
@@ -128,7 +106,7 @@ class User extends Equatable {
         name,
         age,
         gender,
-        imageUrls,
+        imageUrl,
         interests,
         bio,
         jobTitle,

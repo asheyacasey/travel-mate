@@ -44,7 +44,7 @@ class OnboardingScreen extends StatelessWidget {
             name: '',
             age: 0,
             gender: '',
-            imageUrls: [],
+            imageUrl: null,
             interests: [],
             bio: '',
             jobTitle: '',

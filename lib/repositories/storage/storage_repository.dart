@@ -7,32 +7,34 @@ import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 import '../../models/models.dart';
 
+//this repository is for image
 class StorageRepository extends BaseStorageRepository {
   final firebase_storage.FirebaseStorage storage =
       firebase_storage.FirebaseStorage.instance;
 
   @override
-  Future<void> uploadImage(User user, XFile image) async {
+  Future<void> uploadImage(User user, XFile image, String imageURL) async {
     try {
       await storage
           .ref('${user.id}/${image.name}')
           .putFile(
-            File(image.path),
-          )
+        File(image.path),
+      )
           .then(
             (p0) => DatabaseRepository().updateUserPictures(
-              user,
-              image.name,
-            ),
-          );
+          user,
+          imageURL,
+        ),
+      );
     } catch (_) {}
   }
+
 
   @override
   Future<String> getDownloadURL(User user, String imageName) async {
     String downloadURL =
-        await storage.ref('${user.id}/$imageName').getDownloadURL();
+    await storage.ref('${user.id}/$imageName').getDownloadURL();
 
     return downloadURL;
   }
-}
+

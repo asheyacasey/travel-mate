@@ -28,8 +28,8 @@ class Pictures extends StatelessWidget {
         }
         if (state is OnboardingLoaded) {
           print("Confirm image is added now");
-          var images = state.user.imageUrls;
-          var imageCount = images.length;
+          var imageUrl = state.user.imageUrl;
+          var imageCount = imageUrl != null ? 1 : 0;
 
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 50.0),
@@ -76,9 +76,10 @@ class Pictures extends StatelessWidget {
                           height: 200,
                           width: 200,
                           child: (imageCount > 0)
-                              ? CustomImageContainer(imageUrl: images[0])
+                              ? CustomImageContainer(imageUrl: imageUrl!)
                               : CustomImageContainer(),
                         ),
+
                       ],
                     ),
                   ],

@@ -93,7 +93,7 @@ class _CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         children: [
           CircleAvatar(
             radius: 15,
-            backgroundImage: NetworkImage(match.matchUser.imageUrls[0]),
+            backgroundImage: NetworkImage(match.matchUser.imageUrl ?? ''),
           ),
           Text(
             match.matchUser.name,
@@ -419,7 +419,7 @@ class _Message extends StatelessWidget {
             children: [
               CircleAvatar(
                 radius: 15,
-                backgroundImage: NetworkImage(match.matchUser.imageUrls[0]),
+                backgroundImage: NetworkImage(match.matchUser.imageUrl ?? ''),
               ),
               SizedBox(
                 width: 5,

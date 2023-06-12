@@ -123,7 +123,7 @@ class ChatsList extends StatelessWidget {
               UserImageSmall(
                 height: 70,
                 width: 70,
-                imageUrl: activeMatches[index].matchUser.imageUrls[0],
+                imageUrl: activeMatches[index].matchUser.imageUrl ?? '',
               ),
               SizedBox(width: 10),
               Flexible(
@@ -183,7 +183,8 @@ class MatchesList extends StatelessWidget {
                 UserImageSmall(
                   height: 70,
                   width: 70,
-                  imageUrl: inactiveMatches[index].matchUser.imageUrls[0],
+                  imageUrl: inactiveMatches[index].matchUser.imageUrl ?? '',
+
                 ),
                 Text(inactiveMatches[index].matchUser.name,
                     style: Theme.of(context).textTheme.headline5),
