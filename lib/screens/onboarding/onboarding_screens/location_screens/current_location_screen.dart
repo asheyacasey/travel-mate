@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class CurrentLocation extends StatefulWidget {
@@ -11,24 +12,29 @@ class CurrentLocation extends StatefulWidget {
 
 class _CurrentLocationState extends State<CurrentLocation> {
   final PageController _pageController = PageController(initialPage: 0);
-  // ignore: unused_field
   int _currentPageIndex = 0;
   bool _isPageScrollable = false;
   late GoogleMapController googleMapController;
-
-  static const CameraPosition initialCameraPosition = CameraPosition(
-    target: LatLng(37.42736133580664, -122.085749655962),
-    zoom: 14.0,
-  );
+  // Add a variable to hold the user's location
+  LatLng? userLocation;
 
   Set<Marker> markers = {};
+  Set<Circle> circles = {};
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Current User Location'),
-        centerTitle: true,
+        backgroundColor: Color(0xFFB0DB2D),
+        title: Text(
+          'Current Traveler Location',
+          style: GoogleFonts.manrope(
+            textStyle: TextStyle(
+              fontFamily: 'Manrope',
+              fontSize: 16,
+            ),
+          ),
+        ),
       ),
       body: PageView(
         controller: _pageController,
@@ -45,56 +51,87 @@ class _CurrentLocationState extends State<CurrentLocation> {
             child: SizedBox(
               height: MediaQuery.of(context).size.height,
               child: GoogleMap(
-                initialCameraPosition: initialCameraPosition,
+                initialCameraPosition: CameraPosition(
+                  target: LatLng(0, 0), // Default target position
+                  zoom: 0, // Default zoom level
+                ), // Set initial position to null
                 markers: markers,
+                circles: circles,
                 zoomControlsEnabled: false,
                 mapType: MapType.normal,
                 onMapCreated: (GoogleMapController controller) {
                   googleMapController = controller;
+                  _getUserLocation(); // Fetch user's location and update camera position
                 },
               ),
             ),
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () async {
-          Position position = await _determinePosition();
-
-          googleMapController.animateCamera(
-            CameraUpdate.newCameraPosition(
-              CameraPosition(
-                target: LatLng(position.latitude, position.longitude),
-                zoom: 14.0,
+      floatingActionButton: Container(
+        child: SizedBox(
+          child: FloatingActionButton.extended(
+            onPressed: () {
+              _getUserLocation(); // Update camera position when button is pressed
+            },
+            backgroundColor: Color(0xFF80B500), // Set the background color
+            label: Text(
+              "Save my location",
+              style: GoogleFonts.manrope(
+                textStyle: TextStyle(
+                  fontFamily: 'Manrope',
+                ),
               ),
             ),
-          );
-
-          markers.clear();
-
-          markers.add(
-            Marker(
-              markerId: MarkerId("currentLocation"),
-              position: LatLng(position.latitude, position.longitude),
-            ),
-          );
-
-          setState(() {});
-        },
-        label: Text("Current Location"),
-        icon: Icon(Icons.location_history),
+            icon: Icon(Icons.location_history),
+          ),
+        ),
       ),
     );
   }
 
+  void _getUserLocation() async {
+    Position position = await _determinePosition();
+    // Update the userLocation variable with the current position
+    userLocation = LatLng(position.latitude, position.longitude);
+
+    googleMapController.moveCamera(
+      CameraUpdate.newCameraPosition(
+        CameraPosition(
+          target: LatLng(position.latitude, position.longitude),
+          zoom: 14.5,
+        ),
+      ),
+    );
+
+    markers.clear();
+
+    markers.add(Marker(
+      markerId: MarkerId("currentLocation"),
+      position: LatLng(position.latitude, position.longitude),
+    ));
+
+    circles.add(
+      Circle(
+        circleId: CircleId("currentLocation"),
+        center: LatLng(position.latitude, position.longitude),
+        radius: 880,
+        strokeWidth: 2,
+        fillColor: Colors.blueAccent.withOpacity(0.2),
+      ),
+    );
+
+    setState(() {});
+  }
+
   Future<Position> _determinePosition() async {
-    bool serviceEnable;
+    bool serviceEnabled;
     LocationPermission permission;
 
-    serviceEnable = await Geolocator.isLocationServiceEnabled();
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
 
-    if (!serviceEnable) {
-      return Future.error('Location services are disabled');
+    if (!serviceEnabled) {
+      throw 'Location services are disabled';
     }
 
     permission = await Geolocator.checkPermission();
@@ -103,12 +140,12 @@ class _CurrentLocationState extends State<CurrentLocation> {
       permission = await Geolocator.requestPermission();
 
       if (permission == LocationPermission.denied) {
-        return Future.error('Location permission denied');
+        throw 'Location permission denied';
       }
     }
 
     if (permission == LocationPermission.deniedForever) {
-      return Future.error('Location permission are permanently denied');
+      throw 'Location permissions are permanently denied';
     }
 
     Position position = await Geolocator.getCurrentPosition();
