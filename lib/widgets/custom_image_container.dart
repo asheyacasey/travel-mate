@@ -52,6 +52,7 @@ class CustomImageContainer extends StatelessWidget {
                       context
                           .read<OnboardingBloc>()
                           .add(UpdateUserImages(image: _image));
+
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content: Text('Image uploaded'),
@@ -64,6 +65,10 @@ class CustomImageContainer extends StatelessWidget {
             : Image.network(
                 imageUrl!,
                 fit: BoxFit.cover,
+            errorBuilder: (context, error, stackTrace) {
+            print('Error loading image: $error');
+            return Icon(Icons.error);
+          },
               ),
       ),
     );

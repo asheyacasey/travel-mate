@@ -61,20 +61,25 @@ class OnboardingBloc extends Bloc<OnboardingEvent, OnboardingState> {
   }
 
   void _onUpdateUserImages(
-    UpdateUserImages event,
-    Emitter<OnboardingState> emit,
-  ) async {
+      UpdateUserImages event,
+      Emitter<OnboardingState> emit,
+      ) async {
     if (state is OnboardingLoaded) {
       User user = (state as OnboardingLoaded).user;
 
-      await _storageRepository.uploadImage(user, event.image);
+      final imageUrl = await _storageRepository.uploadImage(user, event.image);
+      print('Uploaded image URL: $imageUrl');
+
+      // Assuming that the 'updateUserPictures' method exists in your '_databaseRepository'
+      // and that it correctly updates the Firestore database with the new image URL
+      await _databaseRepository.updateUserPictures(user, imageUrl);
 
       _databaseRepository.getUser(user.id!).listen((user) {
+        print('Updated user image URLs: ${user.imageUrls}');
         add(UpdateUser(user: user));
       });
     }
   }
-
   void _onUpdateUserLocation(
     UpdateUserLocation event,
     Emitter<OnboardingState> emit,

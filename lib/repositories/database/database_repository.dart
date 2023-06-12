@@ -21,7 +21,7 @@ class DatabaseRepository extends BaseDatabaseRepository {
   @override
   Future<void> updateUserPictures(User user, String imageName) async {
     String downloadUrl =
-        await StorageRepository().getDownloadURL(user, imageName);
+    await StorageRepository().getDownloadURL(user, imageName);
 
     return _firebaseFirestore.collection('users').doc(user.id).update({
       'imageUrls': FieldValue.arrayUnion([downloadUrl]),
@@ -66,15 +66,15 @@ class DatabaseRepository extends BaseDatabaseRepository {
 
   @override
   Stream<List<User>> getUsers(
-    User user,
-  ) {
+      User user,
+      ) {
     // List<String> userFilter = List.from(user.swipeLeft!)
     //   ..addAll(user.swipeRight!)
     //   ..add(user.id!);
     return _firebaseFirestore
         .collection('users')
-        // .where('gender', isEqualTo: 'Female')
-        // .where(FieldPath.documentId, whereNotIn: userFilter)
+    // .where('gender', isEqualTo: 'Female')
+    // .where(FieldPath.documentId, whereNotIn: userFilter)
         .where('gender', isEqualTo: _selectGender(user))
         .snapshots()
         .map((snap) {
@@ -85,9 +85,9 @@ class DatabaseRepository extends BaseDatabaseRepository {
   @override
   Stream<List<User>> getUsersToSwipe(User user) {
     return Rx.combineLatest2(getUser(user.id!), getUsers(user), (
-      User currentUser,
-      List<User> users,
-    ) {
+        User currentUser,
+        List<User> users,
+        ) {
       return users.where((user) {
         if (currentUser.swipeLeft!.contains(user.id)) {
           return false;
@@ -147,18 +147,18 @@ class DatabaseRepository extends BaseDatabaseRepository {
   Stream<List<Match>> getMatches(User user) {
     return Rx.combineLatest3(
         getUser(user.id!), getChats(user.id!), getUsers(user), (
-      User user,
-      List<Chat> userChats,
-      List<User> otherUsers,
-    ) {
+        User user,
+        List<Chat> userChats,
+        List<User> otherUsers,
+        ) {
       return otherUsers.where((otherUser) {
         List<String> matches =
-            user.matches!.map((match) => match['matchId'] as String).toList();
+        user.matches!.map((match) => match['matchId'] as String).toList();
         return matches.contains(otherUser.id);
       }).map((matchUser) {
         Chat chat = userChats.where((chat) {
           return chat.userIds.contains(matchUser.id) &
-              chat.userIds.contains(user.id);
+          chat.userIds.contains(user.id);
         }).first;
 
         return Match(userId: user.id!, matchUser: matchUser, chat: chat);
@@ -180,9 +180,18 @@ class DatabaseRepository extends BaseDatabaseRepository {
   }
 
   @override
+  Future<void> updateMessage(String chatId, Message message) {
+    return _firebaseFirestore.collection('chats').doc(chatId).update({
+      'messages': FieldValue.arrayUnion([
+        message.toJson(),
+      ])
+    });
+  }
+
+  @override
   Stream<Chat> getChat(String chatId) {
     return _firebaseFirestore.collection('chats').doc(chatId).snapshots().map(
-        (doc) => Chat.fromJson(doc.data() as Map<String, dynamic>, id: doc.id));
+            (doc) => Chat.fromJson(doc.data() as Map<String, dynamic>, id: doc.id));
   }
 
   @override

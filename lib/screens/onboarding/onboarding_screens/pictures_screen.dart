@@ -19,8 +19,10 @@ class Pictures extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return BlocBuilder<OnboardingBloc, OnboardingState>(
       builder: (context, state) {
+        print('Rebuilding UI with state: $state');
         if (state is OnboardingLoading) {
           return Center(
             child: CircularProgressIndicator(),
@@ -73,6 +75,7 @@ class Pictures extends StatelessWidget {
                                 crossAxisCount: 3, childAspectRatio: 0.66),
                         itemCount: 6,
                         itemBuilder: (BuildContext context, int index) {
+                          print('Building item at index $index');
                           return (imageCount > index)
                               ? CustomImageContainer(imageUrl: images[index])
                               : CustomImageContainer();

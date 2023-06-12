@@ -12,27 +12,23 @@ class StorageRepository extends BaseStorageRepository {
       firebase_storage.FirebaseStorage.instance;
 
   @override
-  Future<void> uploadImage(User user, XFile image) async {
+  Future<String> uploadImage(User user, XFile image) async {
     try {
-      await storage
-          .ref('${user.id}/${image.name}')
-          .putFile(
-            File(image.path),
-          )
-          .then(
-            (p0) => DatabaseRepository().updateUserPictures(
-              user,
-              image.name,
-            ),
-          );
-    } catch (_) {}
+      await storage.ref('${user.id}/${image.name}').putFile(File(image.path));
+      String downloadURL = await getDownloadURL(user, image.name);
+      return downloadURL;
+    } catch (e) {
+      print('Error occurred while uploading image: $e');
+      throw e;  // Propagate the exception to the caller
+    }
   }
 
   @override
   Future<String> getDownloadURL(User user, String imageName) async {
     String downloadURL =
-        await storage.ref('${user.id}/$imageName').getDownloadURL();
+    await storage.ref('${user.id}/$imageName').getDownloadURL();
 
     return downloadURL;
   }
 }
+
