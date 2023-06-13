@@ -45,7 +45,7 @@ class LocationScreen extends StatelessWidget {
               children: [
                 StepProgressIndicator(
                   totalSteps: 6,
-                  currentStep: 1,
+                  currentStep: 6,
                   selectedColor: Theme.of(context).primaryColor,
                   unselectedColor: Theme.of(context).backgroundColor,
                 ),
@@ -71,7 +71,7 @@ class SliderDemo extends StatefulWidget {
 }
 
 class _SliderDemoState extends State<SliderDemo> {
-  late double _currentSliderValue = 0.0;
+  double _currentSliderValue = 20;
   late Position _currentPosition;
 
   void initState() {
@@ -94,25 +94,26 @@ class _SliderDemoState extends State<SliderDemo> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Text('Selected radius: ${_currentSliderValue.toStringAsFixed(6)} km'),
+          Text('Selected radius: ${_currentSliderValue.toStringAsFixed(0)} km'),
           Slider(
             value: _currentSliderValue,
-            min: -90,
-            max: 90,
+            min: 0,
+            max: 100,
             divisions: 180,
-            label: _currentSliderValue.toStringAsFixed(6),
+            label: _currentSliderValue.round().toString(),
             onChanged: (double value) {
               setState(() {
                 _currentSliderValue = value;
-                _currentPosition = Position(
-                    longitude: _currentSliderValue,
-                    latitude: _currentPosition.longitude,
-                    timestamp: _currentPosition.timestamp,
-                    accuracy: _currentPosition.accuracy,
-                    altitude: _currentPosition.altitude,
-                    heading: _currentPosition.heading,
-                    speed: _currentPosition.speed,
-                    speedAccuracy: _currentPosition.speedAccuracy);
+                // _currentPosition = Position(
+                //   longitude: _currentSliderValue,
+                //   latitude: _currentPosition.longitude,
+                //   timestamp: _currentPosition.timestamp,
+                //   accuracy: _currentPosition.accuracy,
+                //   altitude: _currentPosition.altitude,
+                //   heading: _currentPosition.heading,
+                //   speed: _currentPosition.speed,
+                //   speedAccuracy: _currentPosition.speedAccuracy,
+                // );
               });
             },
           ),

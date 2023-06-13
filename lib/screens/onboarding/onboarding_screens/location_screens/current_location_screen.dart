@@ -99,7 +99,7 @@ class _CurrentLocationState extends State<CurrentLocation> {
       CameraUpdate.newCameraPosition(
         CameraPosition(
           target: LatLng(position.latitude, position.longitude),
-          zoom: 14.5,
+          zoom: 15,
         ),
       ),
     );
@@ -115,7 +115,7 @@ class _CurrentLocationState extends State<CurrentLocation> {
       Circle(
         circleId: CircleId("currentLocation"),
         center: LatLng(position.latitude, position.longitude),
-        radius: 880,
+        radius: 700,
         strokeWidth: 2,
         fillColor: Colors.blueAccent.withOpacity(0.2),
       ),
