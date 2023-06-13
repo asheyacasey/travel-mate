@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -15,6 +16,8 @@ class _CurrentLocationState extends State<CurrentLocation> {
   int _currentPageIndex = 0;
   bool _isPageScrollable = false;
   late GoogleMapController googleMapController;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
   // Add a variable to hold the user's location
   LatLng? userLocation;
 
@@ -72,7 +75,11 @@ class _CurrentLocationState extends State<CurrentLocation> {
         child: SizedBox(
           child: FloatingActionButton.extended(
             onPressed: () {
-              _getUserLocation(); // Update camera position when button is pressed
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('Location saved!'),
+                ),
+              );
             },
             backgroundColor: Color(0xFF80B500), // Set the background color
             label: Text(
@@ -94,6 +101,8 @@ class _CurrentLocationState extends State<CurrentLocation> {
     Position position = await _determinePosition();
     // Update the userLocation variable with the current position
     userLocation = LatLng(position.latitude, position.longitude);
+
+    _storeUserLocation();
 
     googleMapController.moveCamera(
       CameraUpdate.newCameraPosition(
@@ -151,5 +160,12 @@ class _CurrentLocationState extends State<CurrentLocation> {
     Position position = await Geolocator.getCurrentPosition();
 
     return position;
+  }
+
+  void _storeUserLocation() async {
+    await _firestore.collection('users').doc('user_id').set({
+      'lat': userLocation?.latitude,
+      'lon': userLocation?.longitude,
+    });
   }
 }
