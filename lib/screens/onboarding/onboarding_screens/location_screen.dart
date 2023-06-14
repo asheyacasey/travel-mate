@@ -25,6 +25,8 @@ class _LocationTabState extends State<LocationTab> {
   late GoogleMapController _mapController;
   location.Location _location = location.Location();
   LatLng _currentPosition = LatLng(0, 0);
+  String _latitude = '';
+  String _longitude = '';
 
   @override
   void initState() {
@@ -32,7 +34,10 @@ class _LocationTabState extends State<LocationTab> {
     _location.onLocationChanged.listen((location.LocationData currentLocation) {
       setState(() {
         _currentPosition = LatLng(currentLocation.latitude!, currentLocation.longitude!);
+        _latitude = currentLocation.latitude.toString();
+        _longitude = currentLocation.longitude.toString();
       });
+      print('Latitude: $_latitude, Longitude: $_longitude');
     });
     _initCurrentLocation();
   }
@@ -43,8 +48,20 @@ class _LocationTabState extends State<LocationTab> {
       final currentLocation = await _location.getLocation();
       setState(() {
         _currentPosition = LatLng(currentLocation.latitude!, currentLocation.longitude!);
+        _latitude = currentLocation.latitude.toString();
+        _longitude = currentLocation.longitude.toString();
       });
+      print('Latitude: $_latitude, Longitude: $_longitude');
     }
+  }
+
+  void _onMapCreated(GoogleMapController controller) {
+    _mapController = controller;
+  }
+
+  void _onCameraMove(CameraPosition position) {
+    final LatLng center = position.target;
+    print('Current Location: ${center.latitude}, ${center.longitude}');
   }
 
   @override
@@ -97,9 +114,8 @@ class _LocationTabState extends State<LocationTab> {
                 child: GoogleMap(
                   mapType: MapType.normal,
                   initialCameraPosition: CameraPosition(target: _currentPosition, zoom: 15),
-                  onMapCreated: (GoogleMapController controller) {
-                    _mapController = controller;
-                  },
+                  onMapCreated: _onMapCreated,
+                  onCameraMove: _onCameraMove,
                   markers: {
                     Marker(markerId: MarkerId('currentLocation'), position: _currentPosition),
                   },
