@@ -31,27 +31,21 @@ class _LocationTabState extends State<LocationTab> {
   @override
   void initState() {
     super.initState();
-    _location.onLocationChanged.listen((location.LocationData currentLocation) {
-      setState(() {
-        _currentPosition = LatLng(currentLocation.latitude!, currentLocation.longitude!);
-        _latitude = currentLocation.latitude.toString();
-        _longitude = currentLocation.longitude.toString();
-      });
-      print('Latitude: $_latitude, Longitude: $_longitude');
-    });
     _initCurrentLocation();
   }
 
   Future<void> _initCurrentLocation() async {
     final hasPermission = await _location.requestPermission();
     if (hasPermission == location.PermissionStatus.granted) {
-      final currentLocation = await _location.getLocation();
-      setState(() {
-        _currentPosition = LatLng(currentLocation.latitude!, currentLocation.longitude!);
-        _latitude = currentLocation.latitude.toString();
-        _longitude = currentLocation.longitude.toString();
+      _location.onLocationChanged.listen((location.LocationData currentLocation) {
+        setState(() {
+          _currentPosition = LatLng(currentLocation.latitude!, currentLocation.longitude!);
+          _latitude = currentLocation.latitude.toString();
+          _longitude = currentLocation.longitude.toString();
+        });
+        _updateCameraPosition();
+        print('Latitude: $_latitude, Longitude: $_longitude');
       });
-      print('Latitude: $_latitude, Longitude: $_longitude');
     }
   }
 
@@ -59,9 +53,9 @@ class _LocationTabState extends State<LocationTab> {
     _mapController = controller;
   }
 
-  void _onCameraMove(CameraPosition position) {
-    final LatLng center = position.target;
-    print('Current Location: ${center.latitude}, ${center.longitude}');
+  void _updateCameraPosition() {
+    final CameraPosition newPosition = CameraPosition(target: _currentPosition, zoom: 15);
+    _mapController.animateCamera(CameraUpdate.newCameraPosition(newPosition));
   }
 
   @override
@@ -115,11 +109,9 @@ class _LocationTabState extends State<LocationTab> {
                   mapType: MapType.normal,
                   initialCameraPosition: CameraPosition(target: _currentPosition, zoom: 15),
                   onMapCreated: _onMapCreated,
-                  onCameraMove: _onCameraMove,
                   markers: {
                     Marker(markerId: MarkerId('currentLocation'), position: _currentPosition),
                   },
-                  myLocationEnabled: true,
                 ),
               ),
               SizedBox(height: 220),
