@@ -174,8 +174,7 @@ class Demographics extends StatelessWidget {
                         totalSteps: 6,
                         currentStep: 3,
                         selectedColor: Theme.of(context).primaryColor,
-                        unselectedColor:
-                            Theme.of(context).colorScheme.background,
+                        unselectedColor: Theme.of(context).backgroundColor,
                       ),
                       SizedBox(height: 10),
                       CustomButton(
