@@ -43,12 +43,15 @@ class OnboardingBloc extends Bloc<OnboardingEvent, OnboardingState> {
   }
 
   void _onUpdateUserInterest(
-    UpdateUserInterest event,
-    Emitter<OnboardingState> emit,
-  ) {
+      UpdateUserInterest event,
+      Emitter<OnboardingState> emit,
+      ) {
     if (state is OnboardingLoaded) {
-      _databaseRepository.UpdateUserInterest(event.user, event.interest);
-      emit(OnboardingLoaded(user: event.user));
+      final List<String> selectedTags = List<String>.from(event.selectedTags);
+      final User updatedUser = event.user.copyWith(interests: selectedTags);
+
+      _databaseRepository.updateUser(updatedUser);
+      emit(OnboardingLoaded(user: updatedUser));
     }
   }
 
