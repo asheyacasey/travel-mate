@@ -9,6 +9,36 @@ import 'package:unicons/unicons.dart';
 import '../../../blocs/blocs.dart';
 import '../widgets/widgets.dart';
 
+class CustomRadio<T> extends StatelessWidget {
+  final T value;
+  final T groupValue;
+  final ValueChanged<T?> onChanged;
+
+  const CustomRadio({
+    required this.value,
+    required this.groupValue,
+    required this.onChanged,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Transform.scale(
+      scale: 1.5, // Adjust the scale value to make the circle bigger
+      child: Theme(
+        data: Theme.of(context).copyWith(
+          toggleableActiveColor: Color(0xFFF5C518),
+        ),
+        child: Radio<T>(
+          value: value,
+          groupValue: groupValue,
+          onChanged: onChanged,
+          activeColor: Color(0xFFF5C518), // Set the active color to Color(0xFFF5C518)
+        ),
+      ),
+    );
+  }
+}
+
 class Demographics extends StatelessWidget {
   final TabController tabController;
 
@@ -30,7 +60,7 @@ class Demographics extends StatelessWidget {
         if (state is OnboardingLoaded) {
           return Padding(
             padding:
-                const EdgeInsets.symmetric(horizontal: 30.0, vertical: 50.0),
+            const EdgeInsets.symmetric(horizontal: 30.0, vertical: 50.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -38,17 +68,18 @@ class Demographics extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                        width: 50,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Theme.of(context).primaryColor,
-                        ),
-                        child: Icon(
-                          UniconsLine.user_check,
-                          size: 40,
-                          color: Colors.white,
-                        )),
+                      width: 50,
+                      height: 50,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Theme.of(context).primaryColor,
+                      ),
+                      child: Icon(
+                        UniconsLine.user_check,
+                        size: 40,
+                        color: Colors.white,
+                      ),
+                    ),
                     SizedBox(height: 20),
                     Text(
                       'About you',
@@ -69,48 +100,58 @@ class Demographics extends StatelessWidget {
                     SizedBox(height: 10),
                     Container(
                       decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
-                          border: Border.all(
-                              color: Theme.of(context).primaryColorLight,
-                              width: 2.0)),
-                      //color: Colors.red,
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                        border: Border.all(
+                          color: Theme.of(context).primaryColorLight,
+                          width: 2.0,
+                        ),
+                      ),
                       child: Row(
                         children: <Widget>[
                           Expanded(
                             flex: 5,
-                            child: Container(
-                              decoration: BoxDecoration(),
-                              child: CustomCheckbox(
-                                text: 'MALE',
-                                value: state.user.gender == 'Male',
-                                onChanged: (bool? newValue) {
+                            child: ListTile(
+                              title: Text(
+                                'MALE',
+                                style: TextStyle(fontSize: 16),
+                              ),
+                              leading: CustomRadio<String>(
+                                value: 'Male',
+                                groupValue: state.user.gender,
+                                onChanged: (String? newValue) {
                                   context.read<OnboardingBloc>().add(
-                                        UpdateUser(
-                                          user: state.user
-                                              .copyWith(gender: 'Male'),
-                                        ),
-                                      );
+                                    UpdateUser(
+                                      user: state.user.copyWith(
+                                        gender: newValue,
+                                      ),
+                                    ),
+                                  );
                                 },
                               ),
                             ),
                           ),
                           Expanded(
                             flex: 5,
-                            child: Container(
-                              child: CustomCheckbox(
-                                text: 'FEMALE',
-                                value: state.user.gender == 'Female',
-                                onChanged: (bool? newValue) {
+                            child: ListTile(
+                              title: Text(
+                                'FEMALE',
+                                style: TextStyle(fontSize: 16),
+                              ),
+                              leading: CustomRadio<String>(
+                                value: 'Female',
+                                groupValue: state.user.gender,
+                                onChanged: (String? newValue) {
                                   context.read<OnboardingBloc>().add(
-                                        UpdateUser(
-                                          user: state.user
-                                              .copyWith(gender: 'Female'),
-                                        ),
-                                      );
+                                    UpdateUser(
+                                      user: state.user.copyWith(
+                                        gender: newValue,
+                                      ),
+                                    ),
+                                  );
                                 },
                               ),
                             ),
-                          )
+                          ),
                         ],
                       ),
                     ),
@@ -123,12 +164,12 @@ class Demographics extends StatelessWidget {
                       hint: 'Enter your name',
                       onChanged: (value) {
                         context.read<OnboardingBloc>().add(
-                              UpdateUser(
-                                user: state.user.copyWith(
-                                  name: value,
-                                ),
-                              ),
-                            );
+                          UpdateUser(
+                            user: state.user.copyWith(
+                              name: value,
+                            ),
+                          ),
+                        );
                       },
                     ),
                     SizedBox(height: 20),
@@ -140,12 +181,12 @@ class Demographics extends StatelessWidget {
                       hint: 'Enter job title',
                       onChanged: (value) {
                         context.read<OnboardingBloc>().add(
-                              UpdateUser(
-                                user: state.user.copyWith(
-                                  jobTitle: value,
-                                ),
-                              ),
-                            );
+                          UpdateUser(
+                            user: state.user.copyWith(
+                              jobTitle: value,
+                            ),
+                          ),
+                        );
                       },
                     ),
                     SizedBox(height: 20),
@@ -157,12 +198,12 @@ class Demographics extends StatelessWidget {
                       hint: 'Enter your Age',
                       onChanged: (value) {
                         context.read<OnboardingBloc>().add(
-                              UpdateUser(
-                                user: state.user.copyWith(
-                                  age: int.parse(value),
-                                ),
-                              ),
-                            );
+                          UpdateUser(
+                            user: state.user.copyWith(
+                              age: int.parse(value),
+                            ),
+                          ),
+                        );
                       },
                     ),
                   ],
@@ -177,7 +218,9 @@ class Demographics extends StatelessWidget {
                     ),
                     SizedBox(height: 10),
                     CustomButton(
-                        tabController: tabController, text: 'NEXT STEP')
+                      tabController: tabController,
+                      text: 'NEXT STEP',
+                    ),
                   ],
                 ),
               ],
