@@ -71,7 +71,7 @@ class Pictures extends StatelessWidget {
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
                                 crossAxisCount: 3, childAspectRatio: 0.66),
-                        itemCount: 6,
+                        itemCount: 3,
                         itemBuilder: (BuildContext context, int index) {
                           return (imageCount > index)
                               ? CustomImageContainer(imageUrl: images[index])
