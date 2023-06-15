@@ -133,8 +133,8 @@ class Biography extends StatelessWidget {
                 Column(
                   children: [
                     StepProgressIndicator(
-                      totalSteps: 6,
-                      currentStep: 5,
+                      totalSteps: 5,
+                      currentStep: 4,
                       selectedColor: Theme.of(context).primaryColor,
                       unselectedColor: Theme.of(context).backgroundColor,
                     ),

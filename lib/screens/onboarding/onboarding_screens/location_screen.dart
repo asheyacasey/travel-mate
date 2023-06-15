@@ -163,8 +163,8 @@ class _LocationTabState extends State<LocationTab> {
                   Column(
                     children: [
                       StepProgressIndicator(
-                        totalSteps: 6,
-                        currentStep: 6,
+                        totalSteps: 5,
+                        currentStep: 5,
                         selectedColor: Theme.of(context).primaryColor,
                         unselectedColor: Theme.of(context).backgroundColor,
                       ),
