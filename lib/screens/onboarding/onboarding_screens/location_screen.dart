@@ -5,9 +5,11 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart' as location;
 import 'package:step_progress_indicator/step_progress_indicator.dart';
 import 'package:unicons/unicons.dart';
-
 import '../../../blocs/blocs.dart';
 import '../widgets/widgets.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
 
 class LocationTab extends StatefulWidget {
   final TabController tabController;
@@ -53,10 +55,28 @@ class _LocationTabState extends State<LocationTab> {
     _mapController = controller;
   }
 
-  void _updateCameraPosition() {
-    final CameraPosition newPosition = CameraPosition(target: _currentPosition, zoom: 15);
-    _mapController.animateCamera(CameraUpdate.newCameraPosition(newPosition));
+  void _updateCameraPosition() async {
+    final newPosition = CameraPosition(target: _currentPosition, zoom: 15);
+    await _mapController.animateCamera(CameraUpdate.newCameraPosition(newPosition));
+
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      final latitude = _currentPosition.latitude;
+      final longitude = _currentPosition.longitude;
+
+      try {
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(user.uid)
+            .update({'latitude': latitude, 'longitude': longitude});
+
+        print('Location saved to Firestore: Latitude: $latitude, Longitude: $longitude');
+      } catch (error) {
+        print('Failed to save location: $error');
+      }
+    }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -66,6 +86,7 @@ class _LocationTabState extends State<LocationTab> {
           return Center(
             child: CircularProgressIndicator(),
           );
+
         }
 
         if (state is OnboardingLoaded) {

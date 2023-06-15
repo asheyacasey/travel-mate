@@ -24,7 +24,6 @@ class User extends Equatable {
       required this.interests,
       required this.bio,
       required this.jobTitle,
-
       this.swipeRight,
       this.swipeLeft,
       this.matches});
@@ -61,7 +60,6 @@ class User extends Equatable {
       'interests': interests,
       'bio': bio,
       'jobTitle': jobTitle,
-      //'location': location.toMap(),
       'swipeLeft': swipeLeft,
       'swipeRight': swipeRight,
       'matches': matches
@@ -77,7 +75,6 @@ class User extends Equatable {
     List<dynamic>? interests,
     String? bio,
     String? jobTitle,
-    //Location? location,
     List<String>? swipeLeft,
     List<String>? swipeRight,
     List<Map<String, dynamic>>? matches,
@@ -91,7 +88,6 @@ class User extends Equatable {
       interests: interests ?? this.interests,
       bio: bio ?? this.bio,
       jobTitle: jobTitle ?? this.jobTitle,
-      //location: location ?? this.location,
       swipeLeft: swipeLeft ?? this.swipeLeft,
       swipeRight: swipeRight ?? this.swipeRight,
       matches: matches ?? this.matches,
@@ -108,7 +104,6 @@ class User extends Equatable {
         interests,
         bio,
         jobTitle,
-        //location,
         swipeLeft,
         swipeRight,
         matches

@@ -1,7 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:intl/intl.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:travel_mate/blocs/blocs.dart';
 import 'package:travel_mate/models/models.dart';
 import 'package:travel_mate/repositories/database/base_database_repository.dart';
 import 'package:travel_mate/repositories/storage/storage_repository.dart';
@@ -68,13 +66,9 @@ class DatabaseRepository extends BaseDatabaseRepository {
   Stream<List<User>> getUsers(
     User user,
   ) {
-    // List<String> userFilter = List.from(user.swipeLeft!)
-    //   ..addAll(user.swipeRight!)
-    //   ..add(user.id!);
+
     return _firebaseFirestore
         .collection('users')
-        // .where('gender', isEqualTo: 'Female')
-        // .where(FieldPath.documentId, whereNotIn: userFilter)
         .where('gender', isEqualTo: _selectGender(user))
         .snapshots()
         .map((snap) {

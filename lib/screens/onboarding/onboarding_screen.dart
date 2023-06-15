@@ -11,7 +11,6 @@ import 'package:travel_mate/screens/onboarding/onboarding_screens/pictures_scree
 import '../../models/models.dart';
 import '../../models/user_model.dart';
 import 'onboarding_screens/start_screen.dart';
-import 'onboarding_screens/email_screen.dart';
 
 class OnboardingScreen extends StatelessWidget {
   static const String routeName = '/onboarding';
@@ -26,7 +25,6 @@ class OnboardingScreen extends StatelessWidget {
   static const List<Tab> tabs = <Tab>[
     Tab(text: 'Start'),
     Tab(text: 'Email'),
-    // Tab(text: 'Email Verification'),
     Tab(text: 'Demographics'),
     Tab(text: 'Pictures'),
     Tab(text: 'Biography'),
@@ -48,7 +46,6 @@ class OnboardingScreen extends StatelessWidget {
             interests: [],
             bio: '',
             jobTitle: '',
-            //location: Location.initialLocation,
             matches: [],
             swipeLeft: [],
             swipeRight: [],
@@ -68,7 +65,6 @@ class OnboardingScreen extends StatelessWidget {
               body: TabBarView(children: [
                 Start(tabController: tabController),
                 Email(tabController: tabController),
-                // EmailVerification(tabController: tabController),
                 Demographics(tabController: tabController),
                 Pictures(tabController: tabController),
                 Biography(tabController: tabController),
