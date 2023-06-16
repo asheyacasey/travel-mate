@@ -20,6 +20,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     on<UpdateChat>(_onUpdateChat);
     on<AddMessage>(_onAddMessage);
     on<UpdateMessage>(_onUpdateMessage);
+    on<DeleteMessage>(_onDeleteMessage);
   }
 
   void _onAddMessage(AddMessage event, Emitter<ChatState> emit) {
@@ -28,6 +29,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       final Message message = Message(
           senderId: event.userId,
           receiverId: event.matchUserId,
+          messageId: event.messageId,
           message: event.message,
           itinerary: event.itinerary,
           dateTime: DateTime.now(),
@@ -46,12 +48,31 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
           senderId: event.userId,
           receiverId: event.matchUserId,
           message: event.message,
+          messageId: event.messageId,
           itinerary: event.itinerary,
           itineraryAccept: event.isAccepted,
           dateTime: DateTime.now(),
           timeString: DateFormat('HH:mm').format(DateTime.now()));
 
-      _databaseRepository.updateMessage(state.chat.id, message);
+      _databaseRepository.updateMessage(
+          state.chat.id, message, event.oldMessageId);
+
+      emit(ChatLoaded(chat: state.chat));
+    }
+  }
+
+  void _onDeleteMessage(DeleteMessage event, Emitter<ChatState> emit) {
+    if (state is ChatLoaded) {
+      final state = this.state as ChatLoaded;
+      final Message message = Message(
+          senderId: event.userId,
+          receiverId: event.matchUserId,
+          messageId: event.messageId,
+          message: event.message,
+          dateTime: DateTime.now(),
+          timeString: DateFormat('HH:mm').format(DateTime.now()));
+
+      _databaseRepository.deleteMessage(state.chat.id, message);
 
       emit(ChatLoaded(chat: state.chat));
     }

@@ -29,6 +29,7 @@ class AddMessage extends ChatEvent {
   final String userId;
   final String matchUserId;
   final String message;
+  final String messageId;
   final Map<String, dynamic>? itinerary;
   final int? index;
 
@@ -36,17 +37,21 @@ class AddMessage extends ChatEvent {
       {required this.userId,
       required this.matchUserId,
       required this.message,
+      required this.messageId,
       this.itinerary,
       this.index});
 
   @override
-  List<Object?> get props => [userId, matchUserId, message, itinerary, index];
+  List<Object?> get props =>
+      [userId, matchUserId, message, messageId, itinerary, index];
 }
 
 class UpdateMessage extends ChatEvent {
   final String userId;
   final String matchUserId;
   final String message;
+  final String messageId;
+  final String oldMessageId;
   final Map<String, dynamic>? itinerary;
   final int? isAccepted;
 
@@ -54,10 +59,38 @@ class UpdateMessage extends ChatEvent {
       {required this.userId,
       required this.matchUserId,
       required this.message,
+      required this.messageId,
+      required this.oldMessageId,
       this.itinerary,
       this.isAccepted});
 
   @override
+  List<Object?> get props => [
+        userId,
+        matchUserId,
+        message,
+        messageId,
+        oldMessageId,
+        itinerary,
+        isAccepted
+      ];
+}
+
+class DeleteMessage extends ChatEvent {
+  final String userId;
+  final String matchUserId;
+  final String message;
+  final String messageId;
+  final int? isAccepted;
+
+  DeleteMessage(
+      {required this.userId,
+      required this.matchUserId,
+      required this.message,
+      required this.messageId,
+      this.isAccepted});
+
+  @override
   List<Object?> get props =>
-      [userId, matchUserId, message, itinerary, isAccepted];
+      [userId, matchUserId, message, messageId, isAccepted];
 }
