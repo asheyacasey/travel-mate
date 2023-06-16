@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 class Message extends Equatable {
   final String senderId;
   final String receiverId;
+  final String messageId;
   final String message;
   final int? itineraryAccept;
   final Map<String, dynamic>? itinerary;
@@ -14,6 +15,7 @@ class Message extends Equatable {
   Message({
     required this.senderId,
     required this.receiverId,
+    required this.messageId,
     required this.message,
     this.itinerary,
     this.itineraryAccept,
@@ -25,6 +27,7 @@ class Message extends Equatable {
     return Message(
       senderId: json['senderId'],
       receiverId: json['receiverId'],
+      messageId: json['messageId'],
       message: json['message'],
       itinerary: json['itinerary'],
       itineraryAccept: json['itineraryAccept'],
@@ -39,6 +42,7 @@ class Message extends Equatable {
     return {
       'senderId': senderId,
       'receiverId': receiverId,
+      'messageId': messageId,
       'message': message,
       'itinerary': itinerary,
       'itineraryAccept': itineraryAccept,
@@ -50,6 +54,7 @@ class Message extends Equatable {
   List<Object?> get props => [
         senderId,
         receiverId,
+        messageId,
         message,
         itinerary,
         itineraryAccept,
@@ -57,15 +62,15 @@ class Message extends Equatable {
         timeString,
       ];
 
-  static List<Message> messages = [
-    Message(
-      senderId: '1',
-      receiverId: '2',
-      message: 'Hey, how are you doing?',
-      dateTime: DateTime.now(),
-      timeString: DateFormat('jm').format(
-        DateTime.now(),
-      ),
-    )
-  ];
+  // static List<Message> messages = [
+  //   Message(
+  //     senderId: '1',
+  //     receiverId: '2',
+  //     message: 'Hey, how are you doing?',
+  //     dateTime: DateTime.now(),
+  //     timeString: DateFormat('jm').format(
+  //       DateTime.now(),
+  //     ),
+  //   )
+  // ];
 }

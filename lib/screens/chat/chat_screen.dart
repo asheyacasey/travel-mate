@@ -8,6 +8,7 @@ import 'package:travel_mate/blocs/blocs.dart';
 import 'package:travel_mate/repositories/database/database_repository.dart';
 import 'package:unicons/unicons.dart';
 import 'package:travel_mate/models/models.dart';
+import 'package:uuid/uuid.dart';
 
 class ChatScreen extends StatelessWidget {
   static const String routeName = '/chat';
@@ -53,6 +54,7 @@ class ChatScreen extends StatelessWidget {
                         title: _Message(
                           match: match,
                           message: messages[index].message,
+                          messageId: messages[index].messageId,
                           itinerary: messages[index].itinerary,
                           isAccepted: messages[index].itineraryAccept,
                           isFromCurrentUser: messages[index].senderId ==
@@ -217,13 +219,14 @@ class _MessageInput extends StatelessWidget {
               child: IconButton(
                 icon: Icon(UniconsLine.message),
                 onPressed: () {
-                  var random = Random();
+                  String uuid = new Uuid().v4();
                   context.read<ChatBloc>()
                     ..add(
                       AddMessage(
                         userId: match.userId,
                         matchUserId: match.matchUser.id!,
                         message: controller.text,
+                        messageId: uuid,
                         itinerary: finalOption,
                       ),
                     );
@@ -270,6 +273,7 @@ class _Message extends StatelessWidget {
   const _Message({
     Key? key,
     required this.message,
+    required this.messageId,
     required this.match,
     this.itinerary,
     this.isAccepted,
@@ -277,6 +281,7 @@ class _Message extends StatelessWidget {
   }) : super(key: key);
 
   final String message;
+  final String messageId;
   final Match match;
   final bool isFromCurrentUser;
   final Map<String, dynamic>? itinerary;
@@ -372,16 +377,20 @@ class _Message extends StatelessWidget {
                           backgroundColor: Colors.greenAccent,
                           child: IconButton(
                             onPressed: () {
-                              context.read<ChatBloc>()
-                                ..add(
-                                  UpdateMessage(
-                                    userId: match.matchUser.id!,
-                                    matchUserId: match.userId,
-                                    itinerary: itinerary,
-                                    isAccepted: 1,
-                                    message: 'Open Invitation',
-                                  ),
-                                );
+                              String newId = Uuid().v4();
+                              context.read<ChatBloc>().add(
+                                    UpdateMessage(
+                                      userId: match.matchUser.id!,
+                                      matchUserId: match.userId,
+                                      itinerary: itinerary,
+                                      isAccepted: 1,
+                                      message: 'View Details',
+                                      messageId: newId,
+                                      oldMessageId: messageId,
+                                    ),
+                                  );
+                              print("THIS IS THE MESSAGE ID ===> " + messageId);
+                              print("THIS IS THE NEW ID ===>" + newId);
                             },
                             icon: Icon(Icons.check),
                           ),
@@ -391,16 +400,20 @@ class _Message extends StatelessWidget {
                           backgroundColor: Colors.redAccent,
                           child: IconButton(
                             onPressed: () {
-                              context.read<ChatBloc>()
-                                ..add(
-                                  UpdateMessage(
-                                    userId: match.matchUser.id!,
-                                    matchUserId: match.userId,
-                                    itinerary: itinerary,
-                                    isAccepted: 0,
-                                    message: 'Invitation closed.',
-                                  ),
-                                );
+                              String newId = Uuid().v4();
+                              context.read<ChatBloc>().add(
+                                    UpdateMessage(
+                                      userId: match.matchUser.id!,
+                                      matchUserId: match.userId,
+                                      itinerary: itinerary,
+                                      isAccepted: 0,
+                                      message: 'Invitation Closed.',
+                                      messageId: newId,
+                                      oldMessageId: messageId,
+                                    ),
+                                  );
+                              print("THIS IS THE MESSAGE ID ===> " + messageId);
+                              print("THIS IS THE NEW ID ===>" + newId);
                             },
                             icon: Icon(Icons.close),
                           ),

@@ -10,6 +10,18 @@ import '../widgets/widgets.dart';
 class Biography extends StatelessWidget {
   final TabController tabController;
   String? interest;
+  final List<String> availableTags = [
+    'Sports',
+    'Technology',
+    'Music',
+    'Art',
+    'Food',
+    'Travel',
+  ];
+
+  bool isTagSelected(String tag, List<String> selectedTags) {
+    return selectedTags.contains(tag);
+  }
 
   Biography({
     Key? key,
@@ -27,8 +39,7 @@ class Biography extends StatelessWidget {
         }
 
         if (state is OnboardingLoaded) {
-          var interests = state.user.interests;
-          var interestsCount = interests.length;
+          List<String> selectedTags = [];
           return Padding(
             padding:
                 const EdgeInsets.symmetric(horizontal: 30.0, vertical: 50.0),
@@ -82,75 +93,30 @@ class Biography extends StatelessWidget {
                           .headline2!
                           .copyWith(color: Colors.black),
                     ),
-                    // Row(
-                    //   children: [
-                    //     CustomTextContainer(text: 'MOVIES'),
-                    //     CustomTextContainer(text: 'HIKING'),
-                    //     CustomTextContainer(text: 'MUSIC'),
-                    //     CustomTextContainer(text: 'BIKING'),
-                    //   ],
-                    // ),
-                    // Row(
-                    //   children: [
-                    //     CustomTextContainer(text: 'KARAOKE'),
-                    //     CustomTextContainer(text: 'FREE DIVING'),
-                    //     CustomTextContainer(text: 'FOOD TRIP'),
-                    //   ],
-                    // ),
-                    // Row(
-                    //   children: [
-                    //     CustomTextContainer(text: 'MUSEUMS'),
-                    //   ],
-                    // ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: CustomTextField(
-                            hint: 'Add an interest',
-                            onChanged: (value) {
-                              interest = value;
-                            },
-                          ),
-                        ),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        ElevatedButton(
-                            onPressed: () {
+                    Wrap(
+                      spacing: 8.0,
+                      children: availableTags.map((tag) {
+                        final isSelected = isTagSelected(tag, selectedTags);
+                        return FilterChip(
+                          label: Text(tag),
+                          selectedColor: state.user.interests.contains(tag)
+                              ? Colors.red
+                              : Colors.black,
+                          onSelected: (isSelected) {
+                            if (isSelected) {
+                              selectedTags.add(tag);
                               context.read<OnboardingBloc>().add(
                                   UpdateUserInterest(
-                                      user: state.user, interest: interest));
-                            },
-                            child: const Text('Add')),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 200,
-                      child: GridView.builder(
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 1, childAspectRatio: 8),
-                        itemCount: interestsCount,
-                        itemBuilder: (BuildContext context, int index) {
-                          return (interestsCount > index)
-                              ? Flexible(
-                                  child: ListTile(
-                                    title: Text(interests[index]),
-                                    trailing: IconButton(
-                                        onPressed: () {
-                                          String word = interests[index];
-                                          context.read<OnboardingBloc>().add(
-                                              UpdateUserInterest(
-                                                  user: state.user,
-                                                  interest: word));
-                                        },
-                                        icon: Icon(Icons.close)),
-                                  ),
-                                )
-                              : Text('');
-                        },
-                      ),
+                                      user: state.user, interest: tag));
+                            } else {
+                              selectedTags.remove(tag);
+                              context.read<OnboardingBloc>().add(
+                                  UpdateUserInterest(
+                                      user: state.user, interest: tag));
+                            }
+                          },
+                        );
+                      }).toList(),
                     ),
                   ],
                 ),

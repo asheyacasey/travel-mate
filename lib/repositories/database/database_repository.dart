@@ -180,11 +180,83 @@ class DatabaseRepository extends BaseDatabaseRepository {
   }
 
   @override
-  Future<void> updateMessage(String chatId, Message message) {
-    return _firebaseFirestore.collection('chats').doc(chatId).update({
+  Future<void> updateMessage(
+      String chatId, Message message, String oldMessageId) async {
+    print("UPDATING ID ===>>" + message.messageId);
+    print("DELETING ID ===>>" + message.messageId);
+
+    DocumentReference docRef =
+        _firebaseFirestore.collection('chats').doc(chatId);
+
+    try {
+      DocumentSnapshot doc = await docRef.get();
+
+      if (doc.exists) {
+        // Retrieve the array from the document
+        List<dynamic> chatsArray = doc.get('messages');
+
+        // Find the index of the element with matching messageId
+        int indexToDelete =
+            chatsArray.indexWhere((chat) => chat['messageId'] == oldMessageId);
+        print("DELETING THE ID ===>>" + oldMessageId);
+
+        if (indexToDelete != -1) {
+          // Remove the element from the array
+          chatsArray.removeAt(indexToDelete);
+
+          // Update the document with the modified array
+          await docRef.update({'messages': chatsArray});
+          print('Element deleted successfully.');
+        } else {
+          print('Element not found in the array.');
+        }
+      } else {
+        print('Document not found.');
+      }
+    } catch (error) {
+      print('Error retrieving or updating document: $error');
+    }
+
+    await _firebaseFirestore.collection('chats').doc(chatId).update({
       'messages': FieldValue.arrayUnion([
         message.toJson(),
       ])
+    });
+  }
+
+  @override
+  Future<void> deleteMessage(String chatId, Message message) async {
+    DocumentReference docRef =
+        _firebaseFirestore.collection('chats').doc(chatId);
+
+    docRef.get().then((doc) {
+      if (doc.exists) {
+        // Retrieve the array from the document
+        List<dynamic> chatsArray = doc.get('messages');
+
+        // Find the index of the element with matching messageId
+        int indexToDelete = chatsArray
+            .indexWhere((chat) => chat['messageId'] == message.messageId);
+        print("DELETING ID ===>>" + message.messageId);
+
+        if (indexToDelete != -1) {
+          // Remove the element from the array
+          chatsArray.removeAt(indexToDelete);
+
+          // Update the document with the modified array
+          return docRef.update({'messages': chatsArray}).then((_) {
+            print('Element deleted successfully.');
+          }).catchError((error) {
+            print('Error updating document: $error');
+          });
+        } else {
+          print('Element not found in the array.');
+        }
+      } else {
+        print('Document not found.');
+      }
+    }).catchError((error) {
+      print('Error retrieving document: $error');
     });
   }
 
