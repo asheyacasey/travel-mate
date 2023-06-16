@@ -11,7 +11,6 @@ class User extends Equatable {
   final List<dynamic> interests;
   final String bio;
   final String jobTitle;
-  //final Location location;
   final List<String>? swipeLeft;
   final List<String>? swipeRight;
   final List<Map<String, dynamic>>? matches;
@@ -25,33 +24,10 @@ class User extends Equatable {
       required this.interests,
       required this.bio,
       required this.jobTitle,
-      //required this.location,
       this.swipeRight,
       this.swipeLeft,
       this.matches});
 
-  // static User fromSnapshot(DocumentSnapshot snap) {
-  //   User user = User(
-  //       id: snap.id,
-  //       name: snap['name'],
-  //       age: snap['age'],
-  //       gender: snap['gender'],
-  //       imageUrls: snap['imageUrls'],
-  //       interests: snap['interests'],
-  //       bio: snap['bio'],
-  //       jobTitle: snap['jobTitle'],
-  //       location: snap['location'],
-  //       swipeLeft: (snap['swipeLeft'] as List)
-  //           .map((swipeLeft) => swipeLeft as String)
-  //           .toList(),
-  //       swipeRight: (snap['swipeRight'] as List)
-  //           .map((swipeRight) => swipeRight as String)
-  //           .toList(),
-  //       matches: (snap['matches'] as List)
-  //           .map((matches) => matches as String)
-  //           .toList());
-  //   return user;
-  // }
 
   static User fromSnapshot(DocumentSnapshot snap) {
     User user = User(
@@ -63,7 +39,6 @@ class User extends Equatable {
         interests: snap['interests'],
         bio: snap['bio'],
         jobTitle: snap['jobTitle'],
-        //location: Location.fromJson(snap['location']),
         swipeLeft: (snap['swipeLeft'] as List)
             .map((swipeLeft) => swipeLeft as String)
             .toList(),
@@ -85,7 +60,6 @@ class User extends Equatable {
       'interests': interests,
       'bio': bio,
       'jobTitle': jobTitle,
-      //'location': location.toMap(),
       'swipeLeft': swipeLeft,
       'swipeRight': swipeRight,
       'matches': matches
@@ -101,7 +75,6 @@ class User extends Equatable {
     List<dynamic>? interests,
     String? bio,
     String? jobTitle,
-    //Location? location,
     List<String>? swipeLeft,
     List<String>? swipeRight,
     List<Map<String, dynamic>>? matches,
@@ -115,7 +88,6 @@ class User extends Equatable {
       interests: interests ?? this.interests,
       bio: bio ?? this.bio,
       jobTitle: jobTitle ?? this.jobTitle,
-      //location: location ?? this.location,
       swipeLeft: swipeLeft ?? this.swipeLeft,
       swipeRight: swipeRight ?? this.swipeRight,
       matches: matches ?? this.matches,
@@ -132,7 +104,6 @@ class User extends Equatable {
         interests,
         bio,
         jobTitle,
-        //location,
         swipeLeft,
         swipeRight,
         matches
