@@ -40,9 +40,6 @@ class MyApp extends StatelessWidget {
         RepositoryProvider(
           create: (context) => DatabaseRepository(),
         ),
-        // RepositoryProvider(
-        //   create: (context) => LocationRepository(),
-        // )
       ],
       child: MultiBlocProvider(
         providers: [
@@ -64,7 +61,6 @@ class MyApp extends StatelessWidget {
             create: (context) => OnboardingBloc(
               databaseRepository: context.read<DatabaseRepository>(),
               storageRepostitory: context.read<StorageRepository>(),
-              //locationRepository: context.read<LocationRepository>(),
             ),
           ),
           BlocProvider(

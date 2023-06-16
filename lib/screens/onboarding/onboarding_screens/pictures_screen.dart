@@ -71,7 +71,7 @@ class Pictures extends StatelessWidget {
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
                                 crossAxisCount: 3, childAspectRatio: 0.66),
-                        itemCount: 6,
+                        itemCount: 3,
                         itemBuilder: (BuildContext context, int index) {
                           return (imageCount > index)
                               ? CustomImageContainer(imageUrl: images[index])
@@ -84,8 +84,8 @@ class Pictures extends StatelessWidget {
                 Column(
                   children: [
                     StepProgressIndicator(
-                      totalSteps: 6,
-                      currentStep: 4,
+                      totalSteps: 5,
+                      currentStep: 3,
                       selectedColor: Theme.of(context).primaryColor,
                       unselectedColor: Theme.of(context).backgroundColor,
                     ),
