@@ -10,7 +10,6 @@ import '../widgets/widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-
 class LocationTab extends StatefulWidget {
   final TabController tabController;
 
@@ -39,9 +38,11 @@ class _LocationTabState extends State<LocationTab> {
   Future<void> _initCurrentLocation() async {
     final hasPermission = await _location.requestPermission();
     if (hasPermission == location.PermissionStatus.granted) {
-      _location.onLocationChanged.listen((location.LocationData currentLocation) {
+      _location.onLocationChanged
+          .listen((location.LocationData currentLocation) {
         setState(() {
-          _currentPosition = LatLng(currentLocation.latitude!, currentLocation.longitude!);
+          _currentPosition =
+              LatLng(currentLocation.latitude!, currentLocation.longitude!);
           _latitude = currentLocation.latitude.toString();
           _longitude = currentLocation.longitude.toString();
         });
@@ -57,7 +58,8 @@ class _LocationTabState extends State<LocationTab> {
 
   void _updateCameraPosition() async {
     final newPosition = CameraPosition(target: _currentPosition, zoom: 15);
-    await _mapController.animateCamera(CameraUpdate.newCameraPosition(newPosition));
+    await _mapController
+        .animateCamera(CameraUpdate.newCameraPosition(newPosition));
 
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
@@ -70,15 +72,32 @@ class _LocationTabState extends State<LocationTab> {
             .doc(user.uid)
             .update({'latitude': latitude, 'longitude': longitude});
 
-        print('Location saved to Firestore: Latitude: $latitude, Longitude: $longitude');
+        print(
+            'Location saved to Firestore: Latitude: $latitude, Longitude: $longitude');
       } catch (error) {
         print('Failed to save location: $error');
       }
     }
   }
 
+  void _updateRadius() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      try {
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(user.uid)
+            .update({'radius': _radius});
+        print('Radius is saved in the Firestore: $_radius');
+      } catch (error) {
+        print('Failed to save radius: $error');
+      }
+    }
+  }
 
   @override
+  double _radius = 1000.0;
+
   Widget build(BuildContext context) {
     return BlocBuilder<OnboardingBloc, OnboardingState>(
       builder: (context, state) {
@@ -86,12 +105,11 @@ class _LocationTabState extends State<LocationTab> {
           return Center(
             child: CircularProgressIndicator(),
           );
-
         }
 
         if (state is OnboardingLoaded) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+          return ListView(
+            //crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -116,7 +134,10 @@ class _LocationTabState extends State<LocationTab> {
                         SizedBox(width: 10),
                         Text(
                           'Where are you?',
-                          style: Theme.of(context).primaryTextTheme.headline2!.copyWith(color: Colors.black, fontSize: 24),
+                          style: Theme.of(context)
+                              .primaryTextTheme
+                              .headline2!
+                              .copyWith(color: Colors.black, fontSize: 24),
                         ),
                       ],
                     ),
@@ -128,12 +149,49 @@ class _LocationTabState extends State<LocationTab> {
                 aspectRatio: 1.0, // Set the aspect ratio to make it square
                 child: GoogleMap(
                   mapType: MapType.normal,
-                  initialCameraPosition: CameraPosition(target: _currentPosition, zoom: 15),
+                  initialCameraPosition:
+                      CameraPosition(target: _currentPosition, zoom: 15),
                   onMapCreated: _onMapCreated,
                   markers: {
-                    Marker(markerId: MarkerId('currentLocation'), position: _currentPosition),
+                    Marker(
+                        markerId: MarkerId('currentLocation'),
+                        position: _currentPosition),
                   },
+                  circles: Set<Circle>.of(
+                    [
+                      Circle(
+                          circleId: CircleId('currentLocation'),
+                          center: _currentPosition,
+                          radius: _radius,
+                          strokeWidth: 2,
+                          fillColor: Colors.blue.withOpacity(0.15),
+                          strokeColor: Colors.blue),
+                    ],
+                  ),
                 ),
+              ),
+              Slider(
+                value: _radius,
+                min: 0,
+                max: 5000, // in km
+                divisions: 10,
+                label: 'Radius $_radius m',
+                onChanged: (double value) {
+                  setState(() {
+                    _radius = value;
+                  });
+                  _updateRadius();
+
+                  //storing the radius in the firebase
+                  // final user = FirebaseAuth.instance.currentUser;
+                  // if (user != null) {
+                  //   try {
+                  //     await FirebaseFirestore.instance.collection('users').doc(user.uid).update({'radius': _radius});
+                  //   } catch (e) {
+
+                  //   }
+                  // }
+                },
               ),
               SizedBox(height: 220),
               Padding(
@@ -147,7 +205,8 @@ class _LocationTabState extends State<LocationTab> {
                       unselectedColor: Theme.of(context).backgroundColor,
                     ),
                     SizedBox(height: 10),
-                    CustomButton(tabController: widget.tabController, text: 'DONE'),
+                    CustomButton(
+                        tabController: widget.tabController, text: 'DONE'),
                   ],
                 ),
               ),
