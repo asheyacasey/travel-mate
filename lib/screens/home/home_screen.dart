@@ -1,7 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:travel_mate/widgets/custom_elevated_button.dart';
-
+import 'dart:math' show cos, sqrt, asin;
 import 'package:unicons/unicons.dart';
 import '../../blocs/blocs.dart';
 import '../../widgets/choice_button.dart';
@@ -70,7 +73,6 @@ class HomeScreen extends StatelessWidget {
 }
 
 class SwipedMatchedHomeScreen extends StatelessWidget {
-
   const SwipedMatchedHomeScreen({
     Key? key,
     required this.state,
@@ -183,7 +185,7 @@ class SwipeLoadedHomeScreen extends StatelessWidget {
             onDoubleTap: () {
               Navigator.pushNamed(context, '/users', arguments: state.users[0]);
             },
-            child: Draggable(
+            child: Draggable( 
               child: UserCard(user: state.users[0]),
               feedback: UserCard(user: state.users[0]),
               childWhenDragging: (userCount > 1)
@@ -251,5 +253,42 @@ class SwipeLoadedHomeScreen extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  void calculateUserDistance() async {
+    final user1 = FirebaseAuth.instance.currentUser;
+    final user2Doc = await FirebaseFirestore.instance
+        .collection('users')
+        .doc('user2id')
+        .get();
+
+    if (user1 != null && user2Doc.exists) {
+      var user1Data = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user1.uid)
+          .get();
+      var user2Data = user2Doc.data();
+
+      LatLng user1Position =
+          LatLng(user1Data.data()?['latitude'], user1Data.data()?['longitude']);
+      LatLng user2Position =
+          LatLng(user2Data?['latitude'], user2Data?['longitude']);
+
+      var distance = calculateDistance(user1Position, user2Position);
+
+      print('Distance between user1 and user2 is $distance km');
+    }
+  }
+
+  double calculateDistance(LatLng pos1, LatLng pos2) {
+    var p = 0.017453292519943295;
+    var c = cos;
+    var a = 0.5 -
+        c((pos2.latitude - pos1.latitude) * p) / 2 +
+        c(pos1.latitude * p) *
+            c(pos2.latitude * p) *
+            (1 - c((pos2.longitude - pos1.longitude) * p)) /
+            2;
+    return 12742 * asin(sqrt(a));
   }
 }

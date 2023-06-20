@@ -63,6 +63,13 @@ class UserCard extends StatelessWidget {
                         fontWeight: FontWeight.normal,
                       ),
                     ),
+                    Text(
+                      '${user.radius}',
+                      style: Theme.of(context).textTheme.headline3!.copyWith(
+                        color: Colors.white,
+                        fontWeight: FontWeight.normal,
+                      ),
+                    ),
                     SizedBox(
                       height: 70,
                       child: ListView.builder(
