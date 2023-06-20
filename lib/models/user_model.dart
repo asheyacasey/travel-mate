@@ -11,6 +11,7 @@ class User extends Equatable {
   final List<dynamic> interests;
   final String bio;
   final String jobTitle;
+  final double radius;
   final List<String>? swipeLeft;
   final List<String>? swipeRight;
   final List<Map<String, dynamic>>? matches;
@@ -24,10 +25,10 @@ class User extends Equatable {
       required this.interests,
       required this.bio,
       required this.jobTitle,
+      required this.radius,
       this.swipeRight,
       this.swipeLeft,
       this.matches});
-
 
   static User fromSnapshot(DocumentSnapshot snap) {
     User user = User(
@@ -39,6 +40,7 @@ class User extends Equatable {
         interests: snap['interests'],
         bio: snap['bio'],
         jobTitle: snap['jobTitle'],
+        radius: snap['radius'].toDouble(),
         swipeLeft: (snap['swipeLeft'] as List)
             .map((swipeLeft) => swipeLeft as String)
             .toList(),
@@ -60,6 +62,7 @@ class User extends Equatable {
       'interests': interests,
       'bio': bio,
       'jobTitle': jobTitle,
+      'radius': radius,
       'swipeLeft': swipeLeft,
       'swipeRight': swipeRight,
       'matches': matches
@@ -75,6 +78,7 @@ class User extends Equatable {
     List<dynamic>? interests,
     String? bio,
     String? jobTitle,
+    double? radius,
     List<String>? swipeLeft,
     List<String>? swipeRight,
     List<Map<String, dynamic>>? matches,
@@ -88,6 +92,7 @@ class User extends Equatable {
       interests: interests ?? this.interests,
       bio: bio ?? this.bio,
       jobTitle: jobTitle ?? this.jobTitle,
+      radius: radius ?? this.radius,
       swipeLeft: swipeLeft ?? this.swipeLeft,
       swipeRight: swipeRight ?? this.swipeRight,
       matches: matches ?? this.matches,
@@ -104,6 +109,7 @@ class User extends Equatable {
         interests,
         bio,
         jobTitle,
+        radius,
         swipeLeft,
         swipeRight,
         matches

@@ -20,6 +20,7 @@ class StartOnboarding extends OnboardingEvent {
       interests: [],
       bio: '',
       jobTitle: '',
+      radius: 0,
     ),
   });
 
@@ -60,7 +61,11 @@ class UpdateUserInterest extends OnboardingEvent {
   final List<String> selectedTags;
   final String? interest;
 
-  UpdateUserInterest({required this.user, this.interest, required this.selectedTags,});
+  UpdateUserInterest({
+    required this.user,
+    this.interest,
+    required this.selectedTags,
+  });
 
   @override
   List<Object?> get props => [user, interest];
