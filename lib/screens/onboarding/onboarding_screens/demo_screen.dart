@@ -103,7 +103,7 @@ class Demographics extends StatelessWidget {
                         borderRadius: BorderRadius.all(Radius.circular(10)),
                         border: Border.all(
                           color: Theme.of(context).primaryColorLight,
-                          width: 2.0,
+                          width: 1.5,
                         ),
                       ),
                       child: Row(
@@ -112,8 +112,8 @@ class Demographics extends StatelessWidget {
                             flex: 4,
                             child: ListTile(
                               title: Text(
-                                'MALE',
-                                style: TextStyle(fontSize: 16),
+                                'Male',
+                                style: TextStyle(fontSize: 15),
                               ),
                               leading: CustomRadio<String>(
                                 value: 'Male',
@@ -134,8 +134,8 @@ class Demographics extends StatelessWidget {
                             flex: 5,
                             child: ListTile(
                               title: Text(
-                                'FEMALE',
-                                style: TextStyle(fontSize: 16),
+                                'Female',
+                                style: TextStyle(fontSize: 15),
                               ),
                               leading: CustomRadio<String>(
                                 value: 'Female',

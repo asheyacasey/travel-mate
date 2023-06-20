@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -38,16 +40,33 @@ class _LocationTabState extends State<LocationTab> {
   Future<void> _initCurrentLocation() async {
     final hasPermission = await _location.requestPermission();
     if (hasPermission == location.PermissionStatus.granted) {
-      _location.onLocationChanged
-          .listen((location.LocationData currentLocation) {
+      StreamSubscription<location.LocationData>? locationSubscription;
+      locationSubscription = _location.onLocationChanged.listen((location.LocationData currentLocation) async {
         setState(() {
-          _currentPosition =
-              LatLng(currentLocation.latitude!, currentLocation.longitude!);
+          _currentPosition = LatLng(currentLocation.latitude!, currentLocation.longitude!);
           _latitude = currentLocation.latitude.toString();
           _longitude = currentLocation.longitude.toString();
         });
         _updateCameraPosition();
         print('Latitude: $_latitude, Longitude: $_longitude');
+
+        final user = FirebaseAuth.instance.currentUser;
+        if (user != null) {
+          final latitude = _currentPosition.latitude;
+          final longitude = _currentPosition.longitude;
+
+          try {
+            await FirebaseFirestore.instance.collection('users').doc(user.uid).update({'latitude': latitude, 'longitude': longitude});
+
+            print('Location saved to Firestore: Latitude: $latitude, Longitude: $longitude');
+          } catch (error) {
+            print('Failed to save location: $error');
+          }
+
+          // Stop listening to location updates
+          locationSubscription?.cancel();
+          print('Location stop');
+        }
       });
     }
   }
