@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:travel_mate/blocs/auth/auth_bloc.dart';
+import 'package:travel_mate/business/screens/business_login.dart';
 import 'package:travel_mate/cubits/cubits.dart';
 import 'package:travel_mate/screens/home/home_screen.dart';
 import 'package:travel_mate/screens/onboarding/onboarding_screen.dart';
@@ -26,10 +28,6 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      // appBar: CustomAppBar(
-      //   title: 'TravelMate',
-      //   hasAction: false,
-      // ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -99,6 +97,47 @@ class LoginScreen extends StatelessWidget {
                         OnboardingScreen.routeName,
                         ModalRoute.withName(
                           '/onboarding',
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 150,),
+                    Container(
+                      // width: 20,
+                      height: 20,
+
+                      child:
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => BusinessLogin()),
+                          );
+                          // Add navigation logic here to go to the portal
+                        },
+                        child: Center(
+                          child: RichText(
+                            textAlign: TextAlign.center, // Set the text alignment to center
+                            text: TextSpan(
+                              text: 'Grow your business and be our partner. ',
+                              style: GoogleFonts.manrope(
+                                textStyle: TextStyle(
+                                  color: Colors.black45,
+                                  // Your text style here
+                                ),
+                              ),
+                              children: <TextSpan>[
+                                TextSpan(
+                                  text: 'Go to Portal',
+                                  style: GoogleFonts.manrope(
+                                    textStyle: TextStyle(
+                                      color: Colors.green, // Set the color to green
+                                      // Additional text style properties if needed
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
                       ),
                     ),
