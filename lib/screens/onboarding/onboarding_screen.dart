@@ -46,6 +46,7 @@ class OnboardingScreen extends StatelessWidget {
             interests: [],
             bio: '',
             jobTitle: '',
+            radius: 0.0,
             matches: [],
             swipeLeft: [],
             swipeRight: [],
