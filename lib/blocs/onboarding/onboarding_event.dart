@@ -57,9 +57,10 @@ class UpdateUser extends OnboardingEvent {
 
 class UpdateUserInterest extends OnboardingEvent {
   final User user;
+  final List<String> selectedTags;
   final String? interest;
 
-  UpdateUserInterest({required this.user, this.interest});
+  UpdateUserInterest({required this.user, this.interest, required this.selectedTags,});
 
   @override
   List<Object?> get props => [user, interest];
