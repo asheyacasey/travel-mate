@@ -1,11 +1,37 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class BusinessLogin extends StatelessWidget {
+class BusinessLogin extends StatefulWidget {
   const BusinessLogin({Key? key}) : super(key: key);
 
   @override
-  Widget build(
-      context) {
+  _BusinessLoginState createState() => _BusinessLoginState();
+}
+
+class _BusinessLoginState extends State<BusinessLogin> {
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
+  String _errorMessage = '';
+
+  Future<void> _login(BuildContext context) async {
+    try {
+      UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: _emailController.text,
+        password: _passwordController.text,
+      );
+      // Authentication successful, navigate to the home screen
+      Navigator.pushReplacementNamed(context, '/home');
+    } catch (e) {
+      // Authentication failed, display an error message
+      setState(() {
+        _errorMessage = 'Invalid email or password';
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -45,7 +71,7 @@ class BusinessLogin extends StatelessWidget {
               ),
               SizedBox(height: 30.0),
               TextField(
-              //  controller: _emailController,
+                controller: _emailController,
                 decoration: InputDecoration(
                   labelText: 'Email',
                   enabledBorder: OutlineInputBorder(
@@ -66,7 +92,7 @@ class BusinessLogin extends StatelessWidget {
               ),
               SizedBox(height: 16.0),
               TextField(
-              //  controller: _passwordController,
+                controller: _passwordController,
                 obscureText: true,
                 decoration: InputDecoration(
                   labelText: 'Password',
@@ -106,8 +132,7 @@ class BusinessLogin extends StatelessWidget {
                     ),
                   ),
                 ),
-                onPressed: () => null
-                    // _login(context),
+                onPressed: () => _login(context),
               ),
               SizedBox(height: 20.0),
               TextButton(
@@ -130,11 +155,19 @@ class BusinessLogin extends StatelessWidget {
                   ),
                 ),
                 onPressed: () {
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(builder: (context) => RegisterScreen()),
-                  // );
+                  // Navigate to the registration screen
+                  Navigator.pushNamed(context, '/register');
                 },
+              ),
+              SizedBox(height: 20.0),
+              Text(
+                _errorMessage,
+                style: TextStyle(
+                  color: Colors.red,
+                  fontSize: 16.0,
+                  fontFamily: 'Manrope',
+                  fontWeight: FontWeight.w500,
+                ),
               ),
             ],
           ),
