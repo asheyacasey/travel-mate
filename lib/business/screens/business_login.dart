@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:travel_mate/business/screens/business_register.dart';
 
 class BusinessLogin extends StatefulWidget {
   const BusinessLogin({Key? key}) : super(key: key);
@@ -155,8 +156,12 @@ class _BusinessLoginState extends State<BusinessLogin> {
                   ),
                 ),
                 onPressed: () {
-                  // Navigate to the registration screen
-                  Navigator.pushNamed(context, '/register');
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => EmailRegistrationScreen(),
+                    ),
+                  );
                 },
               ),
               SizedBox(height: 20.0),
