@@ -51,7 +51,6 @@ class _EmailRegistrationScreenState extends State<EmailRegistrationScreen> {
         'email': email,
       });
 
-      // User registration successful, you can proceed with any additional logic or navigation here.
       if (userCredential.user != null) {
         Navigator.push(
           context,
@@ -64,7 +63,6 @@ class _EmailRegistrationScreenState extends State<EmailRegistrationScreen> {
 
       print('User registered: ${userCredential.user?.email}');
     } catch (e) {
-      // Error occurred during user registration.
       print('Registration error: $e');
       setState(() {
         _isRegistering = false;
