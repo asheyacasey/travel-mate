@@ -14,19 +14,6 @@ import '../../widgets/user_card.dart';
 class HomeScreen extends StatelessWidget {
   static const String routeName = '/';
 
-  // static Route route() {
-  //   return MaterialPageRoute(
-  //       settings: RouteSettings(name: routeName),
-  //       builder: (context) {
-  //         print(BlocProvider.of<AuthBloc>(context).state.status);
-  //         return BlocProvider.of<AuthBloc>(context).state.status ==
-  //             AuthStatus.unauthenticated
-  //             ? OnboardingScreen()
-  //             :
-  //         HomeScreen();
-  //       });
-  // }
-
   static Route route() {
     return MaterialPageRoute(
         builder: (_) => HomeScreen(), settings: RouteSettings(name: routeName));
@@ -185,7 +172,7 @@ class SwipeLoadedHomeScreen extends StatelessWidget {
             onDoubleTap: () {
               Navigator.pushNamed(context, '/users', arguments: state.users[0]);
             },
-            child: Draggable( 
+            child: Draggable(
               child: UserCard(user: state.users[0]),
               feedback: UserCard(user: state.users[0]),
               childWhenDragging: (userCount > 1)
@@ -239,56 +226,12 @@ class SwipeLoadedHomeScreen extends StatelessWidget {
                     icon: UniconsSolid.favorite,
                   ),
                 ),
-                // ChoiceButton(
-                //   height: 60,
-                //   width: 60,
-                //   size: 30,
-                //   hasGradient: false,
-                //   color: Theme.of(context).primaryColor,
-                //   icon: UniconsSolid.check_circle,
-                // ),
               ],
             ),
           ),
         ],
       ),
     );
-  }
-
-  void calculateUserDistance() async {
-    final user1 = FirebaseAuth.instance.currentUser;
-    final user2Doc = await FirebaseFirestore.instance
-        .collection('users')
-        .doc('user2id')
-        .get();
-
-    if (user1 != null && user2Doc.exists) {
-      var user1Data = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(user1.uid)
-          .get();
-      var user2Data = user2Doc.data();
-
-      LatLng user1Position =
-          LatLng(user1Data.data()?['latitude'], user1Data.data()?['longitude']);
-      LatLng user2Position =
-          LatLng(user2Data?['latitude'], user2Data?['longitude']);
-
-      var distance = calculateDistance(user1Position, user2Position);
-
-      print('Distance between user1 and user2 is $distance km');
-    }
-  }
-
-  double calculateDistance(LatLng pos1, LatLng pos2) {
-    var p = 0.017453292519943295;
-    var c = cos;
-    var a = 0.5 -
-        c((pos2.latitude - pos1.latitude) * p) / 2 +
-        c(pos1.latitude * p) *
-            c(pos2.latitude * p) *
-            (1 - c((pos2.longitude - pos1.longitude) * p)) /
-            2;
-    return 12742 * asin(sqrt(a));
-  }
+  }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
 }
+
