@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:travel_mate/business/screens/business_home.dart';
 import 'package:travel_mate/business/screens/business_register.dart';
 
 class BusinessLogin extends StatefulWidget {
@@ -21,8 +22,12 @@ class _BusinessLoginState extends State<BusinessLogin> {
         email: _emailController.text,
         password: _passwordController.text,
       );
-      // Authentication successful, navigate to the home screen
-      Navigator.pushReplacementNamed(context, '/home');
+      if (userCredential.user != null) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => BusinessHomeScreen()),
+        );
+      }
     } catch (e) {
       // Authentication failed, display an error message
       setState(() {
