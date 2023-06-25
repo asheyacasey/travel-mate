@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:travel_mate/business/screens/business_home.dart';
 
 class BusinessInfoScreen extends StatefulWidget {
   final String? userId;
@@ -46,6 +47,10 @@ class _BusinessInfoScreenState extends State<BusinessInfoScreen> {
         'businessAddress': businessAddress,
       }).then((value) {
         print('Business information stored successfully!');
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => BusinessHomeScreen()),
+        );
       }).catchError((error) {
         setState(() {
           _isFormValid = false;
