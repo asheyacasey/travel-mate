@@ -66,8 +66,8 @@ class UserCard extends StatelessWidget {
                             fontWeight: FontWeight.normal,
                           ),
                     ),
-                    FutureBuilder<double>(
-                      future: calculateUserDistance(),
+                    FutureBuilder<String>(
+                      future: calculateUserDistance(user.id),
                       builder: (context, snapshot) {
                         if (snapshot.connectionState ==
                             ConnectionState.waiting) {
@@ -129,12 +129,10 @@ class UserCard extends StatelessWidget {
   }
 }
 
-Future<double> calculateUserDistance() async {
+Future<String> calculateUserDistance(String user2uid) async {
   final user1 = auth.FirebaseAuth.instance.currentUser;
-  final user2Doc = await FirebaseFirestore.instance
-      .collection('users')
-      .doc(user1?.uid)
-      .get();
+  final user2Doc =
+      await FirebaseFirestore.instance.collection('users').doc(user2uid).get();
 
   if (user1 != null && user2Doc.exists) {
     var user1Data = await FirebaseFirestore.instance
@@ -148,10 +146,14 @@ Future<double> calculateUserDistance() async {
     LatLng user2Position =
         LatLng(user2Data?['latitude'], user2Data?['longitude']);
 
+    print('$user1Position user 1 position');
+    print('$user2Position user 2 position');
+
     var distance = calculateDistance(user1Position, user2Position);
+    var formattedDistance = distance.toStringAsFixed(1);
 
     print('Distance between user1 and user2 is $distance km');
-    return distance;
+    return formattedDistance;
   }
   throw Exception('Could not calculate distance');
 }
