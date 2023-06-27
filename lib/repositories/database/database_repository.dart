@@ -62,19 +62,77 @@ class DatabaseRepository extends BaseDatabaseRepository {
     }
   }
 
-  @override
-  Stream<List<User>> getUsers(
-    User user,
-  ) {
+  // @override
+  // Stream<List<User>> getUsers(User user) {
+  //   print('getUsers is running...');
+  //   return _firebaseFirestore
+  //       .collection('users')
+  //       .where('gender', isEqualTo: _selectGender(user))
+  //       .snapshots()
+  //       .map((snap) {
+  //     // You can map over the documents and print their contents.
+  //     return snap.docs.map((doc) {
+  //       User mappedUser = User.fromSnapshot(doc);
+  //       print('Mapped user: ${mappedUser.toString()}');
+  //       return mappedUser;
+  //     }).toList();
+  //   }).handleError((onError) {
+  //     print('An error occurred: $onError');
+  //   });
+  // }
 
+
+
+  Stream<List<User>> getUsers(User user) {
+    print('getUsers is running...');
     return _firebaseFirestore
         .collection('users')
         .where('gender', isEqualTo: _selectGender(user))
         .snapshots()
         .map((snap) {
-      return snap.docs.map((doc) => User.fromSnapshot(doc)).toList();
+      // Map the documents to User objects and then filter based on interests.
+      List<User> users = snap.docs.map((doc) => User.fromSnapshot(doc)).toList();
+      return users.where((currentUser) {
+        bool interestMatches = currentUser.interests.any((interest) => user.interests.contains(interest));
+        print('User ${currentUser.id} interest matches: $interestMatches');
+        return interestMatches;
+      }).toList();
+    }).handleError((onError) {
+      print('An error occurred: $onError');
     });
   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  Stream<List<User>> getUsersWithMatchingInterests(User user) {
+
+    print('getUsersWithMatchingInterests is running...');
+    return _firebaseFirestore
+        .collection('users')
+        .where('gender', isEqualTo: _selectGender(user))
+        .snapshots()
+        .map((snap) {
+      return snap.docs
+          .where((doc) =>
+          user.interests.contains(doc.get('interests')))
+          .map((doc) => User.fromSnapshot(doc))
+          .toList();
+    });
+  }
+
 
   @override
   Stream<List<User>> getUsersToSwipe(User user) {
