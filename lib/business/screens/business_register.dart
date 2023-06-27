@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:travel_mate/business/screens/business_info.dart';
 
 import '../../screens/onboarding/widgets/custom_text_header.dart';
@@ -105,7 +106,15 @@ class _EmailRegistrationScreenState extends State<EmailRegistrationScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Registration'),
+        elevation: 0.0,
+        backgroundColor: Theme.of(context).primaryColorLight,
+        title: Text(
+          'Registration',
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 50.0),
@@ -156,13 +165,29 @@ class _EmailRegistrationScreenState extends State<EmailRegistrationScreen> {
                 errorText: _passwordError,
               ),
             ),
-            SizedBox(height: 20),
-            ElevatedButton(
+            SizedBox(height:50),
+            TextButton(
+              style: TextButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20.0),
+                ),
+                backgroundColor: Color(0xFFB0DB2D),
+                minimumSize: Size(double.infinity, 55.0), // Set button height
+              ),
               onPressed: _isRegistering ? null : _register,
               child: _isRegistering
                   ? CircularProgressIndicator()
-                  : Text('REGISTER'),
-            ),
+                  : Text(
+                      'REGISTER',
+                      style: GoogleFonts.manrope(
+                        textStyle: TextStyle(
+                          fontSize: 16,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+            )
           ],
         ),
       ),

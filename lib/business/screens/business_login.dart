@@ -2,6 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:travel_mate/business/screens/business_home.dart';
 import 'package:travel_mate/business/screens/business_register.dart';
+import 'package:google_fonts/google_fonts.dart';
+
 
 class BusinessLogin extends StatefulWidget {
   const BusinessLogin({Key? key}) : super(key: key);
@@ -48,11 +50,11 @@ class _BusinessLoginState extends State<BusinessLogin> {
               SizedBox(height: 100.0),
               RichText(
                 text: TextSpan(
-                  style: TextStyle(
-                    fontFamily: 'Fredoka',
-                    fontWeight: FontWeight.bold,
-                    fontSize: 40,
-                    color: Color(0xFFB0DB2D),
+                  style: GoogleFonts.fredokaOne(
+                    textStyle: TextStyle(
+                      fontSize: 40,
+                      color: Color(0xFFB0DB2D),
+                    ),
                   ),
                   children: [
                     TextSpan(text: 'Travelmate\n'),
@@ -68,13 +70,15 @@ class _BusinessLoginState extends State<BusinessLogin> {
               SizedBox(height: 8.0),
               Text(
                 'Login to access the TravelMate for Business Portal',
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.grey,
-                  fontFamily: 'Manrope',
-                  fontWeight: FontWeight.w500,
+                style: GoogleFonts.manrope(
+                  textStyle: TextStyle(
+                    fontSize: 16,
+                    color: Colors.grey,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
               ),
+
               SizedBox(height: 30.0),
               TextField(
                 controller: _emailController,
@@ -83,14 +87,14 @@ class _BusinessLoginState extends State<BusinessLogin> {
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
                     borderSide: BorderSide(
-                      color: Colors.yellow,
+                      color: Color(0xFFF5C518),
                       width: 2.0,
                     ),
                   ),
                   focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
+                    borderRadius: BorderRadius.circular(15.0),
                     borderSide: BorderSide(
-                      color: Colors.yellow,
+                      color:Color(0xFFF8E1A1),
                       width: 2.0,
                     ),
                   ),
@@ -105,46 +109,45 @@ class _BusinessLoginState extends State<BusinessLogin> {
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
                     borderSide: BorderSide(
-                      color: Colors.yellow,
+                      color: Color(0xFFF5C518),
                       width: 2.0,
                     ),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
                     borderSide: BorderSide(
-                      color: Colors.yellow,
+                      color: Color(0xFFF8E1A1),
                       width: 2.0,
                     ),
                   ),
                 ),
               ),
-              SizedBox(height: 16.0),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
+              SizedBox(height:50.0),
+              TextButton(
+                style: TextButton.styleFrom(
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
+                    borderRadius: BorderRadius.circular(20.0),
                   ),
-                  primary: Color(0xFFB0DB2D),
+                  backgroundColor: Color(0xFFB0DB2D),
                   minimumSize: Size(double.infinity, 55.0), // Set button height
                 ),
-                child: Center(
-                  child: Text(
-                    'Login',
-                    style: TextStyle(
-                      fontSize: 18,
+                onPressed: () => _login(context),
+                child: Text(
+                  'Login',
+                  style: GoogleFonts.manrope(
+                    textStyle: TextStyle(
+                      fontSize: 16,
                       color: Colors.white,
-                      fontFamily: 'Manrope',
-                      fontWeight: FontWeight.w700,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
                 ),
-                onPressed: () => _login(context),
               ),
               SizedBox(height: 20.0),
               TextButton(
                 style: TextButton.styleFrom(
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
+                    borderRadius: BorderRadius.circular(20.0),
                   ),
                   backgroundColor: Color(0xFFF5C518),
                   minimumSize: Size(double.infinity, 55.0), // Set button height
@@ -152,11 +155,12 @@ class _BusinessLoginState extends State<BusinessLogin> {
                 child: Center(
                   child: Text(
                     'Register',
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.white,
-                      fontFamily: 'Manrope',
-                      fontWeight: FontWeight.w700,
+                    style: GoogleFonts.manrope(
+                      textStyle: TextStyle(
+                        fontSize: 16,
+                        color: Colors.white,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                   ),
                 ),
