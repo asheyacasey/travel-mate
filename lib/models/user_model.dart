@@ -12,6 +12,8 @@ class User extends Equatable {
   final String bio;
   final String jobTitle;
   final double radius;
+  final double latitude;
+  final double longitude;
   final List<String>? swipeLeft;
   final List<String>? swipeRight;
   final List<Map<String, dynamic>>? matches;
@@ -25,6 +27,8 @@ class User extends Equatable {
       required this.interests,
       required this.bio,
       required this.jobTitle,
+      required this.latitude,
+      required this.longitude,
       required this.radius,
       this.swipeRight,
       this.swipeLeft,
@@ -41,6 +45,8 @@ class User extends Equatable {
         bio: snap['bio'],
         jobTitle: snap['jobTitle'],
         radius: snap['radius'].toDouble(),
+        latitude: snap['latitude'].toDouble(),
+        longitude: snap['longitude'].toDouble(),
         swipeLeft: (snap['swipeLeft'] as List)
             .map((swipeLeft) => swipeLeft as String)
             .toList(),
@@ -79,6 +85,8 @@ class User extends Equatable {
     String? bio,
     String? jobTitle,
     double? radius,
+    double? latitude,
+    double? longitude,
     List<String>? swipeLeft,
     List<String>? swipeRight,
     List<Map<String, dynamic>>? matches,
@@ -93,6 +101,8 @@ class User extends Equatable {
       bio: bio ?? this.bio,
       jobTitle: jobTitle ?? this.jobTitle,
       radius: radius ?? this.radius,
+      latitude: latitude ?? this.latitude,
+      longitude: longitude ?? this.longitude,
       swipeLeft: swipeLeft ?? this.swipeLeft,
       swipeRight: swipeRight ?? this.swipeRight,
       matches: matches ?? this.matches,
@@ -109,6 +119,8 @@ class User extends Equatable {
         interests,
         bio,
         jobTitle,
+        latitude,
+        longitude,
         radius,
         swipeLeft,
         swipeRight,

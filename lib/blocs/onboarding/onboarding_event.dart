@@ -21,6 +21,8 @@ class StartOnboarding extends OnboardingEvent {
       bio: '',
       jobTitle: '',
       radius: 0,
+      latitude: 0,
+      longitude: 0,
     ),
   });
 
