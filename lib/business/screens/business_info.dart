@@ -142,74 +142,76 @@ class _BusinessInfoScreenState extends State<BusinessInfoScreen> {
       appBar: AppBar(
         title: Text('Business Information'),
       ),
-      body: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 50.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Enter Your Business Information',
-              style: Theme.of(context).primaryTextTheme.headline6!.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
-            ),
-            SizedBox(height: 20),
-            Text(
-              'Business Name',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
-            TextFormField(
-              controller: _businessNameController,
-              decoration: InputDecoration(
-                hintText: 'Enter your business name',
-                errorText: _businessNameError,
-              ),
-            ),
-            SizedBox(height: 20),
-            Text(
-              'Business Address',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
-            Column(
-              children: [
-                TextFormField(
-                  controller: _businessAddressController,
-                  decoration: InputDecoration(
-                    hintText: 'Enter your business address',
-                    errorText: _businessAddressError,
-                  ),
-                  onChanged: (query) {
-                    _updateAddressSuggestions(query);
-                  },
-                ),
-                SizedBox(height: 10),
-                if (_addressSuggestions.isNotEmpty)
-                  Container(
-                    height: 200,
-                    child: ListView.builder(
-                      itemCount: _addressSuggestions.length,
-                      itemBuilder: (context, index) {
-                        final suggestion = _addressSuggestions[index];
-                        return ListTile(
-                          title: Text(suggestion),
-                          onTap: () {
-                            setState(() {
-                              _businessAddressController.text = suggestion;
-                              _addressSuggestions = [];
-                            });
-                          },
-                        );
-                      },
+      body: SingleChildScrollView(
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 50.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Enter Your Business Information',
+                style: Theme.of(context).primaryTextTheme.headline6!.copyWith(
+                      fontWeight: FontWeight.bold,
                     ),
+              ),
+              SizedBox(height: 20),
+              Text(
+                'Business Name',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+              TextFormField(
+                controller: _businessNameController,
+                decoration: InputDecoration(
+                  hintText: 'Enter your business name',
+                  errorText: _businessNameError,
+                ),
+              ),
+              SizedBox(height: 20),
+              Text(
+                'Business Address',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+              Column(
+                children: [
+                  TextFormField(
+                    controller: _businessAddressController,
+                    decoration: InputDecoration(
+                      hintText: 'Enter your business address',
+                      errorText: _businessAddressError,
+                    ),
+                    onChanged: (query) {
+                      _updateAddressSuggestions(query);
+                    },
                   ),
-              ],
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _isFormValid ? null : saveBusinessInfo,
-              child: Text('SAVE INFO'),
-            ),
-          ],
+                  SizedBox(height: 10),
+                  if (_addressSuggestions.isNotEmpty)
+                    Container(
+                      height: 200,
+                      child: ListView.builder(
+                        itemCount: _addressSuggestions.length,
+                        itemBuilder: (context, index) {
+                          final suggestion = _addressSuggestions[index];
+                          return ListTile(
+                            title: Text(suggestion),
+                            onTap: () {
+                              setState(() {
+                                _businessAddressController.text = suggestion;
+                                _addressSuggestions = [];
+                              });
+                            },
+                          );
+                        },
+                      ),
+                    ),
+                ],
+              ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: _isFormValid ? null : saveBusinessInfo,
+                child: Text('SAVE INFO'),
+              ),
+            ],
+          ),
         ),
       ),
     );
