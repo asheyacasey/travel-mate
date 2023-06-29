@@ -62,6 +62,7 @@ class _BusinessInfoScreenState extends State<BusinessInfoScreen> {
             'businessAddress': businessAddress,
             'latitude': lat,
             'longitude': lon,
+            'activities': [],
           }).then((value) {
             print('Business information stored successfully!');
             Navigator.pushReplacement(
