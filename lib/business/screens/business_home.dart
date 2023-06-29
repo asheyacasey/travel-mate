@@ -12,6 +12,9 @@ class BusinessHomeScreen extends StatefulWidget {
 }
 
 class _BusinessHomeScreenState extends State<BusinessHomeScreen> {
+  TimeOfDay? _startTime;
+  TimeOfDay? _endTime;
+  int? _duration;
   String businessName = '';
   List<Activity> activities = [];
 
@@ -20,6 +23,36 @@ class _BusinessHomeScreenState extends State<BusinessHomeScreen> {
     super.initState();
     _fetchBusinessName();
     _fetchActivities();
+  }
+
+  set startTime(TimeOfDay? value) {
+    setState(() {
+      _startTime = value;
+    });
+  }
+
+  set endTime(TimeOfDay? value) {
+    setState(() {
+      _endTime = value;
+    });
+  }
+
+  set duration(int? value) {
+    setState(() {
+      _duration = value;
+    });
+  }
+
+  int? get duration => _duration;
+  TimeOfDay? get startTime => _startTime;
+  TimeOfDay? get endTime => _endTime;
+
+  void resetTime() {
+    setState(() {
+      _startTime = null;
+      _endTime = null;
+      _duration = null;
+    });
   }
 
   Future<void> _fetchBusinessName() async {
@@ -116,9 +149,6 @@ class _BusinessHomeScreenState extends State<BusinessHomeScreen> {
 
   Future<void> _showAddActivityDialog(BuildContext context) async {
     TextEditingController nameController = TextEditingController();
-    TimeOfDay? startTime;
-    TimeOfDay? endTime;
-    int? duration;
 
     await showDialog(
       context: context,
@@ -138,12 +168,13 @@ class _BusinessHomeScreenState extends State<BusinessHomeScreen> {
                 onTap: () async {
                   TimeOfDay? selectedTime = await showTimePicker(
                     context: context,
-                    initialTime: TimeOfDay.now(),
+                    initialTime: startTime ?? TimeOfDay.now(),
                   );
                   if (selectedTime != null) {
                     setState(() {
                       startTime = selectedTime;
                     });
+                    print("Start ISSSSSS" + startTime!.format(context));
                   }
                 },
                 child: Container(
@@ -275,11 +306,11 @@ class _BusinessHomeScreenState extends State<BusinessHomeScreen> {
                 onTap: () async {
                   TimeOfDay? selectedTime = await showTimePicker(
                     context: context,
-                    initialTime: startTime!,
+                    initialTime: endTime ?? TimeOfDay.now(),
                   );
                   if (selectedTime != null) {
                     setState(() {
-                      startTime = selectedTime;
+                      endTime = selectedTime;
                     });
                   }
                 },
@@ -288,9 +319,9 @@ class _BusinessHomeScreenState extends State<BusinessHomeScreen> {
                   decoration: BoxDecoration(
                     border: Border.all(color: Colors.grey),
                   ),
-                  child: startTime != null
-                      ? Text('${startTime!.format(context)}')
-                      : Text('Select start time'),
+                  child: endTime != null
+                      ? Text('${endTime!.format(context)}')
+                      : Text('Select end time'),
                 ),
               ),
               SizedBox(height: 16),
