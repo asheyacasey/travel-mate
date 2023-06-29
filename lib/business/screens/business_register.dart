@@ -57,7 +57,7 @@ class _EmailRegistrationScreenState extends State<EmailRegistrationScreen> {
           context,
           MaterialPageRoute(
             builder: (context) =>
-                BusinessInfoScreen(userId: userCredential.user?.uid),
+                BusinessInfoScreen(userId: userCredential.user!.uid),
           ),
         );
       }
@@ -165,7 +165,7 @@ class _EmailRegistrationScreenState extends State<EmailRegistrationScreen> {
                 errorText: _passwordError,
               ),
             ),
-            SizedBox(height:50),
+            SizedBox(height: 50),
             TextButton(
               style: TextButton.styleFrom(
                 shape: RoundedRectangleBorder(
