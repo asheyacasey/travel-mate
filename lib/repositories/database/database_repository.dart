@@ -64,25 +64,6 @@ class DatabaseRepository extends BaseDatabaseRepository {
     }
   }
 
-  // Stream<List<User>> getUsers(User user) {
-  //   print('getUsers is running...');
-  //   return _firebaseFirestore
-  //       .collection('users')
-  //       .where('gender', isEqualTo: _selectGender(user))
-  //       .snapshots()
-  //       .map((snap) {
-  //     // Map the documents to User objects and then filter based on interests.
-  //     List<User> users = snap.docs.map((doc) => User.fromSnapshot(doc)).toList();
-  //     return users.where((currentUser) {
-  //       bool interestMatches = currentUser.interests.any((interest) => user.interests.contains(interest));
-  //       print('User ${currentUser.id} interest matches: $interestMatches');
-  //       return interestMatches;
-  //     }).toList();
-  //   }).handleError((onError) {
-  //     print('An error occurred: $onError');
-  //   });
-  // }
-
   Stream<List<User>> getUsers(User user) {
     print('getUsers is running...');
     double userLatitude = user.latitude; // Fetch the latitude of the current user from Firestore
@@ -97,11 +78,13 @@ class DatabaseRepository extends BaseDatabaseRepository {
       // Map the documents to User objects and then filter based on interests and location
       List<User> users = snap.docs.map((doc) => User.fromSnapshot(doc)).toList();
 
-      return users.where((currentUser) {
+      List<User> filteredUsers = users.where((currentUser) {
         // Calculate the distance between the current user and each user in the collection
         double distance = calculateDistance(
-            userLatitude, userLongitude,
-            currentUser.latitude, currentUser.longitude
+          userLatitude,
+          userLongitude,
+          currentUser.latitude,
+          currentUser.longitude,
         );
 
         // Check if the distance is within the maximum radius of the current user
@@ -113,8 +96,11 @@ class DatabaseRepository extends BaseDatabaseRepository {
         print('User ${currentUser.id} interest matches: $interestMatches');
         print('User ${currentUser.id} is within max distance: $isWithinMaxDistance');
 
+        // Check if both interestMatches and isWithinMaxDistance are true
         return interestMatches && isWithinMaxDistance;
       }).toList();
+
+      return filteredUsers;
     }).handleError((onError) {
       print('An error occurred: $onError');
     });
