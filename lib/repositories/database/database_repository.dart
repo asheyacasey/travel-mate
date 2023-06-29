@@ -91,7 +91,7 @@ class DatabaseRepository extends BaseDatabaseRepository {
         bool isWithinMaxDistance = distance <= userRadius;
 
         // Filter based on interests and location
-        bool interestMatches = currentUser.interests.any((interest) => user.interests.contains(interest));
+        bool interestMatches = currentUser.interests.every((interest) => user.interests.contains(interest));
 
         print('User ${currentUser.id} interest matches: $interestMatches');
         print('User ${currentUser.id} is within max distance: $isWithinMaxDistance');
@@ -101,10 +101,12 @@ class DatabaseRepository extends BaseDatabaseRepository {
       }).toList();
 
       return filteredUsers;
-    }).handleError((onError) {
+    })
+        .handleError((onError) {
       print('An error occurred: $onError');
     });
   }
+
 
 // Helper function to calculate the distance between two locations using the Haversine formula
   double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
