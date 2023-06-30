@@ -8,6 +8,7 @@ import 'package:location/location.dart' as location;
 import 'package:step_progress_indicator/step_progress_indicator.dart';
 import 'package:unicons/unicons.dart';
 import '../../../blocs/blocs.dart';
+import '../../../widgets/widgets.dart';
 import '../widgets/widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -41,9 +42,11 @@ class _LocationTabState extends State<LocationTab> {
     final hasPermission = await _location.requestPermission();
     if (hasPermission == location.PermissionStatus.granted) {
       StreamSubscription<location.LocationData>? locationSubscription;
-      locationSubscription = _location.onLocationChanged.listen((location.LocationData currentLocation) async {
+      locationSubscription = _location.onLocationChanged
+          .listen((location.LocationData currentLocation) async {
         setState(() {
-          _currentPosition = LatLng(currentLocation.latitude!, currentLocation.longitude!);
+          _currentPosition =
+              LatLng(currentLocation.latitude!, currentLocation.longitude!);
           _latitude = currentLocation.latitude.toString();
           _longitude = currentLocation.longitude.toString();
         });
@@ -56,9 +59,13 @@ class _LocationTabState extends State<LocationTab> {
           final longitude = _currentPosition.longitude;
 
           try {
-            await FirebaseFirestore.instance.collection('users').doc(user.uid).update({'latitude': latitude, 'longitude': longitude});
+            await FirebaseFirestore.instance
+                .collection('users')
+                .doc(user.uid)
+                .update({'latitude': latitude, 'longitude': longitude});
 
-            print('Location saved to Firestore: Latitude: $latitude, Longitude: $longitude');
+            print(
+                'Location saved to Firestore: Latitude: $latitude, Longitude: $longitude');
           } catch (error) {
             print('Failed to save location: $error');
           }
@@ -130,7 +137,7 @@ class _LocationTabState extends State<LocationTab> {
           return Container(
             child: Padding(
               padding:
-              const EdgeInsets.symmetric(horizontal: 30.0, vertical: 50.0),
+                  const EdgeInsets.symmetric(horizontal: 30.0, vertical: 50.0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -214,21 +221,13 @@ class _LocationTabState extends State<LocationTab> {
                           ),
                         ),
                         SizedBox(height: 10),
-                        Slider(
-                          value: _radius,
-                          min: 0,
-                          max: 5000,
-                          divisions: null,
-                          onChanged: (double value) {
-                            setState(() {
+                        CustomSlider(
+                            value: _radius,
+                            onChanged: (value) {
                               _radius = value;
-                            });
-                            _updateRadius();
-                          },
-                          activeColor: Color(0xFFF5C518),
-                        ),
+                              _updateRadius();
+                            }),
                         SizedBox(height: 10),
-
                       ],
                     ),
                   ),
