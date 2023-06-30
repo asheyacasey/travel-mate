@@ -5,7 +5,6 @@ import 'package:travel_mate/repositories/database/base_database_repository.dart'
 import 'package:travel_mate/repositories/storage/storage_repository.dart';
 import 'dart:math' as math;
 
-
 class DatabaseRepository extends BaseDatabaseRepository {
   final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
 
@@ -66,9 +65,12 @@ class DatabaseRepository extends BaseDatabaseRepository {
 
   Stream<List<User>> getUsers(User user) {
     print('getUsers is running...');
-    double userLatitude = user.latitude; // Fetch the latitude of the current user from Firestore
-    double userLongitude = user.longitude; // Fetch the longitude of the current user from Firestore
-    double userRadius = user.radius; // Fetch the radius of the current user from Firestore
+    double userLatitude =
+        user.latitude; // Fetch the latitude of the current user from Firestore
+    double userLongitude = user
+        .longitude; // Fetch the longitude of the current user from Firestore
+    double userRadius = user.radius /
+        1000; // Fetch the radius of the current user from Firestore
 
     return _firebaseFirestore
         .collection('users')
@@ -76,7 +78,8 @@ class DatabaseRepository extends BaseDatabaseRepository {
         .snapshots()
         .map((snap) {
       // Map the documents to User objects and then filter based on interests and location
-      List<User> users = snap.docs.map((doc) => User.fromSnapshot(doc)).toList();
+      List<User> users =
+          snap.docs.map((doc) => User.fromSnapshot(doc)).toList();
 
       List<User> filteredUsers = users.where((currentUser) {
         // Calculate the distance between the current user and each user in the collection
@@ -91,22 +94,27 @@ class DatabaseRepository extends BaseDatabaseRepository {
         bool isWithinMaxDistance = distance <= userRadius;
 
         // Filter based on interests and location
-        bool interestMatches = currentUser.interests.every((interest) => user.interests.contains(interest));
+        bool interestMatches = currentUser.interests
+            .any((interest) => user.interests.contains(interest));
 
         print('User ${currentUser.id} interest matches: $interestMatches');
-        print('User ${currentUser.id} is within max distance: $isWithinMaxDistance');
+        print(
+            'User ${currentUser.id} is within max distance: $isWithinMaxDistance');
+
+        print(
+            'User ${currentUser.id} is at a distance of: $distance'); // Print the calculated distance
+        print(
+            'User ${currentUser.id} max distance: $userRadius'); // Print the user's maximum distance
 
         // Check if both interestMatches and isWithinMaxDistance are true
         return interestMatches && isWithinMaxDistance;
       }).toList();
 
       return filteredUsers;
-    })
-        .handleError((onError) {
+    }).handleError((onError) {
       print('An error occurred: $onError');
     });
   }
-
 
 // Helper function to calculate the distance between two locations using the Haversine formula
   double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
@@ -131,9 +139,7 @@ class DatabaseRepository extends BaseDatabaseRepository {
     return degree * (math.pi / 180);
   }
 
-
   Stream<List<User>> getUsersWithMatchingInterests(User user) {
-
     print('getUsersWithMatchingInterests is running...');
     return _firebaseFirestore
         .collection('users')
@@ -141,13 +147,11 @@ class DatabaseRepository extends BaseDatabaseRepository {
         .snapshots()
         .map((snap) {
       return snap.docs
-          .where((doc) =>
-          user.interests.contains(doc.get('interests')))
+          .where((doc) => user.interests.contains(doc.get('interests')))
           .map((doc) => User.fromSnapshot(doc))
           .toList();
     });
   }
-
 
   @override
   Stream<List<User>> getUsersToSwipe(User user) {
