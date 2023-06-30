@@ -44,8 +44,15 @@ class HomeScreen extends StatelessWidget {
           return Scaffold(
             appBar: CustomAppBar(title: 'Discover'),
             body: Center(
-              child: Text('There aren\'t any more users.',
-                  style: Theme.of(context).textTheme.headline4),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('There aren\'t any more users.',
+                      style: Theme.of(context).textTheme.headline4),
+                  Text('Edit your preferences to see more users.',
+                      style: Theme.of(context).textTheme.headline4),
+                ],
+              ),
             ),
           );
         } else {
@@ -232,6 +239,5 @@ class SwipeLoadedHomeScreen extends StatelessWidget {
         ],
       ),
     );
-  }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
+  }
 }
-

@@ -243,7 +243,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                         _Interests(),
                         SizedBox(
-                          height: 10,
+                          height: 20,
                         ),
                         if (state.isEditingOn)
                           Column(
@@ -251,12 +251,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               Align(
                                   alignment: Alignment.centerLeft,
                                   child: Text(
-                                    'Radius',
+                                    'Up to ${_radius / 1000} km away',
                                     style: Theme.of(context)
                                         .textTheme
                                         .headline4!
                                         .copyWith(fontWeight: FontWeight.w900),
                                   )),
+                              Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    'See people slightly further away',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headlineSmall!
+                                        .copyWith(fontWeight: FontWeight.w900),
+                                  )),
+                              SizedBox(
+                                height: 10,
+                              ),
                               CustomSlider(
                                 value: _radius.toDouble(),
                                 onChanged: (double value) {
