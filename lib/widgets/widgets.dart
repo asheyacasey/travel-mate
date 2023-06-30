@@ -6,3 +6,4 @@ export 'custom_image_container.dart';
 export 'custom_text_container.dart';
 export 'custom_elevated_button.dart';
 export 'user_image.dart';
+export 'custom_slider.dart';
