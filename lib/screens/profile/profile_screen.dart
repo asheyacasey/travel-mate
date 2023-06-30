@@ -26,7 +26,6 @@ class ProfileScreen extends StatefulWidget {
                   create: (context) => ProfileBloc(
                     authBloc: BlocProvider.of<AuthBloc>(context),
                     databaseRepository: context.read<DatabaseRepository>(),
-                    //locationRepository: context.read<LocationRepository>(),
                   )..add(
                       LoadProfile(
                           userId: context.read<AuthBloc>().state.authUser!.uid),
@@ -52,8 +51,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
             .doc(user.uid)
             .update({'radius': _radius});
         print('Radius is saved in the Firestore: $_radius');
+
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('Radius updated to $_radius km'),
+        ));
       } catch (error) {
         print('Failed to save radius: $error');
+
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('Failed to update radius'),
+        ));
       }
     }
   }
@@ -235,6 +242,32 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           height: 10,
                         ),
                         _Interests(),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        if (state.isEditingOn)
+                          Column(
+                            children: [
+                              Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    'Radius',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headline4!
+                                        .copyWith(fontWeight: FontWeight.w900),
+                                  )),
+                              CustomSlider(
+                                value: _radius.toDouble(),
+                                onChanged: (double value) {
+                                  setState(() {
+                                    _radius = value.round();
+                                  });
+                                  _updateRadius();
+                                },
+                              ),
+                            ],
+                          ),
                         SizedBox(
                           height: 10,
                         ),
