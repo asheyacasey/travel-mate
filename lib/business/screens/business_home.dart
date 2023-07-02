@@ -556,6 +556,24 @@ class _BusinessHomeScreenState extends State<BusinessHomeScreen> {
     }
   }
 
+  Future<void> _deleteActivity(Activity activity) async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      DocumentReference docRef =
+          FirebaseFirestore.instance.collection('business').doc(user.uid);
+
+      await FirebaseFirestore.instance.runTransaction((transaction) async {
+        DocumentSnapshot snapshot = await transaction.get(docRef);
+        List<dynamic> activitiesData = snapshot.get('activities') ?? [];
+        activitiesData.removeWhere((data) => data['id'] == activity.id);
+        transaction.update(docRef, {'activities': activitiesData});
+        setState(() {
+          activities.remove(activity);
+        });
+      });
+    }
+  }
+
   void _logout() async {
     try {
       await FirebaseAuth.instance.signOut();
@@ -603,7 +621,6 @@ class _BusinessHomeScreenState extends State<BusinessHomeScreen> {
             trailing: IconButton(
               icon: Icon(Icons.edit),
               onPressed: () {
-                //Navigate to the edit screen for the selected activity
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -631,8 +648,7 @@ class _BusinessHomeScreenState extends State<BusinessHomeScreen> {
                     ),
                     TextButton(
                       onPressed: () async {
-                        String activityId = activities[index].id;
-                        // await _deleteActivity(activityId);
+                        await _deleteActivity(activity);
                         Navigator.pop(context);
                       },
                       child: Text('Delete'),
