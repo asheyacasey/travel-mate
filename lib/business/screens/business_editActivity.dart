@@ -101,15 +101,25 @@ class _EditActivityScreenState extends State<EditActivityScreen> {
       DocumentReference docRef =
           FirebaseFirestore.instance.collection('business').doc(user.uid);
 
-      await FirebaseFirestore.instance.runTransaction((transaction) async {
-        DocumentSnapshot snapshot = await transaction.get(docRef);
-        List<dynamic> activitiesData = snapshot.get('activities') ?? [];
-        int index = activities.indexWhere((a) => a.id == activity.id);
-        if (index != -1) {
-          activitiesData[index] = activity.toMap();
-          transaction.update(docRef, {'activities': activitiesData});
-        }
-      });
+      try {
+        await FirebaseFirestore.instance.runTransaction((transaction) async {
+          DocumentSnapshot snapshot = await transaction.get(docRef);
+          List<dynamic> activitiesData = snapshot.get('activities') ?? [];
+
+          // Find the index of the activity to update
+          int index = activitiesData.indexWhere((a) => a['id'] == activity.id);
+          if (index != -1) {
+            // Update the activity at the found index
+            activitiesData[index] = activity.toMap();
+            transaction.update(docRef, {'activities': activitiesData});
+            print('Activity updated successfully!');
+          } else {
+            print('Activity not found in the array!');
+          }
+        });
+      } catch (e) {
+        print('Error updating activity: $e');
+      }
     }
   }
 
@@ -271,9 +281,7 @@ class _EditActivityScreenState extends State<EditActivityScreen> {
                         String address = addressController.text.trim();
                         if (name.isNotEmpty && address.isNotEmpty) {
                           Activity updatedActivity = Activity(
-                            id: DateTime.now()
-                                .millisecondsSinceEpoch
-                                .toString(),
+                            id: widget.activity.id,
                             name: name,
                             startTime: startTime!,
                             endTime: endTime!,
