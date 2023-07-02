@@ -25,7 +25,7 @@ class _EditActivityScreenState extends State<EditActivityScreen> {
   late TimeOfDay? startTime;
   late TimeOfDay? endTime;
   late int? duration;
-
+  List<Activity> activities = [];
   List<String> _suggestions = [];
 
   Future<List<String>> _getAddressSuggestions(String query) async {
@@ -74,6 +74,27 @@ class _EditActivityScreenState extends State<EditActivityScreen> {
   //   }
   // }
 
+  Future<void> _fetchActivities() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      DocumentSnapshot snapshot = await FirebaseFirestore.instance
+          .collection('business')
+          .doc(user.uid)
+          .get();
+      if (snapshot.exists) {
+        List<dynamic> activitiesData = snapshot.get('activities') ?? [];
+        setState(() {
+          activities =
+              activitiesData.map((data) => Activity.fromMap(data)).toList();
+        });
+      } else {
+        setState(() {
+          activities = [];
+        });
+      }
+    }
+  }
+
   Future<void> _updateActivity(Activity activity) async {
     User? user = FirebaseAuth.instance.currentUser;
     if (user != null) {
@@ -83,10 +104,11 @@ class _EditActivityScreenState extends State<EditActivityScreen> {
       await FirebaseFirestore.instance.runTransaction((transaction) async {
         DocumentSnapshot snapshot = await transaction.get(docRef);
         List<dynamic> activitiesData = snapshot.get('activities') ?? [];
-        int index = activitiesData.indexWhere((a) => a.id == activity.id);
+        int index = activities.indexWhere((a) => a.id == activity.id);
         if (index != -1) {
           activitiesData[index] = activity.toMap();
           transaction.update(docRef, {'activities': activitiesData});
+          widget.onActivityEdited();
         }
       });
     }
@@ -95,6 +117,7 @@ class _EditActivityScreenState extends State<EditActivityScreen> {
   @override
   void initState() {
     super.initState();
+    _fetchActivities();
     nameController = TextEditingController(text: widget.activity.name);
     addressController = TextEditingController(text: widget.activity.address);
     startTime = widget.activity.startTime;
@@ -260,7 +283,6 @@ class _EditActivityScreenState extends State<EditActivityScreen> {
                           );
                           await _updateActivity(activity);
                           Navigator.pop(context);
-                          widget.onActivityEdited();
                         }
                       }
                     },
