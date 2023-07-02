@@ -7,12 +7,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:travel_mate/business/screens/business_home.dart';
 
 class EditActivityScreen extends StatefulWidget {
-  final VoidCallback onActivityAdded;
+  final VoidCallback onActivityEdited;
   final Activity activity;
 
   const EditActivityScreen({
     super.key,
-    required this.onActivityAdded,
+    required this.onActivityEdited,
     required this.activity,
   });
   @override
@@ -74,7 +74,7 @@ class _EditActivityScreenState extends State<EditActivityScreen> {
   //   }
   // }
 
-  Future<void> _addActivity(Activity activity) async {
+  Future<void> _updateActivity(Activity activity) async {
     User? user = FirebaseAuth.instance.currentUser;
     if (user != null) {
       DocumentReference docRef =
@@ -83,8 +83,11 @@ class _EditActivityScreenState extends State<EditActivityScreen> {
       await FirebaseFirestore.instance.runTransaction((transaction) async {
         DocumentSnapshot snapshot = await transaction.get(docRef);
         List<dynamic> activitiesData = snapshot.get('activities') ?? [];
-        activitiesData.add(activity.toMap());
-        transaction.update(docRef, {'activities': activitiesData});
+        int index = activitiesData.indexWhere((a) => a.id == activity.id);
+        if (index != -1) {
+          activitiesData[index] = activity.toMap();
+          transaction.update(docRef, {'activities': activitiesData});
+        }
       });
     }
   }
@@ -255,13 +258,13 @@ class _EditActivityScreenState extends State<EditActivityScreen> {
                             duration: duration!,
                             address: address,
                           );
-                          await _addActivity(activity);
+                          await _updateActivity(activity);
                           Navigator.pop(context);
-                          widget.onActivityAdded();
+                          widget.onActivityEdited();
                         }
                       }
                     },
-                    child: Text('Add'),
+                    child: Text('Save'),
                   ),
                 ],
               ),

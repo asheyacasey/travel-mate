@@ -608,7 +608,7 @@ class _BusinessHomeScreenState extends State<BusinessHomeScreen> {
                   context,
                   MaterialPageRoute(
                     builder: (context) => EditActivityScreen(
-                      onActivityAdded: _fetchActivities,
+                      onActivityEdited: _fetchActivities,
                       activity: activity,
                     ),
                   ),
