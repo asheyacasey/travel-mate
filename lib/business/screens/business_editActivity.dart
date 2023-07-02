@@ -25,7 +25,6 @@ class _EditActivityScreenState extends State<EditActivityScreen> {
   TimeOfDay? startTime;
   TimeOfDay? endTime;
   int? duration;
-  List<Activity> activities = [];
   List<String> _suggestions = [];
 
   Future<List<String>> _getAddressSuggestions(String query) async {
@@ -74,27 +73,6 @@ class _EditActivityScreenState extends State<EditActivityScreen> {
   //   }
   // }
 
-  Future<void> _fetchActivities() async {
-    User? user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
-      DocumentSnapshot snapshot = await FirebaseFirestore.instance
-          .collection('business')
-          .doc(user.uid)
-          .get();
-      if (snapshot.exists) {
-        List<dynamic> activitiesData = snapshot.get('activities') ?? [];
-        setState(() {
-          activities =
-              activitiesData.map((data) => Activity.fromMap(data)).toList();
-        });
-      } else {
-        setState(() {
-          activities = [];
-        });
-      }
-    }
-  }
-
   Future<void> _updateActivity(Activity activity) async {
     User? user = FirebaseAuth.instance.currentUser;
     if (user != null) {
@@ -126,7 +104,6 @@ class _EditActivityScreenState extends State<EditActivityScreen> {
   @override
   void initState() {
     super.initState();
-    _fetchActivities();
     nameController = TextEditingController(text: widget.activity.name);
     addressController = TextEditingController(text: widget.activity.address);
     startTime = widget.activity.startTime;
