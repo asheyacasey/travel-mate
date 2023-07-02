@@ -508,6 +508,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:travel_mate/business/screens/business_addActivity.dart';
+import 'package:travel_mate/business/screens/business_login.dart';
 
 class BusinessHomeScreen extends StatefulWidget {
   @override
@@ -554,6 +555,19 @@ class _BusinessHomeScreenState extends State<BusinessHomeScreen> {
     }
   }
 
+  void _logout() async {
+    try {
+      await FirebaseAuth.instance.signOut();
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => BusinessLogin()),
+      );
+    } catch (e) {
+      print('Error logging out: $e');
+      // Handle any errors that occur during logout
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -566,6 +580,7 @@ class _BusinessHomeScreenState extends State<BusinessHomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Welcome $businessName'),
+        actions: [IconButton(onPressed: _logout, icon: Icon(Icons.logout))],
       ),
       body: ListView.builder(
         itemCount: activities.length,
