@@ -508,6 +508,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:travel_mate/business/screens/business_addActivity.dart';
+import 'package:travel_mate/business/screens/business_editActivity.dart';
 import 'package:travel_mate/business/screens/business_login.dart';
 
 class BusinessHomeScreen extends StatefulWidget {
@@ -602,15 +603,16 @@ class _BusinessHomeScreenState extends State<BusinessHomeScreen> {
             trailing: IconButton(
               icon: Icon(Icons.edit),
               onPressed: () {
-                // Navigate to the edit screen for the selected activity
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(
-                //     builder: (context) => EditActivityScreen(
-                //       activity: activity,
-                //     ),
-                //   ),
-                // );
+                //Navigate to the edit screen for the selected activity
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => EditActivityScreen(
+                      onActivityAdded: _fetchActivities,
+                      activity: activity,
+                    ),
+                  ),
+                );
               },
             ),
             onLongPress: () {
