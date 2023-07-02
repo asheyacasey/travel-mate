@@ -20,11 +20,11 @@ class EditActivityScreen extends StatefulWidget {
 }
 
 class _EditActivityScreenState extends State<EditActivityScreen> {
-  late TextEditingController nameController = TextEditingController();
-  late TextEditingController addressController = TextEditingController();
-  late TimeOfDay? startTime;
-  late TimeOfDay? endTime;
-  late int? duration;
+  TextEditingController nameController = TextEditingController();
+  TextEditingController addressController = TextEditingController();
+  TimeOfDay? startTime;
+  TimeOfDay? endTime;
+  int? duration;
   List<Activity> activities = [];
   List<String> _suggestions = [];
 
@@ -108,7 +108,6 @@ class _EditActivityScreenState extends State<EditActivityScreen> {
         if (index != -1) {
           activitiesData[index] = activity.toMap();
           transaction.update(docRef, {'activities': activitiesData});
-          widget.onActivityEdited();
         }
       });
     }
@@ -271,7 +270,7 @@ class _EditActivityScreenState extends State<EditActivityScreen> {
                         String name = nameController.text.trim();
                         String address = addressController.text.trim();
                         if (name.isNotEmpty && address.isNotEmpty) {
-                          Activity activity = Activity(
+                          Activity updatedActivity = Activity(
                             id: DateTime.now()
                                 .millisecondsSinceEpoch
                                 .toString(),
@@ -281,8 +280,9 @@ class _EditActivityScreenState extends State<EditActivityScreen> {
                             duration: duration!,
                             address: address,
                           );
-                          await _updateActivity(activity);
+                          await _updateActivity(updatedActivity);
                           Navigator.pop(context);
+                          widget.onActivityEdited();
                         }
                       }
                     },
