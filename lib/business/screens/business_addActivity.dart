@@ -5,6 +5,7 @@ import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:travel_mate/business/screens/business_home.dart';
 
 class AddNewActivityScreen extends StatefulWidget {
   final VoidCallback onActivityAdded;
@@ -23,6 +24,18 @@ class _AddNewActivityScreenState extends State<AddNewActivityScreen> {
   TimeOfDay? startTime;
   TimeOfDay? endTime;
   int? duration;
+  String? selectedCategory;
+  List<String> categories = [
+    'Swimming',
+    'Foods',
+    'Adventure',
+    'Beach',
+    'Night Life',
+    'Land Tour',
+    'Hiking',
+    'Pool',
+    'Diving'
+  ];
 
   List<String> _suggestions = [];
 
@@ -137,6 +150,25 @@ class _AddNewActivityScreenState extends State<AddNewActivityScreen> {
                 ],
               ),
               SizedBox(height: 16),
+              Text('Category'),
+              DropdownButtonFormField<String>(
+                value: selectedCategory,
+                decoration: InputDecoration(
+                  labelText: 'Category',
+                ),
+                onChanged: (value) {
+                  setState(() {
+                    selectedCategory = value;
+                  });
+                },
+                items: categories.map((category) {
+                  return DropdownMenuItem<String>(
+                    value: category,
+                    child: Text(category),
+                  );
+                }).toList(),
+              ),
+              SizedBox(height: 16),
               Text('Start Time'),
               InkWell(
                 onTap: () async {
@@ -238,6 +270,7 @@ class _AddNewActivityScreenState extends State<AddNewActivityScreen> {
                                 .millisecondsSinceEpoch
                                 .toString(),
                             name: name,
+                            category: selectedCategory!,
                             startTime: startTime!,
                             endTime: endTime!,
                             duration: duration!,
@@ -258,57 +291,5 @@ class _AddNewActivityScreenState extends State<AddNewActivityScreen> {
         ),
       ),
     );
-  }
-}
-
-class Activity {
-  final String id;
-  final String name;
-  final String address;
-  final TimeOfDay startTime;
-  final TimeOfDay endTime;
-  final int duration;
-
-  Activity({
-    required this.id,
-    required this.name,
-    required this.address,
-    required this.startTime,
-    required this.endTime,
-    required this.duration,
-  });
-
-  factory Activity.fromMap(Map<String, dynamic> map) {
-    return Activity(
-      id: map['id'],
-      name: map['name'],
-      address: map['address'],
-      startTime: TimeOfDay(
-        hour: map['startTime']['hour'],
-        minute: map['startTime']['minute'],
-      ),
-      endTime: TimeOfDay(
-        hour: map['endTime']['hour'],
-        minute: map['endTime']['minute'],
-      ),
-      duration: map['duration'],
-    );
-  }
-
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'name': name,
-      'address': address,
-      'startTime': {
-        'hour': startTime.hour,
-        'minute': startTime.minute,
-      },
-      'endTime': {
-        'hour': endTime.hour,
-        'minute': endTime.minute,
-      },
-      'duration': duration,
-    };
   }
 }

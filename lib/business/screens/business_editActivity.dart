@@ -26,6 +26,18 @@ class _EditActivityScreenState extends State<EditActivityScreen> {
   TimeOfDay? endTime;
   int? duration;
   List<String> _suggestions = [];
+  String? selectedCategory;
+  List<String> categories = [
+    'Swimming',
+    'Foods',
+    'Adventure',
+    'Beach',
+    'Night Life',
+    'Land Tour',
+    'Hiking',
+    'Pool',
+    'Diving'
+  ];
 
   Future<List<String>> _getAddressSuggestions(String query) async {
     try {
@@ -109,6 +121,7 @@ class _EditActivityScreenState extends State<EditActivityScreen> {
     startTime = widget.activity.startTime;
     endTime = widget.activity.endTime;
     duration = widget.activity.duration;
+    selectedCategory = widget.activity.category;
   }
 
   @override
@@ -127,7 +140,7 @@ class _EditActivityScreenState extends State<EditActivityScreen> {
                 decoration: InputDecoration(labelText: 'Activity Name'),
               ),
               SizedBox(height: 16),
-              Column(
+              Stack(
                 children: [
                   TextFormField(
                     controller: addressController,
@@ -159,6 +172,25 @@ class _EditActivityScreenState extends State<EditActivityScreen> {
                       ),
                     ),
                 ],
+              ),
+              SizedBox(height: 16),
+              Text('Category'),
+              DropdownButtonFormField<String>(
+                value: selectedCategory,
+                decoration: InputDecoration(
+                  labelText: 'Category',
+                ),
+                onChanged: (value) {
+                  setState(() {
+                    selectedCategory = value;
+                  });
+                },
+                items: categories.map((category) {
+                  return DropdownMenuItem<String>(
+                    value: category,
+                    child: Text(category),
+                  );
+                }).toList(),
               ),
               SizedBox(height: 16),
               Text('Start Time'),
@@ -260,6 +292,7 @@ class _EditActivityScreenState extends State<EditActivityScreen> {
                           Activity updatedActivity = Activity(
                             id: widget.activity.id,
                             name: name,
+                            category: selectedCategory!,
                             startTime: startTime!,
                             endTime: endTime!,
                             duration: duration!,

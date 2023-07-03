@@ -612,6 +612,9 @@ class _BusinessHomeScreenState extends State<BusinessHomeScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
+                  'Category: ${activity.category}',
+                ),
+                Text(
                   'Start Time: ${activity.startTime.format(context)} - End Time: ${activity.endTime.format(context)}',
                 ),
                 Text('Duration: ${activity.duration} min'),
@@ -682,6 +685,7 @@ class Activity {
   final String id;
   final String name;
   final String address;
+  final String category;
   final TimeOfDay startTime;
   final TimeOfDay endTime;
   final int duration;
@@ -690,6 +694,7 @@ class Activity {
     required this.id,
     required this.name,
     required this.address,
+    required this.category,
     required this.startTime,
     required this.endTime,
     required this.duration,
@@ -700,6 +705,7 @@ class Activity {
       id: map['id'],
       name: map['name'],
       address: map['address'],
+      category: map['category'],
       startTime: TimeOfDay(
         hour: map['startTime']['hour'],
         minute: map['startTime']['minute'],
@@ -717,6 +723,7 @@ class Activity {
       'id': id,
       'name': name,
       'address': address,
+      'category': category,
       'startTime': {
         'hour': startTime.hour,
         'minute': startTime.minute,
