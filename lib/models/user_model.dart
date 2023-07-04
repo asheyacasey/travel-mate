@@ -69,6 +69,8 @@ class User extends Equatable {
       'bio': bio,
       'jobTitle': jobTitle,
       'radius': radius,
+      'latitude' : latitude,
+      'longitude': longitude,
       'swipeLeft': swipeLeft,
       'swipeRight': swipeRight,
       'matches': matches
