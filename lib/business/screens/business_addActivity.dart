@@ -23,7 +23,6 @@ class _AddNewActivityScreenState extends State<AddNewActivityScreen> {
   TextEditingController addressController = TextEditingController();
   TimeOfDay? startTime;
   TimeOfDay? endTime;
-  int? duration;
   String? selectedCategory;
   List<String> categories = [
     'Swimming',
@@ -217,37 +216,6 @@ class _AddNewActivityScreenState extends State<AddNewActivityScreen> {
                 ),
               ),
               SizedBox(height: 16),
-              InkWell(
-                onTap: () {
-                  Picker(
-                    adapter: NumberPickerAdapter(data: [
-                      NumberPickerColumn(
-                        begin: 5,
-                        end: 120,
-                        initValue: duration ?? 15,
-                        suffix: Text(' min'),
-                      )
-                    ]),
-                    hideHeader: true,
-                    title: Text('Select Duration'),
-                    onConfirm: (Picker picker, List<int> value) {
-                      setState(() {
-                        duration = picker.getSelectedValues()[0];
-                      });
-                    },
-                  ).showDialog(context);
-                },
-                child: Container(
-                  padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey),
-                  ),
-                  child: duration != null
-                      ? Text('$duration min')
-                      : Text('Select duration'),
-                ),
-              ),
-              SizedBox(height: 16),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -261,10 +229,11 @@ class _AddNewActivityScreenState extends State<AddNewActivityScreen> {
                     onPressed: () async {
                       if (startTime != null &&
                           endTime != null &&
-                          duration != null) {
+                          selectedCategory != null) {
                         String name = nameController.text.trim();
                         String address = addressController.text.trim();
                         if (name.isNotEmpty && address.isNotEmpty) {
+                          int duration = _calculateDuration(selectedCategory!);
                           Activity activity = Activity(
                             id: DateTime.now()
                                 .millisecondsSinceEpoch
@@ -273,7 +242,7 @@ class _AddNewActivityScreenState extends State<AddNewActivityScreen> {
                             category: selectedCategory!,
                             startTime: startTime!,
                             endTime: endTime!,
-                            duration: duration!,
+                            duration: duration,
                             address: address,
                           );
                           await _addActivity(activity);
@@ -291,5 +260,30 @@ class _AddNewActivityScreenState extends State<AddNewActivityScreen> {
         ),
       ),
     );
+  }
+
+  int _calculateDuration(String category) {
+    switch (category) {
+      case 'Swimming':
+        return 120;
+      case 'Foods':
+        return 60;
+      case 'Adventure':
+        return 60;
+      case 'Beach':
+        return 120;
+      case 'Night Life':
+        return 180;
+      case 'Land Tour':
+        return 360;
+      case 'Hiking':
+        return 180;
+      case 'Pool':
+        return 120;
+      case 'Diving':
+        return 120;
+      default:
+        return 0;
+    }
   }
 }
