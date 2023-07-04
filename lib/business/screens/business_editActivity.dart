@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_picker/flutter_picker.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -11,10 +10,11 @@ class EditActivityScreen extends StatefulWidget {
   final Activity activity;
 
   const EditActivityScreen({
-    super.key,
+    Key? key,
     required this.onActivityEdited,
     required this.activity,
-  });
+  }) : super(key: key);
+
   @override
   _EditActivityScreenState createState() => _EditActivityScreenState();
 }
@@ -24,9 +24,8 @@ class _EditActivityScreenState extends State<EditActivityScreen> {
   TextEditingController addressController = TextEditingController();
   TimeOfDay? startTime;
   TimeOfDay? endTime;
-  int? duration;
-  List<String> _suggestions = [];
   String? selectedCategory;
+  List<String> _suggestions = [];
   List<String> categories = [
     'Swimming',
     'Foods',
@@ -71,20 +70,6 @@ class _EditActivityScreenState extends State<EditActivityScreen> {
     });
   }
 
-  // Future<void> _addActivity(Activity activity) async {
-  //   try {
-  //     final userDoc = FirebaseFirestore.instance
-  //         .collection('business')
-  //         .doc('user_document');
-  //     await userDoc.update({
-  //       'activities': FieldValue.arrayUnion([activity.toMap()]),
-  //     });
-  //     print('Activity added successfully');
-  //   } catch (e) {
-  //     print('Failed to add activity: $e');
-  //   }
-  // }
-
   Future<void> _updateActivity(Activity activity) async {
     User? user = FirebaseAuth.instance.currentUser;
     if (user != null) {
@@ -120,7 +105,6 @@ class _EditActivityScreenState extends State<EditActivityScreen> {
     addressController = TextEditingController(text: widget.activity.address);
     startTime = widget.activity.startTime;
     endTime = widget.activity.endTime;
-    duration = widget.activity.duration;
     selectedCategory = widget.activity.category;
   }
 
@@ -128,7 +112,7 @@ class _EditActivityScreenState extends State<EditActivityScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add Activity'),
+        title: Text('Edit Activity'),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -241,37 +225,6 @@ class _EditActivityScreenState extends State<EditActivityScreen> {
                 ),
               ),
               SizedBox(height: 16),
-              InkWell(
-                onTap: () {
-                  Picker(
-                    adapter: NumberPickerAdapter(data: [
-                      NumberPickerColumn(
-                        begin: 5,
-                        end: 120,
-                        initValue: duration ?? 15,
-                        suffix: Text(' min'),
-                      )
-                    ]),
-                    hideHeader: true,
-                    title: Text('Select Duration'),
-                    onConfirm: (Picker picker, List<int> value) {
-                      setState(() {
-                        duration = picker.getSelectedValues()[0];
-                      });
-                    },
-                  ).showDialog(context);
-                },
-                child: Container(
-                  padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey),
-                  ),
-                  child: duration != null
-                      ? Text('$duration min')
-                      : Text('Select duration'),
-                ),
-              ),
-              SizedBox(height: 16),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -285,17 +238,20 @@ class _EditActivityScreenState extends State<EditActivityScreen> {
                     onPressed: () async {
                       if (startTime != null &&
                           endTime != null &&
-                          duration != null) {
+                          selectedCategory != null) {
                         String name = nameController.text.trim();
                         String address = addressController.text.trim();
                         if (name.isNotEmpty && address.isNotEmpty) {
+                          // Calculate duration based on selected category
+                          int duration = _calculateDuration(selectedCategory!);
+
                           Activity updatedActivity = Activity(
                             id: widget.activity.id,
                             name: name,
                             category: selectedCategory!,
                             startTime: startTime!,
                             endTime: endTime!,
-                            duration: duration!,
+                            duration: duration,
                             address: address,
                           );
                           await _updateActivity(updatedActivity);
@@ -313,5 +269,30 @@ class _EditActivityScreenState extends State<EditActivityScreen> {
         ),
       ),
     );
+  }
+
+  int _calculateDuration(String category) {
+    switch (category) {
+      case 'Swimming':
+        return 120;
+      case 'Foods':
+        return 60;
+      case 'Adventure':
+        return 60;
+      case 'Beach':
+        return 120;
+      case 'Night Life':
+        return 180;
+      case 'Land Tour':
+        return 360;
+      case 'Hiking':
+        return 180;
+      case 'Pool':
+        return 120;
+      case 'Diving':
+        return 120;
+      default:
+        return 0;
+    }
   }
 }
