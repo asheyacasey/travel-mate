@@ -3,8 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:travel_mate/screens/home/home_screen.dart';
-import 'package:travel_mate/screens/onboarding/onboarding_screen.dart';
 import 'package:travel_mate/screens/screens.dart';
 
 import '../../blocs/blocs.dart';
@@ -25,7 +23,6 @@ class SplashScreen extends StatelessWidget {
       onWillPop: () async => false,
       child: BlocListener<AuthBloc, AuthState>(
         // listenWhen: (previous, current) => previous.authUser != current.authUser,
-        // mao na sa babao ang gi add ni max sa ep 22, pero ambot ma stuck siya sa splashscreen japon
         listener: (context, state) {
           print('Listener');
           if (state.status == AuthStatus.unauthenticated) {

@@ -1,7 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:travel_mate/widgets/custom_elevated_button.dart';
-
+import 'dart:math' show cos, sqrt, asin;
 import 'package:unicons/unicons.dart';
 import '../../blocs/blocs.dart';
 import '../../widgets/choice_button.dart';
@@ -10,19 +13,6 @@ import '../../widgets/user_card.dart';
 
 class HomeScreen extends StatelessWidget {
   static const String routeName = '/';
-
-  // static Route route() {
-  //   return MaterialPageRoute(
-  //       settings: RouteSettings(name: routeName),
-  //       builder: (context) {
-  //         print(BlocProvider.of<AuthBloc>(context).state.status);
-  //         return BlocProvider.of<AuthBloc>(context).state.status ==
-  //             AuthStatus.unauthenticated
-  //             ? OnboardingScreen()
-  //             :
-  //         HomeScreen();
-  //       });
-  // }
 
   static Route route() {
     return MaterialPageRoute(
@@ -54,8 +44,15 @@ class HomeScreen extends StatelessWidget {
           return Scaffold(
             appBar: CustomAppBar(title: 'Discover'),
             body: Center(
-              child: Text('There aren\'t any more users.',
-                  style: Theme.of(context).textTheme.headline4),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('There aren\'t any more users.',
+                      style: Theme.of(context).textTheme.headline4),
+                  Text('Edit your preferences to see more users.',
+                      style: Theme.of(context).textTheme.headline4),
+                ],
+              ),
             ),
           );
         } else {
@@ -104,7 +101,7 @@ class SwipedMatchedHomeScreen extends StatelessWidget {
                     padding: const EdgeInsets.all(5.0),
                     decoration: BoxDecoration(
                         gradient: LinearGradient(colors: [
-                      Theme.of(context).accentColor,
+                      Theme.of(context).colorScheme.secondary,
                       Theme.of(context).primaryColor,
                     ])),
                     child: CircleAvatar(
@@ -236,14 +233,6 @@ class SwipeLoadedHomeScreen extends StatelessWidget {
                     icon: UniconsSolid.favorite,
                   ),
                 ),
-                // ChoiceButton(
-                //   height: 60,
-                //   width: 60,
-                //   size: 30,
-                //   hasGradient: false,
-                //   color: Theme.of(context).primaryColor,
-                //   icon: UniconsSolid.check_circle,
-                // ),
               ],
             ),
           ),

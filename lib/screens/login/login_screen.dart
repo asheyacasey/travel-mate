@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:travel_mate/blocs/auth/auth_bloc.dart';
+import 'package:travel_mate/business/screens/business_login.dart';
 import 'package:travel_mate/cubits/cubits.dart';
 import 'package:travel_mate/screens/home/home_screen.dart';
 import 'package:travel_mate/screens/onboarding/onboarding_screen.dart';
@@ -16,7 +18,7 @@ class LoginScreen extends StatelessWidget {
         settings: RouteSettings(name: routeName),
         builder: (context) {
           return BlocProvider.of<AuthBloc>(context).state.status ==
-              AuthStatus.authenticated
+                  AuthStatus.authenticated
               ? HomeScreen()
               : LoginScreen();
         });
@@ -26,15 +28,12 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      // appBar: CustomAppBar(
-      //   title: 'TravelMate',
-      //   hasAction: false,
-      // ),
       body: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 50.0),
+            padding:
+                const EdgeInsets.symmetric(horizontal: 30.0, vertical: 50.0),
             child: Column(
               children: [
                 Column(
@@ -45,16 +44,16 @@ class LoginScreen extends StatelessWidget {
                             .primaryTextTheme
                             .headline2!
                             .copyWith(
-                            height: 1.8,
-                            color: Theme.of(context).primaryColor,
-                            fontSize: 36)),
+                                height: 1.8,
+                                color: Theme.of(context).primaryColor,
+                                fontSize: 36)),
                     Text('TravelMate!',
                         style: Theme.of(context)
                             .primaryTextTheme
                             .headline2!
                             .copyWith(
-                            color: Theme.of(context).primaryColorLight,
-                            fontSize: 36)),
+                                color: Theme.of(context).primaryColorLight,
+                                fontSize: 36)),
                     SizedBox(
                       height: 10,
                     ),
@@ -64,8 +63,8 @@ class LoginScreen extends StatelessWidget {
                             .primaryTextTheme
                             .bodyText1!
                             .copyWith(
-                            color: Colors.grey,
-                            fontWeight: FontWeight.bold)),
+                                color: Colors.grey,
+                                fontWeight: FontWeight.bold)),
                     SizedBox(
                       height: 50,
                     ),
@@ -76,7 +75,7 @@ class LoginScreen extends StatelessWidget {
                     SizedBox(
                       height: 30,
                     ),
-                    CustomElevatedButton(
+                    CustomElevatedButton3(
                       text: 'Log In',
                       beginColor: Colors.white,
                       endColor: Colors.white,
@@ -93,10 +92,52 @@ class LoginScreen extends StatelessWidget {
                       beginColor: Theme.of(context).primaryColor,
                       endColor: Theme.of(context).primaryColor,
                       textColor: Colors.white,
-                      onPressed: () => Navigator.of(context).pushNamedAndRemoveUntil(
+                      onPressed: () =>
+                          Navigator.of(context).pushNamedAndRemoveUntil(
                         OnboardingScreen.routeName,
                         ModalRoute.withName(
                           '/onboarding',
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 150,),
+                    Container(
+                      // width: 20,
+                      height: 20,
+
+                      child:
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => BusinessLogin()),
+                          );
+                          // Add navigation logic here to go to the portal
+                        },
+                        child: Center(
+                          child: RichText(
+                            textAlign: TextAlign.center, // Set the text alignment to center
+                            text: TextSpan(
+                              text: 'Grow your business and be our partner. ',
+                              style: GoogleFonts.manrope(
+                                textStyle: TextStyle(
+                                  color: Colors.black45,
+                                  // Your text style here
+                                ),
+                              ),
+                              children: <TextSpan>[
+                                TextSpan(
+                                  text: 'Go to Portal',
+                                  style: GoogleFonts.manrope(
+                                    textStyle: TextStyle(
+                                      color: Colors.green, // Set the color to green
+                                      // Additional text style properties if needed
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
                       ),
                     ),
@@ -105,7 +146,7 @@ class LoginScreen extends StatelessWidget {
               ],
             ),
           ),
-        ]
+        ],
       ),
     );
   }
@@ -126,9 +167,10 @@ class EmailInput extends StatelessWidget {
             fillColor: Colors.white,
             hintText: 'Email',
             contentPadding:
-            const EdgeInsets.only(bottom: 5.0, top: 12.5, left: 15.0),
+                const EdgeInsets.only(bottom: 5.0, top: 12.5, left: 15.0),
             focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Theme.of(context).primaryColorLight),
+              borderSide:
+                  BorderSide(color: Theme.of(context).primaryColorLight),
             ),
             enabledBorder: OutlineInputBorder(
                 borderSide: BorderSide(color: Color(0xFFF5C518), width: 2),
@@ -155,9 +197,10 @@ class PasswordInput extends StatelessWidget {
             fillColor: Colors.white,
             hintText: 'Password',
             contentPadding:
-            const EdgeInsets.only(bottom: 5.0, top: 12.5, left: 15.0),
+                const EdgeInsets.only(bottom: 5.0, top: 12.5, left: 15.0),
             focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Theme.of(context).primaryColorLight),
+              borderSide:
+                  BorderSide(color: Theme.of(context).primaryColorLight),
             ),
             enabledBorder: OutlineInputBorder(
                 borderSide: BorderSide(color: Color(0xFFF5C518), width: 2),

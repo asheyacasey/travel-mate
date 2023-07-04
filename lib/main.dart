@@ -1,21 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:travel_mate/cubits/cubits.dart';
-import 'package:travel_mate/blocs/profile/profile_bloc.dart';
-
 import 'package:travel_mate/screens/screens.dart';
-
 import 'blocs/blocs.dart';
 import 'config/app_router.dart';
 import 'config/theme.dart';
-import 'cubits/signup/signup_cubit.dart';
-import 'models/user_model.dart';
+import 'firebase_options.dart';
 import 'repositories/repositories.dart';
 
 void main() async {
+  //initialize hive
+  await Hive.initFlutter();
+  //open a hive box
+  await Hive.openBox('journal_database');
+
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+    name: "travelmate-wonderpets",
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
@@ -42,7 +47,6 @@ class MyApp extends StatelessWidget {
             create: (context) => AuthBloc(
               databaseRepository: context.read<DatabaseRepository>(),
               authRepository: context.read<AuthRepository>(),
-
             ),
           ),
           BlocProvider<SignupCubit>(

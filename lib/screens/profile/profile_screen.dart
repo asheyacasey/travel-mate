@@ -1,5 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:travel_mate/screens/login/login_screen.dart';
 import 'package:travel_mate/screens/onboarding/onboarding_screen.dart';
 import 'package:travel_mate/screens/onboarding/widgets/widgets.dart';
 import 'package:travel_mate/widgets/widgets.dart';
@@ -8,7 +11,7 @@ import 'package:unicons/unicons.dart';
 import '../../blocs/blocs.dart';
 import '../../repositories/repositories.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   static const String routeName = '/profile';
 
   static Route route() {
@@ -18,9 +21,48 @@ class ProfileScreen extends StatelessWidget {
           print(BlocProvider.of<AuthBloc>(context).state.status);
           return BlocProvider.of<AuthBloc>(context).state.status ==
                   AuthStatus.unauthenticated
-              ? OnboardingScreen()
-              : ProfileScreen();
+              ? LoginScreen()
+              : BlocProvider<ProfileBloc>(
+                  create: (context) => ProfileBloc(
+                    authBloc: BlocProvider.of<AuthBloc>(context),
+                    databaseRepository: context.read<DatabaseRepository>(),
+                  )..add(
+                      LoadProfile(
+                          userId: context.read<AuthBloc>().state.authUser!.uid),
+                    ),
+                  child: ProfileScreen(),
+                );
         });
+  }
+
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  int _radius = 100;
+
+  Future<void> _updateRadius() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      try {
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(user.uid)
+            .update({'radius': _radius});
+        print('Radius is saved in the Firestore: $_radius');
+
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('Radius updated to $_radius km'),
+        ));
+      } catch (error) {
+        print('Failed to save radius: $error');
+
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('Failed to update radius'),
+        ));
+      }
+    }
   }
 
   @override
@@ -39,6 +81,7 @@ class ProfileScreen extends StatelessWidget {
             }
             if (state is ProfileLoaded) {
               return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(
                     height: 10,
@@ -85,154 +128,162 @@ class ProfileScreen extends StatelessWidget {
                     ],
                   ),
                   Padding(
-                    padding:
-                        const EdgeInsets.only(left: 20, right: 20, bottom: 20),
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      children: [
+                        CustomElevatedButton(
+                          text: 'View',
+                          beginColor: state.isEditingOn
+                              ? Colors.white
+                              : Theme.of(context).primaryColor,
+                          endColor: state.isEditingOn
+                              ? Colors.white
+                              : Theme.of(context).colorScheme.secondary,
+                          textColor:
+                              state.isEditingOn ? Colors.black : Colors.white,
+                          width: MediaQuery.of(context).size.width * 0.45,
+                          onPressed: () {
+                            context.read<ProfileBloc>().add(
+                                  SaveProfile(user: state.user),
+                                );
+                          },
+                        ),
+                        SizedBox(width: 10),
+                        CustomElevatedButton(
+                          text: 'Edit',
+                          beginColor: state.isEditingOn
+                              ? Theme.of(context).primaryColor
+                              : Colors.white,
+                          endColor: state.isEditingOn
+                              ? Theme.of(context).colorScheme.secondary
+                              : Colors.white,
+                          textColor:
+                              state.isEditingOn ? Colors.white : Colors.black,
+                          width: MediaQuery.of(context).size.width * 0.45,
+                          onPressed: () {
+                            context.read<ProfileBloc>().add(
+                                  EditProfile(
+                                    isEditingOn: true,
+                                  ),
+                                );
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(20.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Container(
-                          width: MediaQuery.of(context).size.width,
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: Theme.of(context).primaryColor,
-                            ),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: Column(
-                              children: [
-                                TitleWithIcon(
-                                    title: 'Profile Summary',
-                                    icon: UniconsLine.edit),
-                                Text(
-                                  context.read<AuthBloc>().state.user!.bio,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyText1!
-                                      .copyWith(height: 1.5),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Container(
-                          width: MediaQuery.of(context).size.width,
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: Theme.of(context).primaryColor,
-                            ),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: Column(
-                              children: [
-                                TitleWithIcon(
-                                    title: 'I\'m interested in...',
-                                    icon: UniconsLine.edit),
-                                Row(
-                                  children: [
-                                    CustomTextContainer(
-                                        text: state.user.interests[0]),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        TitleWithIcon(title: 'Photos', icon: UniconsLine.edit),
-                        SizedBox(
-                          height: 125,
-                          child: ListView.builder(
-                              itemCount: context
-                                  .read<AuthBloc>()
-                                  .state
-                                  .user!
-                                  .imageUrls
-                                  .length,
-                              shrinkWrap: true,
-                              scrollDirection: Axis.horizontal,
-                              itemBuilder: (context, index) {
-                                return Padding(
-                                  padding: const EdgeInsets.only(right: 5),
-                                  child: UserImage.small(
-                                    width: 100,
-                                    height: 125,
-                                    url: context
+                        _TextField(
+                          title: 'Biography',
+                          value: context.read<AuthBloc>().state.user!.bio,
+                          onChanged: (value) {
+                            context.read<ProfileBloc>().add(
+                                  UpdateUserProfile(
+                                    user: context
                                         .read<AuthBloc>()
                                         .state
                                         .user!
-                                        .imageUrls[index],
-                                    border: Border.all(
-                                      color: Theme.of(context).primaryColor,
-                                      width: 2,
-                                    ),
+                                        .copyWith(bio: value),
                                   ),
                                 );
-                              }),
+                          },
                         ),
                         SizedBox(
-                          height: 15,
+                          height: 10,
                         ),
-                        Container(
-                          width: MediaQuery.of(context).size.width,
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: Theme.of(context).primaryColor,
-                            ),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Row(
-                              children: [
-                                Container(
-                                  child: Icon(
-                                    UniconsLine.user_location,
-                                    color: Theme.of(context).primaryColor,
-                                    size: 30,
+                        _TextField(
+                          title: 'Age',
+                          value: '${context.read<AuthBloc>().state.user!.age}',
+                          onChanged: (value) {
+                            if (value == null) {
+                              return;
+                            }
+                            if (value == '') {
+                              return;
+                            }
+                            context.read<ProfileBloc>().add(
+                                  UpdateUserProfile(
+                                    user: context
+                                        .read<AuthBloc>()
+                                        .state
+                                        .user!
+                                        .copyWith(age: int.parse(value)),
                                   ),
-                                ),
-                                SizedBox(
-                                  width: 2,
-                                ),
-                                Text(
-                                  context.read<AuthBloc>().state.user!.location,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headline4!
-                                      .copyWith(height: 1.5),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            RepositoryProvider.of<AuthRepository>(context)
-                                .signOut();
+                                );
                           },
-                          child: Center(
-                            child: Text(
-                              'Sign Out',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headline5!
-                                  .copyWith(
-                                      color: Theme.of(context).primaryColor),
-                            ),
-                          ),
                         ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        _TextField(
+                          title: 'Job Title',
+                          value:
+                              '${context.read<AuthBloc>().state.user!.jobTitle}',
+                          onChanged: (value) {
+                            context.read<ProfileBloc>().add(
+                                  UpdateUserProfile(
+                                    user: context
+                                        .read<AuthBloc>()
+                                        .state
+                                        .user!
+                                        .copyWith(jobTitle: value),
+                                  ),
+                                );
+                          },
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        _Pictures(),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        _Interests(),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        if (state.isEditingOn)
+                          Column(
+                            children: [
+                              Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    'Up to ${_radius / 1000} km away',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headline4!
+                                        .copyWith(fontWeight: FontWeight.w900),
+                                  )),
+                              Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    'See people slightly further away',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headlineSmall!
+                                        .copyWith(fontWeight: FontWeight.w900),
+                                  )),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              CustomSlider(
+                                value: _radius.toDouble(),
+                                onChanged: (double value) {
+                                  setState(() {
+                                    _radius = value.round();
+                                  });
+                                  _updateRadius();
+                                },
+                              ),
+                            ],
+                          ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        _Signout(),
                       ],
                     ),
                   ),
@@ -248,37 +299,200 @@ class ProfileScreen extends StatelessWidget {
   }
 }
 
-class TitleWithIcon extends StatelessWidget {
+class _TextField extends StatelessWidget {
   final String title;
-  final IconData icon;
+  final String value;
+  final Function(String?) onChanged;
 
-  const TitleWithIcon({
+  const _TextField({
     Key? key,
     required this.title,
-    required this.icon,
+    required this.value,
+    required this.onChanged,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          title,
-          style: Theme.of(context)
-              .textTheme
-              .headline4!
-              .copyWith(fontWeight: FontWeight.w900),
-        ),
-        IconButton(
-          onPressed: () {},
-          icon: Icon(
-            icon,
-            color: Colors.grey,
-            size: 15,
-          ),
-        ),
-      ],
+    return BlocBuilder<ProfileBloc, ProfileState>(
+      builder: (context, state) {
+        state as ProfileLoaded;
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              title,
+              style: Theme.of(context)
+                  .textTheme
+                  .headline4!
+                  .copyWith(fontWeight: FontWeight.w900),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            state.isEditingOn
+                ? CustomTextField(
+                    initialValue: value,
+                    onChanged: onChanged,
+                    padding: EdgeInsets.zero,
+                  )
+                : Container(
+                    width: MediaQuery.of(context).size.width,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Theme.of(context).primaryColor),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(value,
+                              style: Theme.of(context).textTheme.headline6)
+                        ],
+                      ),
+                    ),
+                  ),
+            SizedBox(),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class _Pictures extends StatelessWidget {
+  const _Pictures({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<ProfileBloc, ProfileState>(
+      builder: (context, state) {
+        state as ProfileLoaded;
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Photos',
+              style: Theme.of(context)
+                  .textTheme
+                  .headline4!
+                  .copyWith(fontWeight: FontWeight.w900),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            SizedBox(
+              height: 125,
+              child: ListView.builder(
+                  itemCount:
+                      context.read<AuthBloc>().state.user!.imageUrls.length,
+                  shrinkWrap: true,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.only(right: 5),
+                      child: UserImage.small(
+                        width: 100,
+                        height: 125,
+                        url: context
+                            .read<AuthBloc>()
+                            .state
+                            .user!
+                            .imageUrls[index],
+                        border: Border.all(
+                          color: Theme.of(context).primaryColor,
+                          width: 2,
+                        ),
+                      ),
+                    );
+                  }),
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class _Interests extends StatelessWidget {
+  const _Interests({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<ProfileBloc, ProfileState>(
+      builder: (context, state) {
+        state as ProfileLoaded;
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Interests',
+              style: Theme.of(context)
+                  .textTheme
+                  .headline4!
+                  .copyWith(fontWeight: FontWeight.w900),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Container(
+              width: MediaQuery.of(context).size.width,
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: Theme.of(context).primaryColor,
+                ),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Wrap(
+                  spacing: 10.0,
+                  runSpacing: 10.0,
+                  children: state.user.interests
+                      .map((interest) => CustomTextContainer(text: interest))
+                      .toList(),
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class _Signout extends StatelessWidget {
+  const _Signout({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<ProfileBloc, ProfileState>(
+      builder: (context, state) {
+        state as ProfileLoaded;
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            TextButton(
+              onPressed: () {
+                RepositoryProvider.of<AuthRepository>(context).signOut();
+                Navigator.pushNamedAndRemoveUntil(
+                    context, '/login', (route) => false);
+              },
+              child: Center(
+                child: Text(
+                  'Sign Out',
+                  style: Theme.of(context)
+                      .textTheme
+                      .headline5!
+                      .copyWith(color: Theme.of(context).primaryColor),
+                ),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }

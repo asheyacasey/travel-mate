@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:unicons/unicons.dart';
 
-class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
+class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final bool hasAction;
 
@@ -23,10 +23,18 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
       ),
       title: Text(
         title,
-        style: Theme.of(context).primaryTextTheme.headline2,
+        style: Theme.of(context).primaryTextTheme.displayMedium,
       ),
       actions: hasAction
           ? [
+              IconButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/mainJournal');
+                  },
+                  icon: Icon(
+                    UniconsLine.notes,
+                    color: Theme.of(context).primaryColor,
+                  )),
               IconButton(
                   onPressed: () {
                     Navigator.pushNamed(context, '/matches');
