@@ -3,6 +3,7 @@ import 'package:rxdart/rxdart.dart';
 import 'package:travel_mate/models/models.dart';
 import 'package:travel_mate/repositories/database/base_database_repository.dart';
 import 'package:travel_mate/repositories/storage/storage_repository.dart';
+import 'dart:math' as math;
 
 class DatabaseRepository extends BaseDatabaseRepository {
   final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
@@ -62,63 +63,83 @@ class DatabaseRepository extends BaseDatabaseRepository {
     }
   }
 
-  // @override
-  // Stream<List<User>> getUsers(User user) {
-  //   print('getUsers is running...');
-  //   return _firebaseFirestore
-  //       .collection('users')
-  //       .where('gender', isEqualTo: _selectGender(user))
-  //       .snapshots()
-  //       .map((snap) {
-  //     // You can map over the documents and print their contents.
-  //     return snap.docs.map((doc) {
-  //       User mappedUser = User.fromSnapshot(doc);
-  //       print('Mapped user: ${mappedUser.toString()}');
-  //       return mappedUser;
-  //     }).toList();
-  //   }).handleError((onError) {
-  //     print('An error occurred: $onError');
-  //   });
-  // }
-
-
-
   Stream<List<User>> getUsers(User user) {
     print('getUsers is running...');
+    double userLatitude =
+        user.latitude; // Fetch the latitude of the current user from Firestore
+    double userLongitude = user
+        .longitude; // Fetch the longitude of the current user from Firestore
+    double userRadius = user.radius /
+        1000; // Fetch the radius of the current user from Firestore
+
     return _firebaseFirestore
         .collection('users')
         .where('gender', isEqualTo: _selectGender(user))
         .snapshots()
         .map((snap) {
-      // Map the documents to User objects and then filter based on interests.
-      List<User> users = snap.docs.map((doc) => User.fromSnapshot(doc)).toList();
-      return users.where((currentUser) {
-        bool interestMatches = currentUser.interests.any((interest) => user.interests.contains(interest));
+      // Map the documents to User objects and then filter based on interests and location
+      List<User> users =
+          snap.docs.map((doc) => User.fromSnapshot(doc)).toList();
+
+      List<User> filteredUsers = users.where((currentUser) {
+        // Calculate the distance between the current user and each user in the collection
+        double distance = calculateDistance(
+          userLatitude,
+          userLongitude,
+          currentUser.latitude,
+          currentUser.longitude,
+        );
+
+        // Check if the distance is within the maximum radius of the current user
+        bool isWithinMaxDistance = distance <= userRadius;
+
+        // Filter based on interests and location
+        bool interestMatches = currentUser.interests
+            .any((interest) => user.interests.contains(interest));
+
         print('User ${currentUser.id} interest matches: $interestMatches');
-        return interestMatches;
+        print(
+            'User ${currentUser.id} is within max distance: $isWithinMaxDistance');
+
+        print(
+            'User ${currentUser.id} is at a distance of: $distance'); // Print the calculated distance
+        print(
+            'User ${currentUser.id} max distance: $userRadius'); // Print the user's maximum distance
+
+        // Check if both interestMatches and isWithinMaxDistance are true
+        return interestMatches && isWithinMaxDistance;
       }).toList();
+
+      return filteredUsers;
     }).handleError((onError) {
       print('An error occurred: $onError');
     });
   }
 
+// Helper function to calculate the distance between two locations using the Haversine formula
+  double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
+    const int earthRadius = 6371; // Radius of the Earth in kilometers
 
+    double dLat = _toRadians(lat2 - lat1);
+    double dLon = _toRadians(lon2 - lon1);
 
+    double a = math.sin(dLat / 2) * math.sin(dLat / 2) +
+        math.cos(_toRadians(lat1)) *
+            math.cos(_toRadians(lat2)) *
+            math.sin(dLon / 2) *
+            math.sin(dLon / 2);
 
+    double c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a));
+    double distance = earthRadius * c;
 
+    return distance;
+  }
 
-
-
-
-
-
-
-
-
-
+  double _toRadians(double degree) {
+    return degree * (math.pi / 180);
+  }
 
   Stream<List<User>> getUsersWithMatchingInterests(User user) {
-
     print('getUsersWithMatchingInterests is running...');
     return _firebaseFirestore
         .collection('users')
@@ -126,13 +147,11 @@ class DatabaseRepository extends BaseDatabaseRepository {
         .snapshots()
         .map((snap) {
       return snap.docs
-          .where((doc) =>
-          user.interests.contains(doc.get('interests')))
+          .where((doc) => user.interests.contains(doc.get('interests')))
           .map((doc) => User.fromSnapshot(doc))
           .toList();
     });
   }
-
 
   @override
   Stream<List<User>> getUsersToSwipe(User user) {
