@@ -84,7 +84,7 @@ class PackagesScreen extends StatelessWidget {
 
   List<Package> generatePackages(List<Activity> activities, int numberOfDays) {
     List<Package> packages = [];
-    Package currentPackage = Package();
+    Package currentPackage = Package(activities: []);
 
     activities.sort((a, b) {
       DateTime dateTimeA = DateTime(
@@ -119,8 +119,8 @@ class PackagesScreen extends StatelessWidget {
         currentPackage.activities.add(activity);
       } else {
         packages.add(currentPackage);
-        currentPackage = Package();
-        currentPackage.activities.add(activity);
+        Package newPackage = Package(activities: []);
+        currentPackage = newPackage;
       }
     }
 
