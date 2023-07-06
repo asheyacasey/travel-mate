@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:travel_mate/blocs/auth/auth_bloc.dart';
 import 'package:travel_mate/blocs/blocs.dart';
 import 'package:travel_mate/repositories/database/database_repository.dart';
+import 'package:travel_mate/screens/chat/packages_screen.dart';
 import 'package:unicons/unicons.dart';
 import 'package:travel_mate/models/models.dart';
 import 'package:uuid/uuid.dart';
@@ -233,8 +234,13 @@ Widget _buildBottomModal(BuildContext context) {
         SizedBox(height: 16.0),
         ElevatedButton(
           onPressed: () {
-            Navigator.pop(context);
-            // Handle the selected options and perform necessary actions
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                    PackagesScreen(numberOfDays: selectedDays),
+              ),
+            );
           },
           child: Text('Generate'),
         ),

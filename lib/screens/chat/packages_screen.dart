@@ -58,12 +58,15 @@ class PackagesScreen extends StatelessWidget {
     snapshot.docs.forEach((doc) {
       List<dynamic> activityList = doc['activities'];
       activityList.forEach((activityData) {
+        TimeOfDay startTime = _convertToTimeOfDay(activityData['startTime']);
+        TimeOfDay endTime = _convertToTimeOfDay(activityData['endTime']);
+
         Activity activity = Activity(
-          activityName: activityData['activityName'],
+          activityName: activityData['name'],
           category: activityData['category'],
           address: activityData['address'],
-          timeStart: activityData['timeStart'],
-          timeEnd: activityData['timeEnd'],
+          timeStart: startTime,
+          timeEnd: endTime,
           duration: activityData['duration'],
         );
         activities.add(activity);
@@ -73,17 +76,46 @@ class PackagesScreen extends StatelessWidget {
     return generatePackages(activities, numberOfDays);
   }
 
+  TimeOfDay _convertToTimeOfDay(Map<String, dynamic> timeMap) {
+    int hour = timeMap['hour'];
+    int minute = timeMap['minute'];
+    return TimeOfDay(hour: hour, minute: minute);
+  }
+
   List<Package> generatePackages(List<Activity> activities, int numberOfDays) {
     List<Package> packages = [];
     Package currentPackage = Package();
 
-    activities.sort((a, b) => a.timeStart.compareTo(b.timeStart));
+    activities.sort((a, b) {
+      DateTime dateTimeA = DateTime(
+        DateTime.now().year,
+        DateTime.now().month,
+        DateTime.now().day,
+        a.timeStart.hour,
+        a.timeStart.minute,
+      );
+      DateTime dateTimeB = DateTime(
+        DateTime.now().year,
+        DateTime.now().month,
+        DateTime.now().day,
+        b.timeStart.hour,
+        b.timeStart.minute,
+      );
+
+      int timeComparison = dateTimeA.compareTo(dateTimeB);
+      if (timeComparison != 0) {
+        return timeComparison; // Sort by start time
+      } else {
+        return a.duration
+            .compareTo(b.duration); // Sort by duration (secondary criteria)
+      }
+    });
 
     for (int i = 0; i < activities.length; i++) {
       Activity activity = activities[i];
       int totalDuration = currentPackage.totalDuration + activity.duration;
 
-      if (totalDuration <= (numberOfDays * 600)) {
+      if (totalDuration <= (numberOfDays * 120)) {
         currentPackage.activities.add(activity);
       } else {
         packages.add(currentPackage);
