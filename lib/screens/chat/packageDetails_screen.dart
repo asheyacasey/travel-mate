@@ -18,7 +18,7 @@ class PackageDetailsScreen extends StatelessWidget {
       Activity activity = activities[i];
       totalDuration += activity.duration;
 
-      if (totalDuration > 600) {
+      if (totalDuration > 120) {
         currentDay++;
         totalDuration = activity.duration;
       }

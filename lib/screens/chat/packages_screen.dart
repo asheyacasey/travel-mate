@@ -72,7 +72,7 @@ class PackagesScreen extends StatelessWidget {
         activities.add(activity);
       });
     });
-
+    activities.forEach((act) => print(act.activityName));
     return generatePackages(activities, numberOfDays);
   }
 
@@ -110,12 +110,13 @@ class PackagesScreen extends StatelessWidget {
             .compareTo(b.duration); // Sort by duration (secondary criteria)
       }
     });
-
+    print('THIS IS SORTED');
+    activities.forEach((act) => print(act.activityName));
     for (int i = 0; i < activities.length; i++) {
       Activity activity = activities[i];
       int totalDuration = currentPackage.totalDuration + activity.duration;
 
-      if (totalDuration <= (numberOfDays * 120)) {
+      if (totalDuration <= (numberOfDays * 180)) {
         currentPackage.activities.add(activity);
       } else {
         packages.add(currentPackage);
