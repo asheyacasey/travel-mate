@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_picker/flutter_picker.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -70,20 +71,6 @@ class _AddNewActivityScreenState extends State<AddNewActivityScreen> {
     });
   }
 
-  // Future<void> _addActivity(Activity activity) async {
-  //   try {
-  //     final userDoc = FirebaseFirestore.instance
-  //         .collection('business')
-  //         .doc('user_document');
-  //     await userDoc.update({
-  //       'activities': FieldValue.arrayUnion([activity.toMap()]),
-  //     });
-  //     print('Activity added successfully');
-  //   } catch (e) {
-  //     print('Failed to add activity: $e');
-  //   }
-  // }
-
   Future<void> _addActivity(Activity activity) async {
     User? user = FirebaseAuth.instance.currentUser;
     if (user != null) {
@@ -103,7 +90,15 @@ class _AddNewActivityScreenState extends State<AddNewActivityScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add Activity'),
+        elevation: 0.0,
+        backgroundColor: Theme.of(context).primaryColorLight,
+        title: Text(
+          'Add Activity',
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -120,6 +115,7 @@ class _AddNewActivityScreenState extends State<AddNewActivityScreen> {
                   TextFormField(
                     controller: addressController,
                     decoration: InputDecoration(
+                      labelText: 'Location',
                       hintText: 'Enter your business address',
                     ),
                     onChanged: (query) {
@@ -148,8 +144,7 @@ class _AddNewActivityScreenState extends State<AddNewActivityScreen> {
                     ),
                 ],
               ),
-              SizedBox(height: 16),
-              Text('Category'),
+              // SizedBox(height: 10),
               DropdownButtonFormField<String>(
                 value: selectedCategory,
                 decoration: InputDecoration(
@@ -167,94 +162,185 @@ class _AddNewActivityScreenState extends State<AddNewActivityScreen> {
                   );
                 }).toList(),
               ),
-              SizedBox(height: 16),
-              Text('Start Time'),
-              InkWell(
-                onTap: () async {
-                  TimeOfDay? selectedTime = await showTimePicker(
-                    context: context,
-                    initialTime: startTime ?? TimeOfDay.now(),
-                  );
-                  if (selectedTime != null) {
-                    setState(() {
-                      startTime = selectedTime;
-                    });
-                  }
-                },
-                child: Container(
-                  padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey),
-                  ),
-                  child: startTime != null
-                      ? Text('${startTime!.format(context)}')
-                      : Text('Select start time'),
-                ),
-              ),
-              SizedBox(height: 16),
-              Text('End Time'),
-              InkWell(
-                onTap: () async {
-                  TimeOfDay? selectedTime = await showTimePicker(
-                    context: context,
-                    initialTime: TimeOfDay.now(),
-                  );
-                  if (selectedTime != null) {
-                    setState(() {
-                      endTime = selectedTime;
-                    });
-                  }
-                },
-                child: Container(
-                  padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey),
-                  ),
-                  child: endTime != null
-                      ? Text('${endTime!.format(context)}')
-                      : Text('Select end time'),
-                ),
-              ),
-              SizedBox(height: 16),
+              SizedBox(height: 25),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: Text('Cancel'),
-                  ),
-                  ElevatedButton(
-                    onPressed: () async {
-                      if (startTime != null &&
-                          endTime != null &&
-                          selectedCategory != null) {
-                        String name = nameController.text.trim();
-                        String address = addressController.text.trim();
-                        if (name.isNotEmpty && address.isNotEmpty) {
-                          int duration = _calculateDuration(selectedCategory!);
-                          Activity activity = Activity(
-                            id: DateTime.now()
-                                .millisecondsSinceEpoch
-                                .toString(),
-                            name: name,
-                            category: selectedCategory!,
-                            startTime: startTime!,
-                            endTime: endTime!,
-                            duration: duration,
-                            address: address,
-                          );
-                          await _addActivity(activity);
-                          Navigator.pop(context);
-                          widget.onActivityAdded();
-                        }
-                      }
-                    },
-                    child: Text('Add'),
+                  Text(
+                    'Start Time',
+                    style: TextStyle(
+                      fontSize: 12,
+                    ),
                   ),
                 ],
               ),
+              SizedBox(height: 10),
+              Row(
+                children: [
+                  Expanded(
+                    child: InkWell(
+                      onTap: () async {
+                        TimeOfDay? selectedTime = await showTimePicker(
+                          context: context,
+                          initialTime: startTime ?? TimeOfDay.now(),
+                        );
+                        if (selectedTime != null) {
+                          setState(() {
+                            startTime = selectedTime;
+                          });
+                        }
+                      },
+                      child: Container(
+                        width: double.infinity,
+                        padding:
+                            EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: startTime != null
+                            ? Text(
+                                '${startTime!.format(context)}',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.black,
+                                ),
+                              )
+                            : Text(
+                                'Select start time',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 16),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    'End Time',
+                    style: TextStyle(
+                      fontSize: 12,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 10),
+              Row(
+                children: [
+                  Expanded(
+                    child: InkWell(
+                      onTap: () async {
+                        TimeOfDay? selectedTime = await showTimePicker(
+                          context: context,
+                          initialTime: TimeOfDay.now(),
+                        );
+                        if (selectedTime != null) {
+                          setState(() {
+                            endTime = selectedTime;
+                          });
+                        }
+                      },
+                      child: Container(
+                        padding:
+                            EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: endTime != null
+                            ? Text(
+                                '${endTime!.format(context)}',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.black,
+                                ),
+                              )
+                            : Text(
+                                'Select end time',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+
+              SizedBox(height: 35),
+              TextButton(
+                onPressed: () async {
+                  if (startTime != null &&
+                      endTime != null &&
+                      selectedCategory != null) {
+                    String name = nameController.text.trim();
+                    String address = addressController.text.trim();
+                    if (name.isNotEmpty && address.isNotEmpty) {
+                      int duration = _calculateDuration(selectedCategory!);
+                      Activity activity = Activity(
+                        id: DateTime.now().millisecondsSinceEpoch.toString(),
+                        name: name,
+                        category: selectedCategory!,
+                        startTime: startTime!,
+                        endTime: endTime!,
+                        duration: duration,
+                        address: address,
+                      );
+                      await _addActivity(activity);
+                      Navigator.pop(context);
+                      widget.onActivityAdded();
+                    }
+                  }
+                },
+                child: Text(
+                  'Add',
+                  style: GoogleFonts.manrope(
+                    textStyle: TextStyle(
+                      fontSize: 16,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+                style: TextButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20.0),
+                  ),
+                  backgroundColor: Color(0xFFB0DB2D),
+                  minimumSize: Size(double.infinity, 55.0),
+                ),
+              ),
+              SizedBox(height: 16),
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text(
+                  'Cancel',
+                  style: GoogleFonts.manrope(
+                    textStyle: TextStyle(
+                      fontSize: 16,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+                style: TextButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20.0),
+                  ),
+                  backgroundColor: Color(0xFFF55F5F),
+                  minimumSize: Size(double.infinity, 55.0),
+                ),
+              ),
+
             ],
           ),
         ),

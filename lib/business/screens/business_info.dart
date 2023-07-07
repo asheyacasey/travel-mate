@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:travel_mate/business/screens/business_home.dart';
 
@@ -141,7 +142,15 @@ class _BusinessInfoScreenState extends State<BusinessInfoScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Business Information'),
+        elevation: 0.0,
+        backgroundColor: Theme.of(context).primaryColorLight,
+        title: Text(
+          'Business Information',
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -151,11 +160,13 @@ class _BusinessInfoScreenState extends State<BusinessInfoScreen> {
             children: [
               Text(
                 'Enter Your Business Information',
-                style: Theme.of(context).primaryTextTheme.headline6!.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+                style: Theme.of(context).primaryTextTheme.headline2!.copyWith(
+
+                  color: Theme.of(context).primaryColor,
+                  fontSize: 28,
+                ),
               ),
-              SizedBox(height: 20),
+              SizedBox(height: 40),
               Text(
                 'Business Name',
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
@@ -180,10 +191,13 @@ class _BusinessInfoScreenState extends State<BusinessInfoScreen> {
                       hintText: 'Enter your business address',
                       errorText: _businessAddressError,
                     ),
-                    onChanged: (query) {
+                    onChanged: (query){
                       _updateAddressSuggestions(query);
                     },
                   ),
+
+
+
                   SizedBox(height: 10),
                   if (_addressSuggestions.isNotEmpty)
                     Container(
@@ -206,11 +220,34 @@ class _BusinessInfoScreenState extends State<BusinessInfoScreen> {
                     ),
                 ],
               ),
-              SizedBox(height: 20),
-              ElevatedButton(
+              SizedBox(height: 50),
+              // ElevatedButton(
+              //   onPressed: _isFormValid ? null : saveBusinessInfo,
+              //   child: Text('SAVE INFO'),
+              // ),
+              TextButton(
+                style: TextButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20.0),
+                  ),
+                  backgroundColor: Color(0xFFB0DB2D),
+                  minimumSize: Size(double.infinity, 55.0), // Set button height
+                ),
                 onPressed: _isFormValid ? null : saveBusinessInfo,
-                child: Text('SAVE INFO'),
-              ),
+                child: Text(
+                  'SAVE INFO',
+                  style: GoogleFonts.manrope(
+                    textStyle: TextStyle(
+                      fontSize: 16,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+              )
+
+
+
             ],
           ),
         ),
