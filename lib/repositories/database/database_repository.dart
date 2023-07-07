@@ -155,7 +155,7 @@ class DatabaseRepository extends BaseDatabaseRepository {
 
   @override
   Stream<List<User>> getUsersToSwipe(User user) {
-    return Rx.combineLatest2(getUser(user.id!), getUsers(user), (
+    return Rx.combineLatest2(getUser(user.id), getUsers(user), (
       User currentUser,
       List<User> users,
     ) {
@@ -217,7 +217,7 @@ class DatabaseRepository extends BaseDatabaseRepository {
   @override
   Stream<List<Match>> getMatches(User user) {
     return Rx.combineLatest3(
-        getUser(user.id!), getChats(user.id!), getUsers(user), (
+        getUser(user.id), getChats(user.id), getUsers(user), (
       User user,
       List<Chat> userChats,
       List<User> otherUsers,
@@ -232,7 +232,7 @@ class DatabaseRepository extends BaseDatabaseRepository {
               chat.userIds.contains(user.id);
         }).first;
 
-        return Match(userId: user.id!, matchUser: matchUser, chat: chat);
+        return Match(userId: user.id, matchUser: matchUser, chat: chat);
       }).toList();
     });
   }
@@ -326,6 +326,7 @@ class DatabaseRepository extends BaseDatabaseRepository {
       } else {
         print('Document not found.');
       }
+    // ignore: body_might_complete_normally_catch_error
     }).catchError((error) {
       print('Error retrieving document: $error');
     });

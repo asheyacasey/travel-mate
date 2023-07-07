@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:travel_mate/screens/journal/journal_data.dart';
-import 'package:travel_mate/widgets/widgets.dart';
 import 'package:unicons/unicons.dart';
 
 import 'editingJournalPage.dart';

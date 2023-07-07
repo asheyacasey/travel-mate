@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:unicons/unicons.dart';
 
 class CustomTextField extends StatelessWidget {
   final TextEditingController? controller;

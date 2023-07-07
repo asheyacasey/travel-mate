@@ -1,10 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:travel_mate/widgets/custom_elevated_button.dart';
-import 'dart:math' show cos, sqrt, asin;
 import 'package:unicons/unicons.dart';
 import '../../blocs/blocs.dart';
 import '../../widgets/choice_button.dart';

@@ -2,11 +2,9 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:travel_mate/models/user_model.dart';
 import 'package:travel_mate/repositories/auth/auth_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 
-import '../../blocs/onboarding/onboarding_bloc.dart';
 
 part 'signup_state.dart';
 

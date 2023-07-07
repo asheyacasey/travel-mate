@@ -121,7 +121,6 @@ class _LocationTabState extends State<LocationTab> {
     }
   }
 
-  @override
   double _radius = 1000.0;
 
   Widget build(BuildContext context) {

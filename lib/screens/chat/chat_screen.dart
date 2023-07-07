@@ -1,6 +1,4 @@
-import 'dart:math';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:travel_mate/blocs/auth/auth_bloc.dart';
@@ -224,7 +222,7 @@ class _MessageInput extends StatelessWidget {
                     ..add(
                       AddMessage(
                         userId: match.userId,
-                        matchUserId: match.matchUser.id!,
+                        matchUserId: match.matchUser.id,
                         message: controller.text,
                         messageId: uuid,
                         itinerary: finalOption,
@@ -380,7 +378,7 @@ class _Message extends StatelessWidget {
                               String newId = Uuid().v4();
                               context.read<ChatBloc>().add(
                                     UpdateMessage(
-                                      userId: match.matchUser.id!,
+                                      userId: match.matchUser.id,
                                       matchUserId: match.userId,
                                       itinerary: itinerary,
                                       isAccepted: 1,
@@ -403,7 +401,7 @@ class _Message extends StatelessWidget {
                               String newId = Uuid().v4();
                               context.read<ChatBloc>().add(
                                     UpdateMessage(
-                                      userId: match.matchUser.id!,
+                                      userId: match.matchUser.id,
                                       matchUserId: match.userId,
                                       itinerary: itinerary,
                                       isAccepted: 0,

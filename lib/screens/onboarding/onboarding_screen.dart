@@ -62,7 +62,7 @@ class OnboardingScreen extends StatelessWidget {
       child: DefaultTabController(
         length: tabs.length,
         child: Builder(builder: (BuildContext context) {
-          final TabController tabController = DefaultTabController.of(context)!;
+          final TabController tabController = DefaultTabController.of(context);
           return Scaffold(
               resizeToAvoidBottomInset: false,
               body: TabBarView(children: [

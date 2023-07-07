@@ -6,6 +6,7 @@ import 'package:unicons/unicons.dart';
 import '../../../blocs/blocs.dart';
 import '../widgets/widgets.dart';
 
+// ignore: must_be_immutable
 class Biography extends StatelessWidget {
   final TabController tabController;
   String? interest;

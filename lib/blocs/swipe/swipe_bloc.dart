@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
 
 import 'package:travel_mate/models/models.dart';
 
@@ -66,7 +65,7 @@ class SwipeBloc extends Bloc<SwipeEvent, SwipeState> {
 
           _databaseRepository.updateUserSwipe(
               _authBloc.state.authUser!.uid,
-              event.user.id!,
+              event.user.id,
               false
           );
 
@@ -90,14 +89,14 @@ class SwipeBloc extends Bloc<SwipeEvent, SwipeState> {
        await _databaseRepository.updateUserSwipe( // <-- Kani ay
              _authBloc.state.authUser!.uid,
              //  userId,
-              event.user.id!,
+              event.user.id,
               true,
        );
 
       if(event.user.swipeRight!.contains(userId)) {
       await _databaseRepository.updateUserMatch(
           userId,
-          event.user.id!,
+          event.user.id,
       );
       emit (SwipeMatched(user: event.user));
     } else if (users.isNotEmpty) {
