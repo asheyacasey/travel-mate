@@ -600,7 +600,7 @@ class _BusinessHomeScreenState extends State<BusinessHomeScreen> {
       appBar: AppBar(
         elevation: 0.0,
         backgroundColor: Theme.of(context).primaryColorLight,
-        title: Text('Welcome $businessName',
+        title: Text('Welcome, $businessName!',
         style: TextStyle(
           fontSize: 16,
           fontWeight: FontWeight.bold
@@ -610,127 +610,97 @@ class _BusinessHomeScreenState extends State<BusinessHomeScreen> {
         actions: [IconButton(onPressed: _logout, icon: Icon(Icons.logout))],
       ),
 
-      body: Container(
-
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: ListView.builder(
-            itemCount: activities.length,
-            itemBuilder: (context, index) {
-              final activity = activities[index];
-
-              return ListTile(
-                title: Text(
-                  activity.name,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                  ),
+      body:Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                'Activity List',
+                style: Theme.of(context).primaryTextTheme.headline2!.copyWith(
+                  height: 1.8,
+                  color: Color(0xFF93B71D),
+                  fontSize: 25,
                 ),
-                subtitle: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(height: 4),
-                    Text(
-                      'Category: ${activity.category}',
-                      style: TextStyle(fontSize: 14),
-                    ),
-                    SizedBox(height: 2),
-                    Text(
-                      'Start Time: ${activity.startTime.format(context)} - End Time: ${activity.endTime.format(context)}',
-                      style: TextStyle(fontSize: 14),
-                    ),
-                    SizedBox(height: 2),
-                    Text(
-                      'Duration: ${activity.duration} min',
-                      style: TextStyle(fontSize: 14),
-                    ),
-                    SizedBox(height: 2),
-                    Text(
-                      'Location: ${activity.address}',
-                      style: TextStyle(fontSize: 14),
-                    ),
-                  ],
-                ),
-                trailing: IconButton(
-                  icon: Icon(Icons.edit),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => EditActivityScreen(
-                          onActivityEdited: _fetchActivities,
-                          activity: activity,
+              ),
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ListView.builder(
+                  itemCount: activities.length,
+                  itemBuilder: (context, index) {
+                    final activity = activities[index];
+
+                    return ListTile(
+                      title: Text(
+                        activity.name,
+                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                      ),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Category: ${activity.category}', style: TextStyle(fontSize: 14)),
+                          Text('Start Time: ${activity.startTime.format(context)} - End Time: ${activity.endTime.format(context)}', style: TextStyle(fontSize: 14)),
+                          Text('Duration: ${activity.duration} min', style: TextStyle(fontSize: 14)),
+                          Text('Location: ${activity.address}', style: TextStyle(fontSize: 14)),
+                        ],
+                      ),
+                      trailing: IconButton(
+                        icon: Icon(Icons.edit),
+                        onPressed: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => EditActivityScreen(
+                              onActivityEdited: _fetchActivities,
+                              activity: activity,
+                            ),
+                          ),
+                        ),
+                      ),
+                      onLongPress: () => showDialog(
+                        context: context,
+                        builder: (context) => Dialog(
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                          child: Container(
+                            padding: EdgeInsets.all(16),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text('Delete Activity', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+                                SizedBox(height: 8),
+                                Text('Are you sure you want to delete this activity?', style: TextStyle(fontSize: 16)),
+                                SizedBox(height: 16),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    TextButton(onPressed: () => Navigator.pop(context), child: Text('Cancel', style: TextStyle(fontSize: 16))),
+                                    SizedBox(width: 8),
+                                    TextButton(
+                                      onPressed: () async {
+                                        await _deleteActivity(activity);
+                                        Navigator.pop(context);
+                                      },
+                                      child: Text('Delete', style: TextStyle(fontSize: 16, color: Colors.red)),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
                       ),
                     );
                   },
                 ),
-                onLongPress: () {
-                  showDialog(
-                    context: context,
-                    builder: (context) => Dialog(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Container(
-                        padding: EdgeInsets.all(16),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(
-                              'Delete Activity',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18,
-                              ),
-                            ),
-                            SizedBox(height: 8),
-                            Text(
-                              'Are you sure you want to delete this activity?',
-                              style: TextStyle(fontSize: 16),
-                            ),
-                            SizedBox(height: 16),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                  child: Text(
-                                    'Cancel',
-                                    style: TextStyle(fontSize: 16),
-                                  ),
-                                ),
-                                SizedBox(width: 8),
-                                TextButton(
-                                  onPressed: () async {
-                                    await _deleteActivity(activity);
-                                    Navigator.pop(context);
-                                  },
-                                  child: Text(
-                                    'Delete',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.red,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              );
-
-            },
-          ),
+              ),
+            ),
+          ],
         ),
       ),
+
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           // Navigate to the add new activity screen
@@ -743,6 +713,7 @@ class _BusinessHomeScreenState extends State<BusinessHomeScreen> {
             ),
           );
         },
+        backgroundColor: Color(0xFFB0DB2D),
         child: Icon(Icons.add),
       ),
     );
