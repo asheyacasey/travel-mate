@@ -36,8 +36,10 @@ class PackagesScreen extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) =>
-                                PackageDetailsScreen(package: package)),
+                            builder: (context) => PackageDetailsScreen(
+                                  package: package,
+                                  numberOfDays: numberOfDays,
+                                )),
                       );
                     },
                   ),
