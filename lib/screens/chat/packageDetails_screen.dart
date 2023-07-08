@@ -53,16 +53,151 @@ import 'package:travel_mate/screens/chat/packages_screen.dart';
 //   }
 // }
 
-class PackageDetailsScreen extends StatelessWidget {
+// class PackageDetailsScreen extends StatelessWidget {
+//   final Package package;
+
+//   PackageDetailsScreen({required this.package});
+
+//   @override
+//   Widget build(BuildContext context) {
+//     List<List<Activity>> activitiesByDay =
+//         groupActivitiesByDay(package.activities);
+
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: Text('Package Details'),
+//       ),
+//       body: ListView.builder(
+//         itemCount: activitiesByDay.length,
+//         itemBuilder: (context, dayIndex) {
+//           List<Activity> activities = activitiesByDay[dayIndex];
+//           int dayNumber = dayIndex + 1;
+
+//           return Column(
+//             crossAxisAlignment: CrossAxisAlignment.start,
+//             children: [
+//               Padding(
+//                 padding: const EdgeInsets.all(8.0),
+//                 child: Text(
+//                   'Day $dayNumber',
+//                   style: TextStyle(
+//                     fontSize: 20,
+//                     fontWeight: FontWeight.bold,
+//                   ),
+//                 ),
+//               ),
+//               ListView.builder(
+//                 shrinkWrap: true,
+//                 physics: NeverScrollableScrollPhysics(),
+//                 itemCount: activities.length,
+//                 itemBuilder: (context, index) {
+//                   Activity activity = activities[index];
+//                   return ListTile(
+//                     title: Text(activity.activityName),
+//                     subtitle: Text(
+//                       'Category: ${activity.category}\nAddress: ${activity.address}\nTime: ${activity.timeStart.format(context)} - ${addDurationToTime(activity.timeStart, activity.duration).format(context)}',
+//                     ),
+//                   );
+//                 },
+//               ),
+//             ],
+//           );
+//         },
+//       ),
+//     );
+//   }
+
+//   List<List<Activity>> groupActivitiesByDay(List<Activity> activities) {
+//     List<List<Activity>> activitiesByDay = [];
+//     List<Activity> currentDayActivities = [];
+
+//     activities.sort((a, b) {
+//       DateTime dateTimeA = DateTime(
+//         DateTime.now().year,
+//         DateTime.now().month,
+//         DateTime.now().day,
+//         a.timeStart.hour,
+//         a.timeStart.minute,
+//       );
+//       DateTime dateTimeB = DateTime(
+//         DateTime.now().year,
+//         DateTime.now().month,
+//         DateTime.now().day,
+//         b.timeStart.hour,
+//         b.timeStart.minute,
+//       );
+
+//       int timeComparison = dateTimeA.compareTo(dateTimeB);
+//       if (timeComparison != 0) {
+//         return timeComparison; // Sort by timeStart
+//       } else {
+//         return a.duration
+//             .compareTo(b.duration); // Sort by duration (secondary criteria)
+//       }
+//     });
+
+//     int totalDuration = 0;
+//     for (int i = 0; i < activities.length; i++) {
+//       Activity activity = activities[i];
+//       totalDuration += activity.duration;
+//       currentDayActivities.add(activity);
+
+//       if (totalDuration >= 180 || i == activities.length - 1) {
+//         currentDayActivities.sort((a, b) {
+//           DateTime dateTimeA = DateTime(
+//             DateTime.now().year,
+//             DateTime.now().month,
+//             DateTime.now().day,
+//             a.timeStart.hour,
+//             a.timeStart.minute,
+//           );
+//           DateTime dateTimeB = DateTime(
+//             DateTime.now().year,
+//             DateTime.now().month,
+//             DateTime.now().day,
+//             b.timeStart.hour,
+//             b.timeStart.minute,
+//           );
+
+//           int timeComparison = dateTimeA.compareTo(dateTimeB);
+//           if (timeComparison != 0) {
+//             return timeComparison; // Sort by timeStart
+//           } else {
+//             return a.duration
+//                 .compareTo(b.duration); // Sort by duration (secondary criteria)
+//           }
+//         });
+
+//         activitiesByDay.add(currentDayActivities);
+//         currentDayActivities = [];
+//         totalDuration = 0;
+//       }
+//     }
+
+//     return activitiesByDay;
+//   }
+// }
+
+class PackageDetailsScreen extends StatefulWidget {
   final Package package;
 
   PackageDetailsScreen({required this.package});
 
   @override
-  Widget build(BuildContext context) {
-    List<List<Activity>> activitiesByDay =
-        groupActivitiesByDay(package.activities);
+  _PackageDetailsScreenState createState() => _PackageDetailsScreenState();
+}
 
+class _PackageDetailsScreenState extends State<PackageDetailsScreen> {
+  List<List<Activity>> activitiesByDay = [];
+
+  @override
+  void initState() {
+    super.initState();
+    activitiesByDay = groupActivitiesByDay(widget.package.activities);
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Package Details'),
@@ -92,10 +227,21 @@ class PackageDetailsScreen extends StatelessWidget {
                 itemCount: activities.length,
                 itemBuilder: (context, index) {
                   Activity activity = activities[index];
-                  return ListTile(
-                    title: Text(activity.activityName),
-                    subtitle: Text(
-                      'Category: ${activity.category}\nAddress: ${activity.address}\nTime: ${activity.timeStart.format(context)} - ${addDurationToTime(activity.timeStart, activity.duration).format(context)}',
+                  return Dismissible(
+                    key: Key(activity.activityName),
+                    onDismissed: (direction) {
+                      setState(() {
+                        // Remove the dismissed activity from the list
+                        widget.package.activities.remove(activity);
+                        activitiesByDay =
+                            groupActivitiesByDay(widget.package.activities);
+                      });
+                    },
+                    child: ListTile(
+                      title: Text(activity.activityName),
+                      subtitle: Text(
+                        'Category: ${activity.category}\nAddress: ${activity.address}\nTime: ${activity.timeStart.format(context)} - ${addDurationToTime(activity.timeStart, activity.duration).format(context)}',
+                      ),
                     ),
                   );
                 },
@@ -111,67 +257,34 @@ class PackageDetailsScreen extends StatelessWidget {
     List<List<Activity>> activitiesByDay = [];
     List<Activity> currentDayActivities = [];
 
-    activities.sort((a, b) {
-      DateTime dateTimeA = DateTime(
-        DateTime.now().year,
-        DateTime.now().month,
-        DateTime.now().day,
-        a.timeStart.hour,
-        a.timeStart.minute,
-      );
-      DateTime dateTimeB = DateTime(
-        DateTime.now().year,
-        DateTime.now().month,
-        DateTime.now().day,
-        b.timeStart.hour,
-        b.timeStart.minute,
-      );
-
-      int timeComparison = dateTimeA.compareTo(dateTimeB);
-      if (timeComparison != 0) {
-        return timeComparison; // Sort by timeStart
-      } else {
-        return a.duration
-            .compareTo(b.duration); // Sort by duration (secondary criteria)
-      }
-    });
-
+    DateTime currentDay = DateTime.now();
     int totalDuration = 0;
     for (int i = 0; i < activities.length; i++) {
       Activity activity = activities[i];
-      totalDuration += activity.duration;
-      currentDayActivities.add(activity);
+      DateTime activityDateTime = DateTime(
+        currentDay.year,
+        currentDay.month,
+        currentDay.day,
+        activity.timeStart.hour,
+        activity.timeStart.minute,
+      );
 
-      if (totalDuration >= 180 || i == activities.length - 1) {
-        currentDayActivities.sort((a, b) {
-          DateTime dateTimeA = DateTime(
-            DateTime.now().year,
-            DateTime.now().month,
-            DateTime.now().day,
-            a.timeStart.hour,
-            a.timeStart.minute,
-          );
-          DateTime dateTimeB = DateTime(
-            DateTime.now().year,
-            DateTime.now().month,
-            DateTime.now().day,
-            b.timeStart.hour,
-            b.timeStart.minute,
-          );
+      int activityDuration = activity.duration;
 
-          int timeComparison = dateTimeA.compareTo(dateTimeB);
-          if (timeComparison != 0) {
-            return timeComparison; // Sort by timeStart
-          } else {
-            return a.duration
-                .compareTo(b.duration); // Sort by duration (secondary criteria)
-          }
-        });
-
+      if (totalDuration + activityDuration > 180 ||
+          activityDateTime.difference(currentDay).inDays > 0) {
         activitiesByDay.add(currentDayActivities);
         currentDayActivities = [];
         totalDuration = 0;
       }
+
+      currentDayActivities.add(activity);
+      totalDuration += activityDuration;
+      currentDay = activityDateTime;
+    }
+
+    if (currentDayActivities.isNotEmpty) {
+      activitiesByDay.add(currentDayActivities);
     }
 
     return activitiesByDay;
