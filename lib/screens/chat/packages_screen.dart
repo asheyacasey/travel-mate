@@ -23,6 +23,7 @@ class PackagesScreen extends StatelessWidget {
           } else {
             List<Package> packages = snapshot.data!;
             return ListView.builder(
+              physics: AlwaysScrollableScrollPhysics(),
               itemCount: packages.length,
               itemBuilder: (context, index) {
                 Package package = packages[index];
