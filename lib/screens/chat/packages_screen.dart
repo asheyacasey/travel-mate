@@ -55,8 +55,11 @@ class PackagesScreen extends StatelessWidget {
         await FirebaseFirestore.instance.collection('business').get();
 
     List<Activity> activities = [];
-    snapshot.docs.forEach((doc) {
+
+    for (QueryDocumentSnapshot doc in snapshot.docs) {
       List<dynamic> activityList = doc['activities'];
+      List<Activity> tempActivities = [];
+
       activityList.forEach((activityData) {
         TimeOfDay startTime = _convertToTimeOfDay(activityData['startTime']);
         TimeOfDay endTime = _convertToTimeOfDay(activityData['endTime']);
@@ -69,10 +72,48 @@ class PackagesScreen extends StatelessWidget {
           timeEnd: endTime,
           duration: activityData['duration'],
         );
-        activities.add(activity);
+
+        // Check if activity with same activityName and address already exists in activities list
+        bool activityExists = activities.any((existingActivity) =>
+            existingActivity.activityName == activity.activityName &&
+            existingActivity.address == activity.address);
+
+        if (!activityExists) {
+          tempActivities.add(activity);
+        }
       });
-    });
+
+      tempActivities.sort((a, b) {
+        DateTime dateTimeA = DateTime(
+          DateTime.now().year,
+          DateTime.now().month,
+          DateTime.now().day,
+          a.timeStart.hour,
+          a.timeStart.minute,
+        );
+        DateTime dateTimeB = DateTime(
+          DateTime.now().year,
+          DateTime.now().month,
+          DateTime.now().day,
+          b.timeStart.hour,
+          b.timeStart.minute,
+        );
+
+        int timeComparison = dateTimeA.compareTo(dateTimeB);
+        if (timeComparison != 0) {
+          return timeComparison; // Sort by start time
+        } else {
+          return a.duration
+              .compareTo(b.duration); // Sort by duration (secondary criteria)
+        }
+      });
+
+      activities.addAll(tempActivities);
+    }
+
+    print('THIS IS SORTED');
     activities.forEach((act) => print(act.activityName));
+
     return generatePackages(activities, numberOfDays);
   }
 
@@ -86,32 +127,6 @@ class PackagesScreen extends StatelessWidget {
     List<Package> packages = [];
     Package currentPackage = Package(activities: []);
 
-    activities.sort((a, b) {
-      DateTime dateTimeA = DateTime(
-        DateTime.now().year,
-        DateTime.now().month,
-        DateTime.now().day,
-        a.timeStart.hour,
-        a.timeStart.minute,
-      );
-      DateTime dateTimeB = DateTime(
-        DateTime.now().year,
-        DateTime.now().month,
-        DateTime.now().day,
-        b.timeStart.hour,
-        b.timeStart.minute,
-      );
-
-      int timeComparison = dateTimeA.compareTo(dateTimeB);
-      if (timeComparison != 0) {
-        return timeComparison; // Sort by start time
-      } else {
-        return a.duration
-            .compareTo(b.duration); // Sort by duration (secondary criteria)
-      }
-    });
-    print('THIS IS SORTED');
-    activities.forEach((act) => print(act.activityName));
     for (int i = 0; i < activities.length; i++) {
       Activity activity = activities[i];
       int totalDuration = currentPackage.totalDuration + activity.duration;
@@ -120,8 +135,7 @@ class PackagesScreen extends StatelessWidget {
         currentPackage.activities.add(activity);
       } else {
         packages.add(currentPackage);
-        Package newPackage = Package(activities: []);
-        currentPackage = newPackage;
+        currentPackage = Package(activities: [activity]);
       }
     }
 
