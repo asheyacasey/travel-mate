@@ -232,8 +232,13 @@ class _PackageDetailsScreenState extends State<PackageDetailsScreen> {
                 itineraryActivity.activityName == activity.activityName &&
                 itineraryActivity.address == activity.address);
 
+        //Check if the activity is a duplicate
+        bool activityExists = activities.any((existingActivity) =>
+            existingActivity.activityName == activity.activityName &&
+            existingActivity.address == activity.address);
+
         // Add the activity to the list only if it is not already in the itinerary
-        if (!isActivityInItinerary) {
+        if (!isActivityInItinerary && !activityExists) {
           activities.add(activity);
         }
       });
