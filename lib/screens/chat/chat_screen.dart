@@ -188,64 +188,74 @@ class _MessageInput extends StatelessWidget {
 Widget _buildBottomModal(BuildContext context) {
   int selectedDays = 1;
 
-  return Container(
-    padding: EdgeInsets.all(16.0),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Text(
-          'Generate an Itinerary Plan',
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        SizedBox(height: 16.0),
-        Text('How many days?'),
-        Row(
+  return StatefulBuilder(
+    builder: (BuildContext context, StateSetter setState) {
+      return Container(
+        padding: EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
           children: [
-            Radio<int>(
-              value: 1,
-              groupValue: selectedDays,
-              onChanged: (value) {
-                selectedDays = value!;
-              },
+            Text(
+              'Generate an Itinerary Plan',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
             ),
-            Text('1'),
-            Radio<int>(
-              value: 2,
-              groupValue: selectedDays,
-              onChanged: (value) {
-                selectedDays = value!;
-              },
+            SizedBox(height: 16.0),
+            Text('How many days?'),
+            Row(
+              children: [
+                Radio<int>(
+                  value: 1,
+                  groupValue: selectedDays,
+                  onChanged: (value) {
+                    setState(() {
+                      selectedDays = value!;
+                    });
+                  },
+                ),
+                Text('1'),
+                Radio<int>(
+                  value: 2,
+                  groupValue: selectedDays,
+                  onChanged: (value) {
+                    setState(() {
+                      selectedDays = value!;
+                    });
+                  },
+                ),
+                Text('2'),
+                Radio<int>(
+                  value: 3,
+                  groupValue: selectedDays,
+                  onChanged: (value) {
+                    setState(() {
+                      selectedDays = value!;
+                    });
+                  },
+                ),
+                Text('3'),
+              ],
             ),
-            Text('2'),
-            Radio<int>(
-              value: 3,
-              groupValue: selectedDays,
-              onChanged: (value) {
-                selectedDays = value!;
+            SizedBox(height: 16.0),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        PackagesScreen(numberOfDays: selectedDays),
+                  ),
+                );
               },
+              child: Text('Generate'),
             ),
-            Text('3'),
           ],
         ),
-        SizedBox(height: 16.0),
-        ElevatedButton(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) =>
-                    PackagesScreen(numberOfDays: selectedDays),
-              ),
-            );
-          },
-          child: Text('Generate'),
-        ),
-      ],
-    ),
+      );
+    },
   );
 }
 
