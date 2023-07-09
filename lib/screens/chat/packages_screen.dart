@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:travel_mate/models/models.dart';
 import 'package:travel_mate/screens/chat/packageDetails_screen.dart';
 
 class PackagesScreen extends StatelessWidget {
   final int numberOfDays;
+  final Match match;
 
-  PackagesScreen({required this.numberOfDays});
+  PackagesScreen({required this.numberOfDays, required this.match});
 
   @override
   Widget build(BuildContext context) {
@@ -40,6 +42,7 @@ class PackagesScreen extends StatelessWidget {
                             builder: (context) => PackageDetailsScreen(
                                   package: package,
                                   numberOfDays: numberOfDays,
+                                  match: match,
                                 )),
                       );
                     },
@@ -166,6 +169,17 @@ class Activity {
     required this.timeEnd,
     required this.duration,
   });
+
+  Map<String, dynamic> toMap() {
+    return {
+      'activityName': activityName,
+      'category': category,
+      'address': address,
+      'timeStart': timeStart,
+      'timeEnd': timeEnd,
+      'duration': duration,
+    };
+  }
 }
 
 class Package {

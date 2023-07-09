@@ -149,7 +149,7 @@ class _MessageInput extends StatelessWidget {
                 showModalBottomSheet(
                   context: context,
                   builder: (BuildContext context) {
-                    return _buildBottomModal(context);
+                    return _buildBottomModal(context, match);
                   },
                 );
               },
@@ -185,7 +185,7 @@ class _MessageInput extends StatelessWidget {
   }
 }
 
-Widget _buildBottomModal(BuildContext context) {
+Widget _buildBottomModal(BuildContext context, Match match) {
   int selectedDays = 1;
 
   return StatefulBuilder(
@@ -245,8 +245,10 @@ Widget _buildBottomModal(BuildContext context) {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) =>
-                        PackagesScreen(numberOfDays: selectedDays),
+                    builder: (context) => PackagesScreen(
+                      numberOfDays: selectedDays,
+                      match: match,
+                    ),
                   ),
                 );
               },
