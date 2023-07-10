@@ -147,14 +147,6 @@ class UsersScreen extends StatelessWidget {
                       ),
                     ),),
                 SizedBox(height: 15),
-                // Text('Interest',
-                //   style: GoogleFonts.manrope(
-                //     textStyle: TextStyle(
-                //       fontSize: 25,
-                //       color: Colors.black54,
-                //       fontWeight: FontWeight.w800,
-                //     ),
-                //   ),),
                 Row(
                   children: user.interests
                       .map((interest) => Container(
