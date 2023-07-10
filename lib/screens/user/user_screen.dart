@@ -21,7 +21,6 @@ class UsersScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -86,60 +85,94 @@ class UsersScreen extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox( height: 20),
+          SizedBox(height: 20),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8.0),
-
-            child:
-
-            Column(
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-
               children: [
-                Text(
-                  '${user.name}, ${user.age}',
-                  style: Theme.of(context).primaryTextTheme.headline2!.copyWith(
-                      fontFamily: GoogleFonts.fredoka().fontFamily,
-                      fontWeight: FontWeight.w900,
-                      color: Colors.black ),
-
+                Row(
+                  children: [
+                    Text(
+                      '${user.name}, ${user.age} ',
+                      style: GoogleFonts.fredokaOne(
+                        textStyle: TextStyle(
+                          fontSize: 30,
+                          color: Colors.black54,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
                 Text(
                   '${user.jobTitle}',
                   style: Theme.of(context).textTheme.headline3!.copyWith(
-                        fontWeight: FontWeight.normal,
-                      ),
+                      fontWeight: FontWeight.w600,
+                      fontSize: 20,
+                      color: Colors.black54),
                 ),
                 SizedBox(height: 15),
-                Text('About',
-                    style: Theme.of(context).textTheme.headline3!.copyWith(
-                          fontWeight: FontWeight.bold,
-                        )),
+                Row(
+                  children: [
+
+                    Text('About ${user.name}',
+                      style: GoogleFonts.manrope(
+                        textStyle: TextStyle(
+                          fontSize: 20,
+                          color: Colors.black54,
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),),
+                    Container(
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.white,
+                      ),
+                      child: Icon(
+                        UniconsLine.google_hangouts_alt,
+                        size: 30,
+                        color: Theme.of(context).primaryColor,
+                      ),
+                    ),
+                  ],
+                ),
+
                 Text('${user.bio}',
-                    style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                          height: 2,
-                        )),
+                    style: GoogleFonts.manrope(
+                      textStyle: TextStyle(
+                        fontSize: 30,
+                        color: Colors.black54,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),),
                 SizedBox(height: 15),
-                Text('Interest',
-                    style: Theme.of(context).textTheme.headline3!.copyWith(
-                          fontWeight: FontWeight.bold,
-                        )),
+                // Text('Interest',
+                //   style: GoogleFonts.manrope(
+                //     textStyle: TextStyle(
+                //       fontSize: 25,
+                //       color: Colors.black54,
+                //       fontWeight: FontWeight.w800,
+                //     ),
+                //   ),),
                 Row(
                   children: user.interests
                       .map((interest) => Container(
-                            padding: const EdgeInsets.all(5.0),
+                            padding: const EdgeInsets.all(10.0),
                             margin: const EdgeInsets.only(top: 5.0, right: 5.0),
                             decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5.0),
+                              borderRadius: BorderRadius.circular(22.0),
                               color: Theme.of(context).primaryColor,
                             ),
                             child: Text(
                               interest,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headline6!
-                                  .copyWith(color: Colors.white),
-                            ),
+                              style: GoogleFonts.manrope(
+                                textStyle: TextStyle(
+                                  fontSize: 20,
+                                  color: Colors.white,
+
+                                ),
+                              ),),
                           ))
                       .toList(),
                 )
@@ -151,5 +184,3 @@ class UsersScreen extends StatelessWidget {
     );
   }
 }
-
-

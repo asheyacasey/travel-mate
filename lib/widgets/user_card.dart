@@ -64,6 +64,8 @@ class UserCard extends StatelessWidget {
                       style: Theme.of(context).textTheme.headline3!.copyWith(
                             color: Colors.white,
                             fontWeight: FontWeight.normal,
+                        fontSize: 20
+
                           ),
                     ),
                     FutureBuilder<String>(
