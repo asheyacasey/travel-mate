@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:travel_mate/blocs/auth/auth_bloc.dart';
 import 'package:travel_mate/blocs/blocs.dart';
 import 'package:travel_mate/repositories/database/database_repository.dart';
+import 'package:travel_mate/screens/chat/itinerary_screen.dart';
 import 'package:travel_mate/screens/chat/packages_screen.dart';
 import 'package:unicons/unicons.dart';
 import 'package:travel_mate/models/models.dart';
@@ -296,37 +297,13 @@ class _Message extends StatelessWidget {
       return GestureDetector(
         onTap: () {
           if (isFromCurrentUser || isAccepted == 1) {
-            showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return AlertDialog(
-                  title: Text(itinerary?['name']),
-                  content: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      for (var place in itinerary?['places'])
-                        ListTile(
-                          title: Text(place['name']),
-                          subtitle: Text(place['departureTime']),
-                        ),
-                    ],
-                  ),
-                  actions: [
-                    TextButton(
-                      child: Text('OK'),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                  ],
-                );
-              },
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ItineraryScreen(itinerary: itinerary),
+              ),
             );
-          } else
-            () {
-              SizedBox();
-            };
+          }
         },
         child: Row(
           children: [
