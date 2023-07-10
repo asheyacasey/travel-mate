@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:travel_mate/blocs/blocs.dart';
 import 'package:travel_mate/repositories/database/database_repository.dart';
 import 'package:travel_mate/screens/chat/packages_screen.dart';
@@ -402,25 +403,27 @@ class _PackageDetailsScreenState extends State<PackageDetailsScreen> {
       String messageId = Uuid().v4();
 
       Map<String, dynamic> itineraryMap = {
-        'activities': itinerary.map((activity) => activity.toMap()).toList(),
+        'activities':
+            itinerary.map((activity) => activity.toMap(context)).toList(),
       };
 
-      context.read<ChatBloc>().add(
-            AddMessage(
-              userId: widget.match.userId,
-              matchUserId: widget.match.matchUser.id!,
-              message: 'Itinerary',
-              messageId: messageId,
-              itinerary: itineraryMap,
-            ),
-          );
+      final Message message = Message(
+          senderId: widget.match.userId,
+          receiverId: widget.match.matchUser.id!,
+          messageId: messageId,
+          message: "Date Invitation",
+          itinerary: itineraryMap,
+          dateTime: DateTime.now(),
+          timeString: DateFormat('HH:mm').format(DateTime.now()));
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Itinerary sent successfully!'),
-        ),
-      );
-      Navigator.pop(context);
+      return FirebaseFirestore.instance
+          .collection('chats')
+          .doc(widget.match.chat.id)
+          .update({
+        'messages': FieldValue.arrayUnion([
+          message.toJson(),
+        ])
+      });
     } catch (error) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -429,6 +432,8 @@ class _PackageDetailsScreenState extends State<PackageDetailsScreen> {
       );
       print(error);
     }
+
+    Navigator.pop(context);
   }
 
   List<List<Activity>> groupActivitiesByDay(List<Activity> activities) {

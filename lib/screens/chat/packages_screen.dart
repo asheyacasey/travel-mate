@@ -170,13 +170,13 @@ class Activity {
     required this.duration,
   });
 
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toMap(BuildContext context) {
     return {
       'activityName': activityName,
       'category': category,
       'address': address,
-      'timeStart': timeStart,
-      'timeEnd': timeEnd,
+      'timeStart': timeStart.format(context),
+      'timeEnd': timeEnd.format(context),
       'duration': duration,
     };
   }
