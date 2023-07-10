@@ -163,18 +163,43 @@ class _AddNewActivityScreenState extends State<AddNewActivityScreen> {
                 }).toList(),
               ),
               SizedBox(height: 25),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    'Start Time',
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    'Business Hours',
                     style: TextStyle(
-                      fontSize: 12,
+                      fontSize: 20,
                     ),
                   ),
-                ],
+                ),
               ),
+
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.start,
+              //   children: [
+              //     Text(
+              //       'Start Time',
+              //       style: TextStyle(
+              //         fontSize: 12,
+              //       ),
+              //     ),
+              //   ],
+              // ),
               SizedBox(height: 10),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    'Start Time',
+                    style: TextStyle(
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+              ),
               Row(
                 children: [
                   Expanded(
@@ -193,7 +218,7 @@ class _AddNewActivityScreenState extends State<AddNewActivityScreen> {
                       child: Container(
                         width: double.infinity,
                         padding:
-                            EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                            EdgeInsets.symmetric(vertical: 18, horizontal: 16),
                         decoration: BoxDecoration(
                           border: Border.all(color: Colors.grey),
                           borderRadius: BorderRadius.circular(8),
@@ -207,7 +232,7 @@ class _AddNewActivityScreenState extends State<AddNewActivityScreen> {
                                 ),
                               )
                             : Text(
-                                'Select start time',
+                                'Select starting time',
                                 style: TextStyle(
                                   fontSize: 16,
                                   color: Colors.grey,
@@ -219,20 +244,23 @@ class _AddNewActivityScreenState extends State<AddNewActivityScreen> {
                 ],
               ),
               SizedBox(height: 16),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    'End Time',
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    'Close Time',
                     style: TextStyle(
-                      fontSize: 12,
+                      fontSize: 16,
                     ),
                   ),
-                ],
+                ),
               ),
-              SizedBox(height: 10),
+
+
               Row(
                 children: [
+
                   Expanded(
                     child: InkWell(
                       onTap: () async {
@@ -248,7 +276,7 @@ class _AddNewActivityScreenState extends State<AddNewActivityScreen> {
                       },
                       child: Container(
                         padding:
-                            EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                            EdgeInsets.symmetric(vertical:18, horizontal: 16),
                         decoration: BoxDecoration(
                           border: Border.all(color: Colors.grey),
                           borderRadius: BorderRadius.circular(8),
@@ -262,7 +290,7 @@ class _AddNewActivityScreenState extends State<AddNewActivityScreen> {
                                 ),
                               )
                             : Text(
-                                'Select end time',
+                                'Select closing time',
                                 style: TextStyle(
                                   fontSize: 16,
                                   color: Colors.grey,
