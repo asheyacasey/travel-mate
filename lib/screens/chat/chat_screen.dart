@@ -96,12 +96,14 @@ class _CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       title: Column(
         children: [
           CircleAvatar(
-            radius: 15,
+            radius: 20,
             backgroundImage: NetworkImage(match.matchUser.imageUrls[0]),
           ),
           Text(
             match.matchUser.name,
-            style: Theme.of(context).textTheme.headline4,
+            style: Theme.of(context).textTheme.headline4!.copyWith(
+              fontWeight: FontWeight.w800,
+            ),
           ),
         ],
       ),
@@ -109,7 +111,7 @@ class _CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => Size.fromHeight(56.0);
+  Size get preferredSize => Size.fromHeight(65.0);
 }
 
 class _MessageInput extends StatelessWidget {
@@ -126,6 +128,17 @@ class _MessageInput extends StatelessWidget {
       child: SingleChildScrollView(
         child: Row(
           children: [
+            IconButton(
+              icon: Icon(Icons.add),
+              onPressed: () {
+                showModalBottomSheet(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return _buildBottomModal(context, match);
+                  },
+                );
+              },
+            ),
             Expanded(
               child: TextField(
                 controller: controller,
@@ -144,17 +157,17 @@ class _MessageInput extends StatelessWidget {
                 ),
               ),
             ),
-            IconButton(
-              icon: Icon(Icons.add),
-              onPressed: () {
-                showModalBottomSheet(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return _buildBottomModal(context, match);
-                  },
-                );
-              },
-            ),
+            // IconButton(
+            //   icon: Icon(Icons.add),
+            //   onPressed: () {
+            //     showModalBottomSheet(
+            //       context: context,
+            //       builder: (BuildContext context) {
+            //         return _buildBottomModal(context, match);
+            //       },
+            //     );
+            //   },
+            // ),
             Container(
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
