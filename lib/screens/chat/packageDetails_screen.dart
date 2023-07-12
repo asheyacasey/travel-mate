@@ -448,6 +448,31 @@ class _PackageDetailsScreenState extends State<PackageDetailsScreen> {
     List<List<Activity>> activitiesByDay = [];
     List<Activity> currentDayActivities = [];
 
+    activities.sort((a, b) {
+      DateTime dateTimeA = DateTime(
+        DateTime.now().year,
+        DateTime.now().month,
+        DateTime.now().day,
+        a.timeStart.hour,
+        a.timeStart.minute,
+      );
+      DateTime dateTimeB = DateTime(
+        DateTime.now().year,
+        DateTime.now().month,
+        DateTime.now().day,
+        b.timeStart.hour,
+        b.timeStart.minute,
+      );
+
+      int timeComparison = dateTimeA.compareTo(dateTimeB);
+      if (timeComparison != 0) {
+        return timeComparison; // Sort by timeStart
+      } else {
+        return a.duration
+            .compareTo(b.duration); // Sort by duration (secondary criteria)
+      }
+    });
+
     DateTime currentDay = DateTime.now();
     int totalDuration = 0;
     for (int i = 0; i < activities.length; i++) {
