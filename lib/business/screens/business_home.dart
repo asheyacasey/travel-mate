@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:travel_mate/business/screens/business_addActivity.dart';
 import 'package:travel_mate/business/screens/business_editActivity.dart';
@@ -93,18 +94,19 @@ class _BusinessHomeScreenState extends State<BusinessHomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: SvgPicture.asset(
+          'assets/logo.svg',
+          height: 90,
+        ),
         elevation: 0.0,
         backgroundColor: Theme.of(context).primaryColorLight,
-        title: Text('Activity List',
-        style: TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.bold
-        ),
+        title: Text(
+          'Activity List',
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
         ),
         actions: [IconButton(onPressed: _logout, icon: Icon(Icons.logout))],
       ),
-
-      body:Padding(
+      body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -114,24 +116,27 @@ class _BusinessHomeScreenState extends State<BusinessHomeScreen> {
               child: Row(
                 children: [
                   Text(
-                  'Welcome, ',
-                    style: Theme.of(context).primaryTextTheme.headline2!.copyWith(
-                      color: Theme.of(context).primaryColor,
-                      fontSize: 28,
-                    ),
+                    'Welcome, ',
+                    style:
+                        Theme.of(context).primaryTextTheme.headline2!.copyWith(
+                              color: Theme.of(context).primaryColor,
+                              fontSize: 28,
+                            ),
                   ),
                   Text(
                     '$businessName!',
-                    style: Theme.of(context).primaryTextTheme.headline2!.copyWith(
-                      color: Theme.of(context).primaryColorLight,
-                      fontSize: 28,
-                    ),
+                    style:
+                        Theme.of(context).primaryTextTheme.headline2!.copyWith(
+                              color: Theme.of(context).primaryColorLight,
+                              fontSize: 28,
+                            ),
                   ),
                 ],
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 20.0, bottom: 10.0, right: 16.0),
+              padding:
+                  const EdgeInsets.only(left: 20.0, bottom: 10.0, right: 16.0),
               child: Text(
                 'Feel the thrill of adventure! Add an exhilarating activity that will leave travelers in awe and make their itinerary plan unforgettable.',
                 style: GoogleFonts.fredoka(
@@ -164,10 +169,17 @@ class _BusinessHomeScreenState extends State<BusinessHomeScreen> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text('${activity.name}', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-                                Text('Category: ${activity.category}', style: TextStyle(fontSize: 16)),
-                                Text('Business Hours: ${activity.startTime.format(context)} -  ${activity.endTime.format(context)}', style: TextStyle(fontSize: 16)),
-                                Text('Location: ${activity.address}', style: TextStyle(fontSize: 16)),
+                                Text('${activity.name}',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18)),
+                                Text('Category: ${activity.category}',
+                                    style: TextStyle(fontSize: 16)),
+                                Text(
+                                    'Business Hours: ${activity.startTime.format(context)} -  ${activity.endTime.format(context)}',
+                                    style: TextStyle(fontSize: 16)),
+                                Text('Location: ${activity.address}',
+                                    style: TextStyle(fontSize: 16)),
                               ],
                             ),
                           ),
@@ -186,27 +198,41 @@ class _BusinessHomeScreenState extends State<BusinessHomeScreen> {
                           onLongPress: () => showDialog(
                             context: context,
                             builder: (context) => Dialog(
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8)),
                               child: Container(
                                 padding: EdgeInsets.all(16),
                                 child: Column(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    Text('Delete Activity', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+                                    Text('Delete Activity',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 18)),
                                     SizedBox(height: 8),
-                                    Text('Are you sure you want to delete this activity?', style: TextStyle(fontSize: 16)),
+                                    Text(
+                                        'Are you sure you want to delete this activity?',
+                                        style: TextStyle(fontSize: 16)),
                                     SizedBox(height: 16),
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
-                                        TextButton(onPressed: () => Navigator.pop(context), child: Text('Cancel', style: TextStyle(fontSize: 16))),
+                                        TextButton(
+                                            onPressed: () =>
+                                                Navigator.pop(context),
+                                            child: Text('Cancel',
+                                                style:
+                                                    TextStyle(fontSize: 16))),
                                         SizedBox(width: 8),
                                         TextButton(
                                           onPressed: () async {
                                             await _deleteActivity(activity);
                                             Navigator.pop(context);
                                           },
-                                          child: Text('Delete', style: TextStyle(fontSize: 16, color: Colors.red)),
+                                          child: Text('Delete',
+                                              style: TextStyle(
+                                                  fontSize: 16,
+                                                  color: Colors.red)),
                                         ),
                                       ],
                                     ),
@@ -225,7 +251,6 @@ class _BusinessHomeScreenState extends State<BusinessHomeScreen> {
           ],
         ),
       ),
-
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           // Navigate to the add new activity screen
