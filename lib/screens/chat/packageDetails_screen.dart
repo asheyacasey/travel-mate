@@ -322,65 +322,69 @@ class _PackageDetailsScreenState extends State<PackageDetailsScreen> {
               context: context,
               builder: (context) => AlertDialog(
                 title: Text('Add Activity'),
-                content: ListView.builder(
-                  itemCount: availableActivities.length + 1,
-                  itemBuilder: (context, index) {
-                    if (index == 0) {
-                      return Text('Select an activity'); // Placeholder text
-                    }
-                    final activity = availableActivities[index - 1];
-                    return ListTile(
-                      title: Text(activity.activityName),
-                      subtitle: Text(
-                        'Category: ${activity.category}\nAddress: ${activity.address}\nTime: ${activity.timeStart.format(context)} - ${addDurationToTime(activity.timeStart, activity.duration).format(context)}',
-                      ),
-                      onTap: () {
-                        int currentDuration = widget.package.activities.fold(
-                          0,
-                          (previousValue, activity) =>
-                              previousValue + activity.duration,
-                        );
-                        if (currentDuration + activity.duration >
-                            (widget.numberOfDays * 180)) {
-                          showMessage(
-                              'Adding this activity will exceed the total duration.');
-                        } else {
-                          setState(() {
-                            widget.package.activities.add(activity);
-                            widget.package.activities.sort((a, b) {
-                              DateTime dateTimeA = DateTime(
-                                DateTime.now().year,
-                                DateTime.now().month,
-                                DateTime.now().day,
-                                a.timeStart.hour,
-                                a.timeStart.minute,
-                              );
-                              DateTime dateTimeB = DateTime(
-                                DateTime.now().year,
-                                DateTime.now().month,
-                                DateTime.now().day,
-                                b.timeStart.hour,
-                                b.timeStart.minute,
-                              );
+                content: Container(
+                  width: MediaQuery.of(context).size.width * 0.8,
+                  height: MediaQuery.of(context).size.height * 0.5,
+                  child: ListView.builder(
+                    itemCount: availableActivities.length + 1,
+                    itemBuilder: (context, index) {
+                      if (index == 0) {
+                        return Text('Select an activity'); // Placeholder text
+                      }
+                      final activity = availableActivities[index - 1];
+                      return ListTile(
+                        title: Text(activity.activityName),
+                        subtitle: Text(
+                          'Category: ${activity.category}\nAddress: ${activity.address}\nTime: ${activity.timeStart.format(context)} - ${addDurationToTime(activity.timeStart, activity.duration).format(context)}',
+                        ),
+                        onTap: () {
+                          int currentDuration = widget.package.activities.fold(
+                            0,
+                            (previousValue, activity) =>
+                                previousValue + activity.duration,
+                          );
+                          if (currentDuration + activity.duration >
+                              (widget.numberOfDays * 180)) {
+                            showMessage(
+                                'Adding this activity will exceed the total duration.');
+                          } else {
+                            setState(() {
+                              widget.package.activities.add(activity);
+                              widget.package.activities.sort((a, b) {
+                                DateTime dateTimeA = DateTime(
+                                  DateTime.now().year,
+                                  DateTime.now().month,
+                                  DateTime.now().day,
+                                  a.timeStart.hour,
+                                  a.timeStart.minute,
+                                );
+                                DateTime dateTimeB = DateTime(
+                                  DateTime.now().year,
+                                  DateTime.now().month,
+                                  DateTime.now().day,
+                                  b.timeStart.hour,
+                                  b.timeStart.minute,
+                                );
 
-                              int timeComparison =
-                                  dateTimeA.compareTo(dateTimeB);
-                              if (timeComparison != 0) {
-                                return timeComparison; // Sort by timeStart
-                              } else {
-                                return a.duration.compareTo(b
-                                    .duration); // Sort by duration (secondary criteria)
-                              }
+                                int timeComparison =
+                                    dateTimeA.compareTo(dateTimeB);
+                                if (timeComparison != 0) {
+                                  return timeComparison; // Sort by timeStart
+                                } else {
+                                  return a.duration.compareTo(b
+                                      .duration); // Sort by duration (secondary criteria)
+                                }
+                              });
+                              activitiesByDay = groupActivitiesByDay(
+                                  widget.package.activities);
+                              availableActivities.remove(activity);
                             });
-                            activitiesByDay =
-                                groupActivitiesByDay(widget.package.activities);
-                            availableActivities.remove(activity);
-                          });
-                          Navigator.pop(context); // Close the dialog
-                        }
-                      },
-                    );
-                  },
+                            Navigator.pop(context); // Close the dialog
+                          }
+                        },
+                      );
+                    },
+                  ),
                 ),
               ),
             );
