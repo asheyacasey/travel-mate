@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
 import 'package:travel_mate/models/models.dart';
 import 'package:travel_mate/screens/chat/packageDetails_screen.dart';
 
@@ -179,6 +180,22 @@ class Activity {
       'timeEnd': timeEnd.format(context),
       'duration': duration,
     };
+  }
+
+  factory Activity.fromFirebaseMap(
+      Map<String, dynamic> map, BuildContext context) {
+    return Activity(
+      activityName: map['activityName'],
+      category: map['category'],
+      address: map['address'],
+      timeStart: TimeOfDay.fromDateTime(
+        DateFormat.Hm().parse(map['timeStart']),
+      ),
+      timeEnd: TimeOfDay.fromDateTime(
+        DateFormat.Hm().parse(map['timeEnd']),
+      ),
+      duration: map['duration'],
+    );
   }
 }
 
