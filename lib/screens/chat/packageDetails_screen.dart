@@ -416,7 +416,7 @@ class _PackageDetailsScreenState extends State<PackageDetailsScreen> {
           dateTime: DateTime.now(),
           timeString: DateFormat('HH:mm').format(DateTime.now()));
 
-      return FirebaseFirestore.instance
+      await FirebaseFirestore.instance
           .collection('chats')
           .doc(widget.match.chat.id)
           .update({
@@ -424,6 +424,12 @@ class _PackageDetailsScreenState extends State<PackageDetailsScreen> {
           message.toJson(),
         ])
       });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Itinerary successfully sent.'),
+        ),
+      );
     } catch (error) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -432,8 +438,6 @@ class _PackageDetailsScreenState extends State<PackageDetailsScreen> {
       );
       print(error);
     }
-
-    Navigator.pop(context);
   }
 
   List<List<Activity>> groupActivitiesByDay(List<Activity> activities) {
