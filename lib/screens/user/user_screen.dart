@@ -71,13 +71,6 @@ class UsersScreen extends StatelessWidget {
                           color: Colors.white,
                           icon: UniconsSolid.favorite,
                         ),
-                        // ChoiceButton(
-                        //     width: 80,
-                        //     size: 30,
-                        //     height: 80,
-                        //     color: Theme.of(context).primaryColor,
-                        //     icon:  UniconsSolid.check_circle,
-                        //     hasGradient: true)
                       ],
                     ),
                   ),
@@ -85,7 +78,7 @@ class UsersScreen extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(height: 20),
+          SizedBox(height: 40),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8.0),
             child: Column(
@@ -105,17 +98,20 @@ class UsersScreen extends StatelessWidget {
                     ),
                   ],
                 ),
-                Text(
-                  '${user.jobTitle}',
-                  style: Theme.of(context).textTheme.headline3!.copyWith(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 20,
-                      color: Colors.black54),
+
+                Padding(
+                  padding: const EdgeInsets.only(left: 5.0, top: 5.0),
+                  child: Text(
+                    '${user.jobTitle}',
+                    style: Theme.of(context).textTheme.headline3!.copyWith(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 20,
+                        color: Colors.black54),
+                  ),
                 ),
-                SizedBox(height: 15),
+                SizedBox(height: 25),
                 Row(
                   children: [
-
                     Text('About ${user.name}',
                       style: GoogleFonts.manrope(
                         textStyle: TextStyle(
@@ -124,6 +120,7 @@ class UsersScreen extends StatelessWidget {
                           fontWeight: FontWeight.w800,
                         ),
                       ),),
+                    SizedBox(width: 5.0,),
                     Container(
                       decoration: const BoxDecoration(
                         shape: BoxShape.circle,
@@ -141,12 +138,20 @@ class UsersScreen extends StatelessWidget {
                 Text('${user.bio}',
                     style: GoogleFonts.manrope(
                       textStyle: TextStyle(
-                        fontSize: 30,
+                        fontSize: 26,
                         color: Colors.black54,
                         fontWeight: FontWeight.w800,
                       ),
                     ),),
-                SizedBox(height: 15),
+                SizedBox(height: 30),
+                Text('Interest',
+                  style: GoogleFonts.manrope(
+                    textStyle: TextStyle(
+                      fontSize: 20,
+                      color: Colors.black54,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),),
                 Row(
                   children: user.interests
                       .map((interest) => Container(
@@ -160,7 +165,7 @@ class UsersScreen extends StatelessWidget {
                               interest,
                               style: GoogleFonts.manrope(
                                 textStyle: TextStyle(
-                                  fontSize: 20,
+                                  fontSize: 18,
                                   color: Colors.white,
 
                                 ),

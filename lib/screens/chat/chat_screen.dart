@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:travel_mate/blocs/auth/auth_bloc.dart';
@@ -11,6 +10,7 @@ import 'package:travel_mate/screens/chat/packages_screen.dart';
 import 'package:unicons/unicons.dart';
 import 'package:travel_mate/models/models.dart';
 import 'package:uuid/uuid.dart';
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 
 class ChatScreen extends StatelessWidget {
   static const String routeName = '/chat';
@@ -129,7 +129,7 @@ class _MessageInput extends StatelessWidget {
         child: Row(
           children: [
             IconButton(
-              icon: Icon(Icons.add),
+              icon: Icon(EvaIcons.fileAdd, size: 40, color: Color(0xFFF5C518),),
               onPressed: () {
                 showModalBottomSheet(
                   context: context,
@@ -144,52 +144,48 @@ class _MessageInput extends StatelessWidget {
                 controller: controller,
                 decoration: InputDecoration(
                   filled: true,
-                  fillColor: Colors.white,
+                  fillColor: Color(0xFFEDEDED),
                   hintText: 'Type a message',
                   contentPadding:
                       const EdgeInsets.only(left: 20, bottom: 5, top: 5),
                   focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.white),
+                    borderRadius: BorderRadius.circular(15.0),
                   ),
                   enabledBorder: UnderlineInputBorder(
                     borderSide: BorderSide(color: Colors.white),
+                    borderRadius: BorderRadius.circular(15.0),
                   ),
                 ),
               ),
             ),
             // IconButton(
-            //   icon: Icon(Icons.add),
-            //   onPressed: () {
-            //     showModalBottomSheet(
-            //       context: context,
-            //       builder: (BuildContext context) {
-            //         return _buildBottomModal(context, match);
-            //       },
-            //     );
-            //   },
-            // ),
-            Container(
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Theme.of(context).primaryColor,
-              ),
-              child: IconButton(
-                icon: Icon(UniconsLine.message),
-                onPressed: () {
-                  String uuid = new Uuid().v4();
-                  context.read<ChatBloc>()
-                    ..add(
-                      AddMessage(
-                        userId: match.userId,
-                        matchUserId: match.matchUser.id!,
-                        message: controller.text,
-                        messageId: uuid,
-                        itinerary: finalOption,
-                      ),
-                    );
-                  controller.clear();
-                },
-                color: Colors.white,
+
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Theme.of(context).primaryColor,
+                ),
+                child: IconButton(
+                  icon: Icon(UniconsLine.message, size: 25,),
+                  onPressed: () {
+                    String uuid = new Uuid().v4();
+                    context.read<ChatBloc>()
+                      ..add(
+                        AddMessage(
+                          userId: match.userId,
+                          matchUserId: match.matchUser.id!,
+                          message: controller.text,
+                          messageId: uuid,
+                          itinerary: finalOption,
+                        ),
+                      );
+                    controller.clear();
+                  },
+                  color: Colors.white,
+                ),
               ),
             ),
           ],
@@ -299,12 +295,12 @@ class _Message extends StatelessWidget {
         isFromCurrentUser ? Alignment.topRight : Alignment.topLeft;
 
     Color color = isFromCurrentUser
-        ? Theme.of(context).backgroundColor
-        : Theme.of(context).primaryColor;
+        ? Theme.of(context).primaryColor
+        : Theme.of(context).backgroundColor;
 
     TextStyle? textStyle = isFromCurrentUser
-        ? Theme.of(context).textTheme.headline6!.copyWith(color: Colors.black)
-        : Theme.of(context).textTheme.headline6!.copyWith(color: Colors.white);
+        ? Theme.of(context).textTheme.titleLarge!.copyWith(color: Colors.white, fontSize: 17)
+        : Theme.of(context).textTheme.titleLarge!.copyWith(color: Colors.black, fontSize: 17);
 
     if (itinerary != null) {
       return GestureDetector(
@@ -413,7 +409,7 @@ class _Message extends StatelessWidget {
           child: Row(
             children: [
               CircleAvatar(
-                radius: 15,
+                radius: 22,
                 backgroundImage: NetworkImage(match.matchUser.imageUrls[0]),
               ),
               SizedBox(
@@ -424,9 +420,9 @@ class _Message extends StatelessWidget {
                   child: Align(
                     alignment: alignment,
                     child: Container(
-                      padding: const EdgeInsets.all(8),
+                      padding: const EdgeInsets.all(10),
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8.0),
+                        borderRadius: BorderRadius.circular(20.0),
                         color: color,
                       ),
                       child: Text(
@@ -444,9 +440,9 @@ class _Message extends StatelessWidget {
         return Align(
           alignment: alignment,
           child: Container(
-            padding: const EdgeInsets.all(8),
+            padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8.0),
+              borderRadius: BorderRadius.circular(20.0),
               color: color,
             ),
             child: Text(
