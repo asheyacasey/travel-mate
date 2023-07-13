@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:travel_mate/blocs/auth/auth_bloc.dart';
 import 'package:travel_mate/blocs/blocs.dart';
 import 'package:travel_mate/repositories/database/database_repository.dart';
@@ -102,8 +103,8 @@ class _CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           Text(
             match.matchUser.name,
             style: Theme.of(context).textTheme.headline4!.copyWith(
-              fontWeight: FontWeight.w800,
-            ),
+                  fontWeight: FontWeight.w800,
+                ),
           ),
         ],
       ),
@@ -129,7 +130,11 @@ class _MessageInput extends StatelessWidget {
         child: Row(
           children: [
             IconButton(
-              icon: Icon(EvaIcons.fileAdd, size: 40, color: Color(0xFFF5C518),),
+              icon: Icon(
+                EvaIcons.fileAdd,
+                size: 40,
+                color: Color(0xFFF5C518),
+              ),
               onPressed: () {
                 showModalBottomSheet(
                   context: context,
@@ -169,7 +174,10 @@ class _MessageInput extends StatelessWidget {
                   color: Theme.of(context).primaryColor,
                 ),
                 child: IconButton(
-                  icon: Icon(UniconsLine.message, size: 25,),
+                  icon: Icon(
+                    UniconsLine.message,
+                    size: 25,
+                  ),
                   onPressed: () {
                     String uuid = new Uuid().v4();
                     context.read<ChatBloc>()
@@ -201,69 +209,172 @@ Widget _buildBottomModal(BuildContext context, Match match) {
   return StatefulBuilder(
     builder: (BuildContext context, StateSetter setState) {
       return Container(
-        padding: EdgeInsets.all(16.0),
+        height: 440,
+        padding: EdgeInsets.all(20.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              'Generate an Itinerary Plan',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
+              'TravelMate',
+              style: GoogleFonts.fredokaOne(
+                textStyle: TextStyle(
+                  fontSize: 25,
+                  color: Color(0xFFB0DB2D),
+                ),
+              ),
+            ),
+            SizedBox(height: 5),
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8.0),
+                color: Color(0xFFF5C518),
+              ),
+
+              child: Padding(
+                padding: const EdgeInsets.all(6.0),
+                child: Text(
+                  'Itinerary Planner',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
               ),
             ),
             SizedBox(height: 16.0),
-            Text('How many days?'),
-            Row(
-              children: [
-                Radio<int>(
-                  value: 1,
-                  groupValue: selectedDays,
-                  onChanged: (value) {
-                    setState(() {
-                      selectedDays = value!;
-                    });
-                  },
+            Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15.0),
+                  color: Colors.transparent,
+                  border: Border.all(
+                    color: Color(0xFFECEAEA), // Replace with your desired border color
+                    width: 2.0, // Adjust the border width as needed
+                  ),
                 ),
-                Text('1'),
-                Radio<int>(
-                  value: 2,
-                  groupValue: selectedDays,
-                  onChanged: (value) {
-                    setState(() {
-                      selectedDays = value!;
-                    });
-                  },
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(15.0, 20.0, 15.0, 15.0),
+                child: Column(
+                  children: [
+                    Text(
+                      'How many days do you plan to travel together?',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            width: 180,
+                            child: TextButton(
+                              onPressed: () => setState(() => selectedDays = 1),
+                              style: ButtonStyle(
+                                backgroundColor: MaterialStateProperty.all<Color>(
+                                  selectedDays == 1 ? Color(0xFFF5C518) : Color(0xFFEDEDED),
+                                ),
+                                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20.0),
+                                  ),
+                                ),
+                              ),
+                              child: Text(
+                                '1 Day',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: selectedDays == 1 ? Colors.white : Colors.black,
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 180,
+                            child: TextButton(
+                              onPressed: () => setState(() => selectedDays = 2),
+                              style: ButtonStyle(
+                                backgroundColor: MaterialStateProperty.all<Color>(
+                                  selectedDays == 2 ? Color(0xFFF5C518) : Color(0xFFEDEDED),
+                                ),
+                                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20.0),
+                                  ),
+                                ),
+                              ),
+                              child: Text(
+                                '2 Days',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: selectedDays == 2 ? Colors.white : Colors.black,
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 180,
+                            child: TextButton(
+                              onPressed: () => setState(() => selectedDays = 3),
+                              style: ButtonStyle(
+                                backgroundColor: MaterialStateProperty.all<Color>(
+                                  selectedDays == 3 ? Color(0xFFF5C518) : Color(0xFFEDEDED),
+                                ),
+                                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20.0),
+                                  ),
+                                ),
+                              ),
+                              child: Text(
+                                '3 Days or more',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: selectedDays == 3 ? Colors.white : Colors.black,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+
+                    ),
+                  ],
                 ),
-                Text('2'),
-                Radio<int>(
-                  value: 3,
-                  groupValue: selectedDays,
-                  onChanged: (value) {
-                    setState(() {
-                      selectedDays = value!;
-                    });
-                  },
-                ),
-                Text('3'),
-              ],
+
+              ),
             ),
+
             SizedBox(height: 16.0),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => PackagesScreen(
-                      numberOfDays: selectedDays,
-                      match: match,
+            Container(
+              height: 50, // Adjust the height as desired
+              width: 300, // Adjust the width as desired
+              child: TextButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => PackagesScreen(
+                        numberOfDays: selectedDays,
+                        match: match,
+                      ),
+                    ),
+                  );
+                },
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all<Color>( Color(0xFFB0DB2D)),
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(25.0),
                     ),
                   ),
-                );
-              },
-              child: Text('Generate'),
+                ),
+                child: Text('Create Itinerary Plan', style: TextStyle(color: Colors.white, fontSize: 16),),
+              ),
             ),
+
           ],
         ),
       );
@@ -299,8 +410,14 @@ class _Message extends StatelessWidget {
         : Theme.of(context).backgroundColor;
 
     TextStyle? textStyle = isFromCurrentUser
-        ? Theme.of(context).textTheme.titleLarge!.copyWith(color: Colors.white, fontSize: 17)
-        : Theme.of(context).textTheme.titleLarge!.copyWith(color: Colors.black, fontSize: 17);
+        ? Theme.of(context)
+            .textTheme
+            .titleLarge!
+            .copyWith(color: Colors.white, fontSize: 17)
+        : Theme.of(context)
+            .textTheme
+            .titleLarge!
+            .copyWith(color: Colors.black, fontSize: 17);
 
     if (itinerary != null) {
       return GestureDetector(
