@@ -30,7 +30,7 @@ class MatchesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: 'TravelMate'),
+      appBar: CustomAppBar(title: 'travelmate'),
       body: BlocBuilder<MatchBloc, MatchState>(
         builder: (context, state) {
           if (state is MatchLoading) {

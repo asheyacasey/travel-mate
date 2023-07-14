@@ -216,7 +216,7 @@ Widget _buildBottomModal(BuildContext context, Match match) {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              'TravelMate',
+              'travelmate',
               style: GoogleFonts.fredokaOne(
                 textStyle: TextStyle(
                   fontSize: 25,
@@ -259,6 +259,7 @@ Widget _buildBottomModal(BuildContext context, Match match) {
                   children: [
                     Text(
                       'How many days do you plan to travel together?',
+                      textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,

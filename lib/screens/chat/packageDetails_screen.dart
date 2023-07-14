@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:travel_mate/blocs/blocs.dart';
 import 'package:travel_mate/repositories/database/database_repository.dart';
@@ -266,7 +267,19 @@ class _PackageDetailsScreenState extends State<PackageDetailsScreen> {
       ),
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Package Details'),
+          title: Text('travelmate',
+            style: GoogleFonts.fredokaOne(
+              textStyle: TextStyle(
+                fontSize: 20,
+                color: Color(0xFFB0DB2D),
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+          centerTitle: true,
+          backgroundColor: Colors.white,
+          iconTheme: IconThemeData(color: Theme.of(context).primaryColor),
+          elevation: 0.0,
         ),
         body: ListView.builder(
           itemCount: activitiesByDay.length,
