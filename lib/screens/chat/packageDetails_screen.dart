@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:travel_mate/blocs/blocs.dart';
+import 'package:travel_mate/repositories/auth/auth_repository.dart';
 import 'package:travel_mate/repositories/database/database_repository.dart';
 import 'package:travel_mate/screens/chat/packages_screen.dart';
 import 'package:travel_mate/models/models.dart';
@@ -85,8 +86,9 @@ class _PackageDetailsScreenState extends State<PackageDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => ChatBloc(
+      create: (context) => AuthBloc(
         databaseRepository: context.read<DatabaseRepository>(),
+        authRepository: context.read<AuthRepository>(),
       ),
       child: Scaffold(
         appBar: AppBar(
@@ -240,6 +242,7 @@ class _PackageDetailsScreenState extends State<PackageDetailsScreen> {
 
   void sendItinerary(BuildContext context) async {
     try {
+      final String name = context.read<AuthBloc>().state.user!.name;
       List<Activity> itinerary = widget.package.activities;
       String messageId = Uuid().v4();
 
@@ -275,7 +278,7 @@ class _PackageDetailsScreenState extends State<PackageDetailsScreen> {
           senderId: widget.match.userId,
           receiverId: widget.match.matchUser.id!,
           messageId: messageId,
-          message: "Date Invitation",
+          message: "${name} sent an Invitation",
           itinerary: itineraryMap,
           dateTime: DateTime.now(),
           timeString: DateFormat('HH:mm').format(DateTime.now()));
