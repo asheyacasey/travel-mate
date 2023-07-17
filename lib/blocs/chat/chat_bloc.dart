@@ -50,6 +50,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
           message: event.message,
           messageId: event.messageId,
           itinerary: event.itinerary,
+          numberOfDays: event.numberOfDays,
           itineraryAccept: event.isAccepted,
           dateTime: DateTime.now(),
           timeString: DateFormat('HH:mm').format(DateTime.now()));

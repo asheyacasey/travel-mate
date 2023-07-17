@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:travel_mate/models/models.dart';
 import 'package:travel_mate/screens/chat/packageDetails_screen.dart';
@@ -14,48 +15,108 @@ class PackagesScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Package Itineraries'),
+        title: Text(
+          'travelmate',
+          style: GoogleFonts.fredokaOne(
+            textStyle: TextStyle(
+              fontSize: 20,
+              color: Color(0xFFB0DB2D),
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.white,
+        iconTheme: IconThemeData(color: Theme.of(context).primaryColor),
+        elevation: 0.0,
       ),
-      body: FutureBuilder<List<Package>>(
-        future: generatePackagesFromFirebase(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          } else {
-            List<Package> packages = snapshot.data!;
-            return ListView.builder(
-              physics: AlwaysScrollableScrollPhysics(),
-              itemCount: packages.length,
-              itemBuilder: (context, index) {
-                Package package = packages[index];
-                return Card(
-                  child: ListTile(
-                    title: Text('Package ${index + 1}'),
-                    subtitle: Text(
-                        'Total Duration: ${package.totalDuration} minutes'),
-                    trailing: Icon(Icons.arrow_forward),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => PackageDetailsScreen(
-                                  package: package,
-                                  numberOfDays: numberOfDays,
-                                  match: match,
-                                )),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Container(
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  children: [
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          'Travel Date Itinerary',
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w900,
+                            color: Color(0xFFB0DB2D),
+                          ),
+                        ),
+                      ),
+
+                    ),
+                    Divider(
+                      thickness: 1.0,
+                      color: Colors.black,
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: FutureBuilder<List<Package>>(
+                  future: generatePackagesFromFirebase(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(child: CircularProgressIndicator());
+                    } else if (snapshot.hasError) {
+                      return Center(child: Text('Error: ${snapshot.error}'));
+                    } else {
+                      List<Package> packages = snapshot.data!;
+                      return ListView.builder(
+                        physics: AlwaysScrollableScrollPhysics(),
+                        itemCount: packages.length,
+                        itemBuilder: (context, index) {
+                          Package package = packages[index];
+                          return Card(
+                            child: ListTile(
+                              title: Text(
+                                'Package ${index + 1}',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              subtitle: Text(
+                                  'Total Duration: ${package.totalDuration} minutes'),
+                              trailing: Icon(Icons.arrow_forward),
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => PackageDetailsScreen(
+                                      package: package,
+                                      numberOfDays: numberOfDays,
+                                      match: match,
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          );
+                        },
                       );
-                    },
-                  ),
-                );
-              },
-            );
-          }
-        },
+                    }
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
+
+
 
   Future<List<Package>> generatePackagesFromFirebase() async {
     QuerySnapshot snapshot =

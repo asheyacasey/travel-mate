@@ -2,189 +2,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:travel_mate/blocs/blocs.dart';
+import 'package:travel_mate/repositories/auth/auth_repository.dart';
 import 'package:travel_mate/repositories/database/database_repository.dart';
 import 'package:travel_mate/screens/chat/packages_screen.dart';
 import 'package:travel_mate/models/models.dart';
 import 'package:uuid/uuid.dart';
-
-// class PackageDetailsScreen extends StatelessWidget {
-//   final Package package;
-
-//   PackageDetailsScreen({required this.package});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     List<Widget> dayWidgets = [];
-//     List<Activity> activities = package.activities;
-
-//     int totalDuration = 0;
-//     int currentDay = 1;
-
-//     for (int i = 0; i < activities.length; i++) {
-//       Activity activity = activities[i];
-//       totalDuration += activity.duration;
-
-//       if (totalDuration > 180) {
-//         currentDay++;
-//         totalDuration = activity.duration;
-//       }
-
-//       String dayTitle = 'Day $currentDay';
-
-//       if (!dayWidgets.contains(dayTitle)) {
-//         dayWidgets.add(
-//           Text(
-//             dayTitle,
-//             style: TextStyle(fontWeight: FontWeight.bold),
-//           ),
-//         );
-//       }
-
-//       dayWidgets.add(
-//         ListTile(
-//           title: Text(activity.activityName),
-//           subtitle: Text(
-//             'Category: ${activity.category}\nAddress: ${activity.address}\nTime: ${activity.timeStart.format(context)} - ${addDurationToTime(activity.timeStart, activity.duration).format(context)}',
-//           ),
-//         ),
-//       );
-//     }
-
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text('Package Details'),
-//       ),
-//       body: ListView(children: dayWidgets),
-//     );
-//   }
-// }
-
-// class PackageDetailsScreen extends StatelessWidget {
-//   final Package package;
-
-//   PackageDetailsScreen({required this.package});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     List<List<Activity>> activitiesByDay =
-//         groupActivitiesByDay(package.activities);
-
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text('Package Details'),
-//       ),
-//       body: ListView.builder(
-//         itemCount: activitiesByDay.length,
-//         itemBuilder: (context, dayIndex) {
-//           List<Activity> activities = activitiesByDay[dayIndex];
-//           int dayNumber = dayIndex + 1;
-
-//           return Column(
-//             crossAxisAlignment: CrossAxisAlignment.start,
-//             children: [
-//               Padding(
-//                 padding: const EdgeInsets.all(8.0),
-//                 child: Text(
-//                   'Day $dayNumber',
-//                   style: TextStyle(
-//                     fontSize: 20,
-//                     fontWeight: FontWeight.bold,
-//                   ),
-//                 ),
-//               ),
-//               ListView.builder(
-//                 shrinkWrap: true,
-//                 physics: NeverScrollableScrollPhysics(),
-//                 itemCount: activities.length,
-//                 itemBuilder: (context, index) {
-//                   Activity activity = activities[index];
-//                   return ListTile(
-//                     title: Text(activity.activityName),
-//                     subtitle: Text(
-//                       'Category: ${activity.category}\nAddress: ${activity.address}\nTime: ${activity.timeStart.format(context)} - ${addDurationToTime(activity.timeStart, activity.duration).format(context)}',
-//                     ),
-//                   );
-//                 },
-//               ),
-//             ],
-//           );
-//         },
-//       ),
-//     );
-//   }
-
-//   List<List<Activity>> groupActivitiesByDay(List<Activity> activities) {
-//     List<List<Activity>> activitiesByDay = [];
-//     List<Activity> currentDayActivities = [];
-
-//     activities.sort((a, b) {
-//       DateTime dateTimeA = DateTime(
-//         DateTime.now().year,
-//         DateTime.now().month,
-//         DateTime.now().day,
-//         a.timeStart.hour,
-//         a.timeStart.minute,
-//       );
-//       DateTime dateTimeB = DateTime(
-//         DateTime.now().year,
-//         DateTime.now().month,
-//         DateTime.now().day,
-//         b.timeStart.hour,
-//         b.timeStart.minute,
-//       );
-
-//       int timeComparison = dateTimeA.compareTo(dateTimeB);
-//       if (timeComparison != 0) {
-//         return timeComparison; // Sort by timeStart
-//       } else {
-//         return a.duration
-//             .compareTo(b.duration); // Sort by duration (secondary criteria)
-//       }
-//     });
-
-//     int totalDuration = 0;
-//     for (int i = 0; i < activities.length; i++) {
-//       Activity activity = activities[i];
-//       totalDuration += activity.duration;
-//       currentDayActivities.add(activity);
-
-//       if (totalDuration >= 180 || i == activities.length - 1) {
-//         currentDayActivities.sort((a, b) {
-//           DateTime dateTimeA = DateTime(
-//             DateTime.now().year,
-//             DateTime.now().month,
-//             DateTime.now().day,
-//             a.timeStart.hour,
-//             a.timeStart.minute,
-//           );
-//           DateTime dateTimeB = DateTime(
-//             DateTime.now().year,
-//             DateTime.now().month,
-//             DateTime.now().day,
-//             b.timeStart.hour,
-//             b.timeStart.minute,
-//           );
-
-//           int timeComparison = dateTimeA.compareTo(dateTimeB);
-//           if (timeComparison != 0) {
-//             return timeComparison; // Sort by timeStart
-//           } else {
-//             return a.duration
-//                 .compareTo(b.duration); // Sort by duration (secondary criteria)
-//           }
-//         });
-
-//         activitiesByDay.add(currentDayActivities);
-//         currentDayActivities = [];
-//         totalDuration = 0;
-//       }
-//     }
-
-//     return activitiesByDay;
-//   }
-// }
 
 class PackageDetailsScreen extends StatefulWidget {
   final Package package;
@@ -261,12 +86,26 @@ class _PackageDetailsScreenState extends State<PackageDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => ChatBloc(
+      create: (context) => AuthBloc(
         databaseRepository: context.read<DatabaseRepository>(),
+        authRepository: context.read<AuthRepository>(),
       ),
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Package Details'),
+          title: Text(
+            'travelmate',
+            style: GoogleFonts.fredokaOne(
+              textStyle: TextStyle(
+                fontSize: 20,
+                color: Color(0xFFB0DB2D),
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+          centerTitle: true,
+          backgroundColor: Colors.white,
+          iconTheme: IconThemeData(color: Theme.of(context).primaryColor),
+          elevation: 0.0,
         ),
         body: ListView.builder(
           itemCount: activitiesByDay.length,
@@ -403,19 +242,44 @@ class _PackageDetailsScreenState extends State<PackageDetailsScreen> {
 
   void sendItinerary(BuildContext context) async {
     try {
+      final String name = context.read<AuthBloc>().state.user!.name;
       List<Activity> itinerary = widget.package.activities;
       String messageId = Uuid().v4();
 
+      List<Activity> updatedItinerary = [];
+
+      itinerary.forEach((activity) {
+        int minutes = activity.timeStart.minute + activity.duration;
+        int hours = activity.timeStart.hour + (minutes ~/ 60);
+        int remainingMinutes = minutes % 60;
+
+        TimeOfDay updatedTimeEnd =
+            TimeOfDay(hour: hours, minute: remainingMinutes);
+
+        Activity updatedActivity = Activity(
+          activityName: activity.activityName,
+          category: activity.category,
+          address: activity.address,
+          timeStart: activity.timeStart,
+          timeEnd: updatedTimeEnd, // Update the timeEnd value
+          duration: activity.duration,
+        );
+
+        updatedItinerary.add(updatedActivity);
+      });
+
       Map<String, dynamic> itineraryMap = {
-        'activities':
-            itinerary.map((activity) => activity.toMap(context)).toList(),
+        'activities': updatedItinerary
+            .map((activity) => activity.toMap(context))
+            .toList(),
       };
 
       final Message message = Message(
           senderId: widget.match.userId,
           receiverId: widget.match.matchUser.id!,
           messageId: messageId,
-          message: "Date Invitation",
+          message: "${name} sent an Invitation",
+          numberOfDays: widget.numberOfDays,
           itinerary: itineraryMap,
           dateTime: DateTime.now(),
           timeString: DateFormat('HH:mm').format(DateTime.now()));
