@@ -113,14 +113,15 @@ class _BusinessHomeScreenState extends State<BusinessHomeScreen> {
           children: [
             Padding(
               padding: const EdgeInsets.all(15.0),
-              child: Row(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     'Welcome, ',
                     style:
                         Theme.of(context).primaryTextTheme.headline2!.copyWith(
                               color: Theme.of(context).primaryColor,
-                              fontSize: 28,
+                              fontSize: 23,
                             ),
                   ),
                   Text(
@@ -128,7 +129,7 @@ class _BusinessHomeScreenState extends State<BusinessHomeScreen> {
                     style:
                         Theme.of(context).primaryTextTheme.headline2!.copyWith(
                               color: Theme.of(context).primaryColorLight,
-                              fontSize: 28,
+                              fontSize: 23,
                             ),
                   ),
                 ],
@@ -139,9 +140,9 @@ class _BusinessHomeScreenState extends State<BusinessHomeScreen> {
                   const EdgeInsets.only(left: 20.0, bottom: 10.0, right: 16.0),
               child: Text(
                 'Feel the thrill of adventure! Add an exhilarating activity that will leave travelers in awe and make their itinerary plan unforgettable.',
-                style: GoogleFonts.fredoka(
+                style: GoogleFonts.manrope(
                   textStyle: TextStyle(
-                    fontSize: 16,
+                    fontSize: 15,
                     color: Colors.black,
                     //fontWeight: FontWeight.w500,
                   ),
