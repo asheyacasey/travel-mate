@@ -64,6 +64,7 @@ class ChatScreen extends StatelessWidget {
                           message: messages[index].message,
                           messageId: messages[index].messageId,
                           itinerary: messages[index].itinerary,
+                          numberOfDays: messages[index].numberOfDays,
                           isAccepted: messages[index].itineraryAccept,
                           isFromCurrentUser: messages[index].senderId ==
                               context.read<AuthBloc>().state.authUser!.uid,
@@ -414,6 +415,7 @@ class _Message extends StatelessWidget {
     required this.match,
     this.itinerary,
     this.isAccepted,
+    this.numberOfDays,
     required this.isFromCurrentUser,
   }) : super(key: key);
 
@@ -423,6 +425,7 @@ class _Message extends StatelessWidget {
   final bool isFromCurrentUser;
   final Map<String, dynamic>? itinerary;
   final int? isAccepted;
+  final int? numberOfDays;
 
   @override
   Widget build(BuildContext context) {
@@ -523,7 +526,11 @@ class _Message extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => ItineraryScreen(itinerary: itinerary),
+                builder: (context) => ItineraryScreen(
+                    itinerary: itinerary,
+                    numberOfDays: numberOfDays,
+                    match: match,
+                    oldMessageId: messageId),
               ),
             );
           } else if (!isFromCurrentUser && isAccepted == null) {
@@ -634,6 +641,7 @@ class _Message extends StatelessWidget {
                                       userId: match.matchUser.id!,
                                       matchUserId: match.userId,
                                       itinerary: itinerary,
+                                      numberOfDays: numberOfDays,
                                       isAccepted: 1,
                                       message:
                                           '${context.read<AuthBloc>().state.user!.name} accepted the invitation',

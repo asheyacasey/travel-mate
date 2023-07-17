@@ -279,6 +279,7 @@ class _PackageDetailsScreenState extends State<PackageDetailsScreen> {
           receiverId: widget.match.matchUser.id!,
           messageId: messageId,
           message: "${name} sent an Invitation",
+          numberOfDays: widget.numberOfDays,
           itinerary: itineraryMap,
           dateTime: DateTime.now(),
           timeString: DateFormat('HH:mm').format(DateTime.now()));

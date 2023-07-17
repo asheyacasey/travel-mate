@@ -54,6 +54,7 @@ class UpdateMessage extends ChatEvent {
   final String oldMessageId;
   final Map<String, dynamic>? itinerary;
   final int? isAccepted;
+  final int? numberOfDays;
 
   UpdateMessage(
       {required this.userId,
@@ -62,6 +63,7 @@ class UpdateMessage extends ChatEvent {
       required this.messageId,
       required this.oldMessageId,
       this.itinerary,
+      this.numberOfDays,
       this.isAccepted});
 
   @override
@@ -71,6 +73,7 @@ class UpdateMessage extends ChatEvent {
         message,
         messageId,
         oldMessageId,
+        numberOfDays,
         itinerary,
         isAccepted
       ];
