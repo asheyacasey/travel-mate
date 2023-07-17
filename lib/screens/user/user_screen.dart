@@ -22,6 +22,7 @@ class UsersScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xFFF8F7CA),
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.transparent,
@@ -78,80 +79,63 @@ class UsersScreen extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(height: 40),
+          SizedBox(height: 30),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8.0),
+            padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 8.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  children: [
-                    Text(
-                      '${user.name}, ${user.age} ',
-                      style: GoogleFonts.fredokaOne(
-                        textStyle: TextStyle(
-                          fontSize: 30,
-                          color: Colors.black54,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
+                Text('About me',
+                  style: GoogleFonts.manrope(
+                    textStyle: TextStyle(
+                      fontSize: 16,
+                      color: Colors.black45,
+                      //fontWeight: FontWeight.w500,
                     ),
-                  ],
+                  ),
                 ),
-
-                Padding(
-                  padding: const EdgeInsets.only(left: 5.0, top: 5.0),
-                  child: Text(
-                    '${user.jobTitle}',
-                    style: Theme.of(context).textTheme.headline3!.copyWith(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 20,
-                        color: Colors.black54),
+                SizedBox(height: 5),
+                Text('${user.bio}',
+                  style: GoogleFonts.manrope(
+                    textStyle: TextStyle(
+                      fontSize: 20,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w400,
+                    ),
                   ),
                 ),
                 SizedBox(height: 25),
                 Row(
                   children: [
-                    Text('About ${user.name}',
+                    Text('My Basics',
                       style: GoogleFonts.manrope(
                         textStyle: TextStyle(
-                          fontSize: 20,
-                          color: Colors.black54,
-                          fontWeight: FontWeight.w800,
+                          fontSize: 16,
+                          color: Colors.black45,
+                          //fontWeight: FontWeight.w500,
                         ),
                       ),),
                     SizedBox(width: 5.0,),
-                    Container(
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.white,
-                      ),
-                      child: Icon(
-                        UniconsLine.google_hangouts_alt,
-                        size: 30,
-                        color: Theme.of(context).primaryColor,
-                      ),
-                    ),
+
                   ],
                 ),
-
-                Text('${user.bio}',
-                    style: GoogleFonts.manrope(
-                      textStyle: TextStyle(
-                        fontSize: 26,
-                        color: Colors.black54,
-                        fontWeight: FontWeight.w800,
-                      ),
-                    ),),
+            Text('${user.jobTitle}',
+                  style: GoogleFonts.manrope(
+                    textStyle: TextStyle(
+                      fontSize: 20,
+                      color: Colors.black,
+                      //fontWeight: FontWeight.w500,
+                    ),
+                  ),),
                 SizedBox(height: 30),
                 Text('Interest',
                   style: GoogleFonts.manrope(
                     textStyle: TextStyle(
-                      fontSize: 20,
-                      color: Colors.black54,
-                      fontWeight: FontWeight.w800,
+                      fontSize: 16,
+                      color: Colors.black45,
                     ),
                   ),),
+                SizedBox(height: 5,),
                 Row(
                   children: user.interests
                       .map((interest) => Container(
@@ -159,7 +143,7 @@ class UsersScreen extends StatelessWidget {
                             margin: const EdgeInsets.only(top: 5.0, right: 5.0),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(22.0),
-                              color: Theme.of(context).primaryColor,
+                              color: Color(0xFFF5C518),
                             ),
                             child: Text(
                               interest,
@@ -167,7 +151,7 @@ class UsersScreen extends StatelessWidget {
                                 textStyle: TextStyle(
                                   fontSize: 18,
                                   color: Colors.white,
-
+                                  //fontWeight: FontWeight.w500,
                                 ),
                               ),),
                           ))
