@@ -109,7 +109,7 @@ class _BusinessInfoScreenState extends State<BusinessInfoScreen> {
   Future<List<String>> _getAddressSuggestions(String query) async {
     try {
       final url = Uri.parse(
-          'https://nominatim.openstreetmap.org/search?format=json&q=$query');
+          'https://nominatim.openstreetmap.org/search?format=json&q=$query, Cebu, Philippines');
       final response = await http.get(url);
 
       if (response.statusCode == 200) {
@@ -161,10 +161,9 @@ class _BusinessInfoScreenState extends State<BusinessInfoScreen> {
               Text(
                 'Enter Your Business Information',
                 style: Theme.of(context).primaryTextTheme.headline2!.copyWith(
-
-                  color: Theme.of(context).primaryColor,
-                  fontSize: 28,
-                ),
+                      color: Theme.of(context).primaryColor,
+                      fontSize: 28,
+                    ),
               ),
               SizedBox(height: 40),
               Text(
@@ -191,13 +190,10 @@ class _BusinessInfoScreenState extends State<BusinessInfoScreen> {
                       hintText: 'Enter your business address',
                       errorText: _businessAddressError,
                     ),
-                    onChanged: (query){
+                    onChanged: (query) {
                       _updateAddressSuggestions(query);
                     },
                   ),
-
-
-
                   SizedBox(height: 10),
                   if (_addressSuggestions.isNotEmpty)
                     Container(
@@ -245,9 +241,6 @@ class _BusinessInfoScreenState extends State<BusinessInfoScreen> {
                   ),
                 ),
               )
-
-
-
             ],
           ),
         ),
