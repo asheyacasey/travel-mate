@@ -4,27 +4,93 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:travel_mate/models/models.dart';
 import 'package:travel_mate/screens/chat/packageDetails_screen.dart';
+import 'dart:math';
 
-class PackagesScreen extends StatelessWidget {
+class PackagesScreen extends StatefulWidget {
   final int numberOfDays;
   final Match match;
 
   PackagesScreen({required this.numberOfDays, required this.match});
 
   @override
+  _PackagesScreenState createState() => _PackagesScreenState();
+}
+
+class _PackagesScreenState extends State<PackagesScreen> {
+  List<String> randomTitles = [];
+  int lastUsedTitleIndex = -1;
+
+  @override
+  void initState() {
+    super.initState();
+    _shuffleRandomTitles();
+  }
+
+  void _shuffleRandomTitles() {
+    randomTitles = [
+          "Sweetheart Soiree",
+          "Lovely Rendezvous",
+          "Adorable Adventure",
+          "Charming Getaway",
+          "Whimsical Wanderlust",
+          "Enchanting Excursion",
+          "Playful Retreat",
+          "Darling Escape",
+          "Romantic Roaming",
+          "Magical Memories",
+          "Cuddlesome Journey",
+          "Blissful Expedition",
+          "Heartwarming Holiday",
+          "Dreamy Discovery",
+          "Sunny Serenade",
+          "Cozy Caravan",
+          "Honeybee Honeymoon",
+          "Cherished Trails",
+          "Sparkling Stroll",
+          "Smitten Sightseeing",
+    ];
+    randomTitles.shuffle();
+    lastUsedTitleIndex = -1;
+  }
+
+  String _getNextRandomTitle() {
+    lastUsedTitleIndex++;
+    if (lastUsedTitleIndex >= randomTitles.length) {
+      _shuffleRandomTitles();
+      lastUsedTitleIndex = 0;
+    }
+    return randomTitles[lastUsedTitleIndex];
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          'travelmate',
-          style: GoogleFonts.fredokaOne(
-            textStyle: TextStyle(
-              fontSize: 20,
-              color: Color(0xFFB0DB2D),
-              fontWeight: FontWeight.w500,
-            ),
+        title: RichText(
+          text: TextSpan(
+            children: [
+              TextSpan(
+                text: 'travel',
+                style: GoogleFonts.fredokaOne(
+                  textStyle: TextStyle(
+                    fontSize: 23,
+                    fontWeight: FontWeight.w500,
+                    color: Color(0xFFF5C518), // First color
+                  ),
+                ),
+              ),
+              TextSpan(
+                text: 'mate',
+                style: GoogleFonts.fredokaOne(
+                  textStyle: TextStyle(
+                    fontSize: 23,
+                    fontWeight: FontWeight.w500,
+                    color: Color(0xFFB0DB2D), // Second color
+                  ),
+                ),
+              ),
+            ],
           ),
-
         ),
         centerTitle: true,
         backgroundColor: Colors.white,
@@ -42,23 +108,20 @@ class PackagesScreen extends StatelessWidget {
                   children: [
                     Align(
                       alignment: Alignment.centerLeft,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          'Travel Date Itinerary',
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w900,
-                            color: Color(0xFFB0DB2D),
-                          ),
-                        ),
+                      child: Text(
+                        'Travel Date Plans',
+                        textAlign: TextAlign.start,
+                        style: GoogleFonts.manrope(
+                            textStyle: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w900,
+                              color: Color(0xFFB0DB2D),
+                            )),
                       ),
-
                     ),
                     Divider(
                       thickness: 1.0,
-                      color: Colors.black,
+                      color: Color(0xFFDADADA),
                     ),
                   ],
                 ),
@@ -78,16 +141,32 @@ class PackagesScreen extends StatelessWidget {
                         itemCount: packages.length,
                         itemBuilder: (context, index) {
                           Package package = packages[index];
+                          String randomTitle = _getNextRandomTitle();
                           return Card(
                             child: ListTile(
                               title: Text(
-                                'Package ${index + 1}',
+                                randomTitle,
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              subtitle: Text(
-                                  'Total Duration: ${package.totalDuration} minutes'),
+                              subtitle: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "Around Cebu",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 11,
+                                      color: Colors.black54,
+                                    ),
+                                  ),
+                                  SizedBox(height: 4),
+                                  Text(
+                                    'Total Duration: ${package.totalDuration} minutes',
+                                  ),
+                                ],
+                              ),
                               trailing: Icon(Icons.arrow_forward),
                               onTap: () {
                                 Navigator.push(
@@ -95,8 +174,8 @@ class PackagesScreen extends StatelessWidget {
                                   MaterialPageRoute(
                                     builder: (context) => PackageDetailsScreen(
                                       package: package,
-                                      numberOfDays: numberOfDays,
-                                      match: match,
+                                      numberOfDays: widget.numberOfDays,
+                                      match: widget.match,
                                     ),
                                   ),
                                 );
@@ -116,11 +195,9 @@ class PackagesScreen extends StatelessWidget {
     );
   }
 
-
-
   Future<List<Package>> generatePackagesFromFirebase() async {
     QuerySnapshot snapshot =
-        await FirebaseFirestore.instance.collection('business').get();
+    await FirebaseFirestore.instance.collection('business').get();
 
     List<Activity> activities = [];
 
@@ -141,9 +218,9 @@ class PackagesScreen extends StatelessWidget {
           duration: activityData['duration'],
         );
 
-        // Check if activity with same activityName and address already exists in activities list
+        // Check if activity with the same activityName and address already exists in activities list
         bool activityExists = activities.any((existingActivity) =>
-            existingActivity.activityName == activity.activityName &&
+        existingActivity.activityName == activity.activityName &&
             existingActivity.address == activity.address);
 
         if (!activityExists) {
@@ -179,10 +256,7 @@ class PackagesScreen extends StatelessWidget {
       activities.addAll(tempActivities);
     }
 
-    print('THIS IS SORTED');
-    activities.forEach((act) => print(act.activityName));
-
-    return generatePackages(activities, numberOfDays);
+    return generatePackages(activities, widget.numberOfDays);
   }
 
   TimeOfDay _convertToTimeOfDay(Map<String, dynamic> timeMap) {

@@ -42,7 +42,7 @@ class _AddNewActivityScreenState extends State<AddNewActivityScreen> {
   Future<List<String>> _getAddressSuggestions(String query) async {
     try {
       final url = Uri.parse(
-          'https://nominatim.openstreetmap.org/search?format=json&q=$query');
+          'https://nominatim.openstreetmap.org/search?format=json&q=$query, Cebu, Philippines');
       final response = await http.get(url);
 
       if (response.statusCode == 200) {
@@ -257,10 +257,8 @@ class _AddNewActivityScreenState extends State<AddNewActivityScreen> {
                 ),
               ),
 
-
               Row(
                 children: [
-
                   Expanded(
                     child: InkWell(
                       onTap: () async {
@@ -276,7 +274,7 @@ class _AddNewActivityScreenState extends State<AddNewActivityScreen> {
                       },
                       child: Container(
                         padding:
-                            EdgeInsets.symmetric(vertical:18, horizontal: 16),
+                            EdgeInsets.symmetric(vertical: 18, horizontal: 16),
                         decoration: BoxDecoration(
                           border: Border.all(color: Colors.grey),
                           borderRadius: BorderRadius.circular(8),
@@ -368,7 +366,6 @@ class _AddNewActivityScreenState extends State<AddNewActivityScreen> {
                   minimumSize: Size(double.infinity, 55.0),
                 ),
               ),
-
             ],
           ),
         ),
