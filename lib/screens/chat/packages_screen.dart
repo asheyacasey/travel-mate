@@ -28,12 +28,26 @@ class _PackagesScreenState extends State<PackagesScreen> {
 
   void _shuffleRandomTitles() {
     randomTitles = [
-      "Sweetheart Soiree",
-      "Lovely Rendezvous",
-      "Adorable Adventure",
-      "Charming Getaway",
-      "Whimsical Wanderlust",
-      // Add more cute title dates here...
+          "Sweetheart Soiree",
+          "Lovely Rendezvous",
+          "Adorable Adventure",
+          "Charming Getaway",
+          "Whimsical Wanderlust",
+          "Enchanting Excursion",
+          "Playful Retreat",
+          "Darling Escape",
+          "Romantic Roaming",
+          "Magical Memories",
+          "Cuddlesome Journey",
+          "Blissful Expedition",
+          "Heartwarming Holiday",
+          "Dreamy Discovery",
+          "Sunny Serenade",
+          "Cozy Caravan",
+          "Honeybee Honeymoon",
+          "Cherished Trails",
+          "Sparkling Stroll",
+          "Smitten Sightseeing",
     ];
     randomTitles.shuffle();
     lastUsedTitleIndex = -1;
@@ -136,8 +150,23 @@ class _PackagesScreenState extends State<PackagesScreen> {
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              subtitle: Text(
-                                  'Total Duration: ${package.totalDuration} minutes'),
+                              subtitle: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "Around Cebu",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 11,
+                                      color: Colors.black54,
+                                    ),
+                                  ),
+                                  SizedBox(height: 4),
+                                  Text(
+                                    'Total Duration: ${package.totalDuration} minutes',
+                                  ),
+                                ],
+                              ),
                               trailing: Icon(Icons.arrow_forward),
                               onTap: () {
                                 Navigator.push(
