@@ -92,14 +92,30 @@ class _PackageDetailsScreenState extends State<PackageDetailsScreen> {
       ),
       child: Scaffold(
         appBar: AppBar(
-          title: Text(
-            'travelmate',
-            style: GoogleFonts.fredokaOne(
-              textStyle: TextStyle(
-                fontSize: 20,
-                color: Color(0xFFB0DB2D),
-                fontWeight: FontWeight.w500,
-              ),
+          title: RichText(
+            text: TextSpan(
+              children: [
+                TextSpan(
+                  text: 'travel',
+                  style: GoogleFonts.fredokaOne(
+                    textStyle: TextStyle(
+                      fontSize: 23,
+                      fontWeight: FontWeight.w500,
+                      color: Color(0xFFF5C518), // First color
+                    ),
+                  ),
+                ),
+                TextSpan(
+                  text: 'mate',
+                  style: GoogleFonts.fredokaOne(
+                    textStyle: TextStyle(
+                      fontSize: 23,
+                      fontWeight: FontWeight.w500,
+                      color: Color(0xFFB0DB2D), // Second color
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
           centerTitle: true,

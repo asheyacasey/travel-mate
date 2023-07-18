@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:travel_mate/models/models.dart';
 import 'package:travel_mate/screens/chat/packageDetails_screen.dart';
 import 'dart:math';
+import 'package:unicons/unicons.dart';
 
 class PackagesScreen extends StatefulWidget {
   final int numberOfDays;
@@ -62,6 +64,19 @@ class _PackagesScreenState extends State<PackagesScreen> {
     return randomTitles[lastUsedTitleIndex];
   }
 
+  String getTripDurationText(int numberOfDays) {
+    if (numberOfDays == 1) {
+      return '1 day';
+    } else if (numberOfDays == 2) {
+      return '2 days and 1 night';
+    } else if (numberOfDays > 2) {
+      int numberOfNights = numberOfDays - 1;
+      return '$numberOfDays days, $numberOfNights nights';
+    } else {
+      return ''; // Handle other cases if needed
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -106,18 +121,30 @@ class _PackagesScreenState extends State<PackagesScreen> {
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
                   children: [
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        'Travel Date Plans',
-                        textAlign: TextAlign.start,
-                        style: GoogleFonts.manrope(
-                            textStyle: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w900,
-                              color: Color(0xFFB0DB2D),
-                            )),
-                      ),
+                    Column(
+                      children: [
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Padding(
+                            padding: const EdgeInsets.only(left:8.0),
+                            child: Text(
+                              'Travel Date Plans',
+                              textAlign: TextAlign.start,
+                              style: GoogleFonts.manrope(
+                                  textStyle: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w900,
+                                    color: Color(0xFFB0DB2D),
+                                  )),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 8,),
+                        Image.asset(
+                          'assets/coverphoto.png', // Replace with your image path
+                          fit: BoxFit.cover,
+                        ),
+                      ],
                     ),
                     Divider(
                       thickness: 1.0,
@@ -142,44 +169,67 @@ class _PackagesScreenState extends State<PackagesScreen> {
                         itemBuilder: (context, index) {
                           Package package = packages[index];
                           String randomTitle = _getNextRandomTitle();
-                          return Card(
-                            child: ListTile(
-                              title: Text(
-                                randomTitle,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                ),
+                          return Padding(
+                            padding: const EdgeInsets.fromLTRB(6.0, 3.0, 6.0, 3.0),
+                            child: Card(
+                              elevation: 0,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
                               ),
-                              subtitle: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "Around Cebu",
+                              color: Color(0xFFFAE4A1),
+                              child: ListTile(
+                                title: Padding(
+                                  padding: const EdgeInsets.only(top: 8.0, bottom: 4.0),
+                                  child: Text(
+                                    randomTitle,
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 11,
-                                      color: Colors.black54,
                                     ),
                                   ),
-                                  SizedBox(height: 4),
-                                  Text(
-                                    'Total Duration: ${package.totalDuration} minutes',
-                                  ),
-                                ],
+                                ),
+
+                                subtitle: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "Around Cebu",
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 15,
+                                        color: Colors.black54,
+                                      ),
+                                    ),
+                                    SizedBox(height: 4),
+                                    Text(
+                                      'Trip Duration: ${getTripDurationText(widget.numberOfDays)}',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 15,
+                                        color: Colors.black54,
+                                      ),
+                                    ),
+                                    SizedBox(height:10),
+                                  ],
+                                ),
+                                trailing: Icon(
+                                  UniconsLine.angle_right_b,
+                                  size: 30,
+                                  color: Colors.black,
+                                ),
+
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => PackageDetailsScreen(
+                                        package: package,
+                                        numberOfDays: widget.numberOfDays,
+                                        match: widget.match,
+                                      ),
+                                    ),
+                                  );
+                                },
                               ),
-                              trailing: Icon(Icons.arrow_forward),
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => PackageDetailsScreen(
-                                      package: package,
-                                      numberOfDays: widget.numberOfDays,
-                                      match: widget.match,
-                                    ),
-                                  ),
-                                );
-                              },
                             ),
                           );
                         },
