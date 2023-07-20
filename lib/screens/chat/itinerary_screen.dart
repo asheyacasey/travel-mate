@@ -9,6 +9,7 @@ import 'package:travel_mate/repositories/auth/auth_repository.dart';
 import 'package:travel_mate/repositories/database/database_repository.dart';
 import 'package:travel_mate/screens/chat/packages_screen.dart';
 import 'package:travel_mate/models/models.dart';
+import 'package:unicons/unicons.dart';
 import 'package:uuid/uuid.dart';
 
 class ItineraryScreen extends StatefulWidget {
@@ -109,149 +110,341 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
       ),
       child: Scaffold(
         appBar: AppBar(
-          title: Text(
-            'travelmate',
-            style: GoogleFonts.fredokaOne(
-              textStyle: TextStyle(
-                fontSize: 20,
-                color: Color(0xFFB0DB2D),
-                fontWeight: FontWeight.w500,
-              ),
+          title: RichText(
+            text: TextSpan(
+              children: [
+                TextSpan(
+                  text: 'travel',
+                  style: GoogleFonts.fredokaOne(
+                    textStyle: TextStyle(
+                      fontSize: 23,
+                      fontWeight: FontWeight.w500,
+                      color: Color(0xFFF5C518), // First color
+                    ),
+                  ),
+                ),
+                TextSpan(
+                  text: 'mate',
+                  style: GoogleFonts.fredokaOne(
+                    textStyle: TextStyle(
+                      fontSize: 23,
+                      fontWeight: FontWeight.w500,
+                      color: Color(0xFFB0DB2D), // Second color
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
           centerTitle: true,
           backgroundColor: Colors.white,
           iconTheme: IconThemeData(color: Theme.of(context).primaryColor),
           elevation: 0.0,
-        ),
-        body: ListView.builder(
-          itemCount: activitiesByDay.length,
-          itemBuilder: (context, dayIndex) {
-            List<Activity> activities = activitiesByDay[dayIndex];
-            int dayNumber = dayIndex + 1;
+          actions: [
+            IconButton(
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: Text('Add Activity'),
+                    content: Container(
+                      width: MediaQuery.of(context).size.width * 0.8,
+                      height: MediaQuery.of(context).size.height * 0.5,
+                      child: ListView.builder(
+                        itemCount: availableActivities.length + 1,
+                        itemBuilder: (context, index) {
+                          if (index == 0) {
+                            return Text('Select an activity'); // Placeholder text
+                          }
+                          final activity = availableActivities[index - 1];
+                          return ListTile(
+                            title: Text(activity.activityName),
+                            subtitle: Text(
+                              'Category: ${activity.category}\nAddress: ${activity.address}\nTime: ${activity.timeStart.format(context)} - ${addDurationToTime(activity.timeStart, activity.duration).format(context)}',
+                            ),
+                            onTap: () {
+                              int currentDuration = transformedActivities.fold(
+                                0,
+                                    (previousValue, activity) =>
+                                previousValue + activity.duration,
+                              );
+                              if (currentDuration + activity.duration >
+                                  (widget.numberOfDays! * 600 )) {
+                                showMessage(
+                                    'Adding this activity will exceed the total duration.');
+                              } else {
+                                setState(() {
+                                  transformedActivities.add(activity);
+                                  transformedActivities.sort((a, b) {
+                                    DateTime dateTimeA = DateTime(
+                                      DateTime.now().year,
+                                      DateTime.now().month,
+                                      DateTime.now().day,
+                                      a.timeStart.hour,
+                                      a.timeStart.minute,
+                                    );
+                                    DateTime dateTimeB = DateTime(
+                                      DateTime.now().year,
+                                      DateTime.now().month,
+                                      DateTime.now().day,
+                                      b.timeStart.hour,
+                                      b.timeStart.minute,
+                                    );
 
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    'Day $dayNumber',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
+                                    int timeComparison =
+                                    dateTimeA.compareTo(dateTimeB);
+                                    if (timeComparison != 0) {
+                                      return timeComparison; // Sort by timeStart
+                                    } else {
+                                      return a.duration.compareTo(b
+                                          .duration); // Sort by duration (secondary criteria)
+                                    }
+                                  });
+                                  activitiesByDay = groupActivitiesByDay(
+                                      transformedActivities);
+                                  availableActivities.remove(activity);
+                                });
+                                Navigator.pop(context); // Close the dialog
+                              }
+                            },
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                );
+              },
+              icon: Icon(UniconsLine.book_medical),
+            ),
+          ],
+
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Flexible(
+                child: Container(
+                  height: 240,
+                  //width: double.infinity,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                   fit: BoxFit.cover,
+                      image: AssetImage('assets/ph-cover-photo.png'),
                     ),
                   ),
                 ),
-                ListView.builder(
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  itemCount: activities.length,
-                  itemBuilder: (context, index) {
-                    Activity activity = activities[index];
-                    return Dismissible(
-                      key: Key(activity.activityName),
-                      onDismissed: (direction) {
-                        setState(() {
-                          transformedActivities.remove(activity);
-                          activitiesByDay =
-                              groupActivitiesByDay(transformedActivities);
-                        });
-                        fetchActivitiesFromFirebase();
-                      },
-                      child: ListTile(
-                        title: Text(activity.activityName),
-                        subtitle: Text(
-                          'Category: ${activity.category}\nAddress: ${activity.address}\nTime: ${activity.timeStart.format(context)} - ${addDurationToTime(activity.timeStart, activity.duration).format(context)}',
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ],
-            );
-          },
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            showDialog(
-              context: context,
-              builder: (context) => AlertDialog(
-                title: Text('Add Activity'),
-                content: Container(
-                  width: MediaQuery.of(context).size.width * 0.8,
-                  height: MediaQuery.of(context).size.height * 0.5,
-                  child: ListView.builder(
-                    itemCount: availableActivities.length + 1,
-                    itemBuilder: (context, index) {
-                      if (index == 0) {
-                        return Text('Select an activity'); // Placeholder text
-                      }
-                      final activity = availableActivities[index - 1];
-                      return ListTile(
-                        title: Text(activity.activityName),
-                        subtitle: Text(
-                          'Category: ${activity.category}\nAddress: ${activity.address}\nTime: ${activity.timeStart.format(context)} - ${addDurationToTime(activity.timeStart, activity.duration).format(context)}',
-                        ),
-                        onTap: () {
-                          int currentDuration = transformedActivities.fold(
-                            0,
-                            (previousValue, activity) =>
-                                previousValue + activity.duration,
-                          );
-                          if (currentDuration + activity.duration >
-                              (widget.numberOfDays! * 600)) {
-                            showMessage(
-                                'Adding this activity will exceed the total duration.');
-                          } else {
-                            setState(() {
-                              transformedActivities.add(activity);
-                              transformedActivities.sort((a, b) {
-                                DateTime dateTimeA = DateTime(
-                                  DateTime.now().year,
-                                  DateTime.now().month,
-                                  DateTime.now().day,
-                                  a.timeStart.hour,
-                                  a.timeStart.minute,
-                                );
-                                DateTime dateTimeB = DateTime(
-                                  DateTime.now().year,
-                                  DateTime.now().month,
-                                  DateTime.now().day,
-                                  b.timeStart.hour,
-                                  b.timeStart.minute,
-                                );
+              ),
+              SingleChildScrollView(
+                child: Expanded(
+                  child: Container(
+                //    color: Colors.blue,
+                    height: 500,// Replace with your desired background color
+                    child: ListView.builder(
+                      itemCount: activitiesByDay.length,
+                      itemBuilder: (context, dayIndex) {
+                        List<Activity> activities = activitiesByDay[dayIndex];
+                        int dayNumber = dayIndex + 1;
 
-                                int timeComparison =
-                                    dateTimeA.compareTo(dateTimeB);
-                                if (timeComparison != 0) {
-                                  return timeComparison; // Sort by timeStart
-                                } else {
-                                  return a.duration.compareTo(b
-                                      .duration); // Sort by duration (secondary criteria)
-                                }
-                              });
-                              activitiesByDay =
-                                  groupActivitiesByDay(transformedActivities);
-                              availableActivities.remove(activity);
-                            });
-                            Navigator.pop(context); // Close the dialog
-                          }
-                        },
-                      );
-                    },
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Container(
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                  color:  Color(0xFFF5C518),
+                                  borderRadius: BorderRadius.circular(15),// Add any desired border styling
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    'Day $dayNumber',
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            ListView.builder(
+                              shrinkWrap: true,
+                              physics: NeverScrollableScrollPhysics(),
+                              itemCount: activities.length,
+                              itemBuilder: (context, index) {
+                                Activity activity = activities[index];
+                                return Dismissible(
+                                  key: Key(activity.activityName),
+                                  onDismissed: (direction) {
+                                    setState(() {
+                                      transformedActivities.remove(activity);
+                                      activitiesByDay = groupActivitiesByDay(transformedActivities);
+                                    });
+                                    fetchActivitiesFromFirebase();
+                                  },
+                                  child: ListTile(
+                                    title: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Expanded(
+
+                                          child: Text(
+                                            activity.activityName,
+                                            textAlign: TextAlign.left,
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ),
+                                        Text(
+                                          '${activity.timeStart.format(context)} - ${addDurationToTime(activity.timeStart, activity.duration).format(context)}',
+                                          textAlign: TextAlign.right,
+                                        ),
+                                      ],
+                                    ),
+                                    subtitle: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          '${activity.address}',
+                                          style: TextStyle(
+                                              fontSize: 14
+                                          ),
+                                        ),
+                                        Container(
+                                          decoration: BoxDecoration(
+                                            color: Color(0xFFB0DB2D),
+                                            borderRadius: BorderRadius.circular(5),
+                                          ),
+                                          padding: EdgeInsets.all(4),
+                                          child: Text(
+                                            '${activity.category}',
+                                            style: TextStyle(
+                                                fontSize: 14
+                                            ),
+                                          ),
+                                        ),
+
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    ),
                   ),
                 ),
               ),
-            );
-          },
-          child: Icon(Icons.add),
-        ),
-        persistentFooterButtons: [
-          ElevatedButton(
-            onPressed: () => updateItinerary(context),
-            child: Text('Update Itinerary'),
+            ],
           ),
+        ),
+
+        // floatingActionButton: FloatingActionButton(
+        //   onPressed: () {
+        //     showDialog(
+        //       context: context,
+        //       builder: (context) => AlertDialog(
+        //         title: Text('Add Activity'),
+        //         content: Container(
+        //           width: MediaQuery.of(context).size.width * 0.8,
+        //           height: MediaQuery.of(context).size.height * 0.5,
+        //           child: ListView.builder(
+        //             itemCount: availableActivities.length + 1,
+        //             itemBuilder: (context, index) {
+        //               if (index == 0) {
+        //                 return Text('Select an activity'); // Placeholder text
+        //               }
+        //               final activity = availableActivities[index - 1];
+        //               return ListTile(
+        //                 title: Text(activity.activityName),
+        //                 subtitle: Text(
+        //                   'Category: ${activity.category}\nAddress: ${activity.address}\nTime: ${activity.timeStart.format(context)} - ${addDurationToTime(activity.timeStart, activity.duration).format(context)}',
+        //                 ),
+        //                 onTap: () {
+        //                   int currentDuration = transformedActivities.fold(
+        //                     0,
+        //                     (previousValue, activity) =>
+        //                         previousValue + activity.duration,
+        //                   );
+        //                   if (currentDuration + activity.duration >
+        //                       (widget.numberOfDays! * 600)) {
+        //                     showMessage(
+        //                         'Adding this activity will exceed the total duration.');
+        //                   } else {
+        //                     setState(() {
+        //                       transformedActivities.add(activity);
+        //                       transformedActivities.sort((a, b) {
+        //                         DateTime dateTimeA = DateTime(
+        //                           DateTime.now().year,
+        //                           DateTime.now().month,
+        //                           DateTime.now().day,
+        //                           a.timeStart.hour,
+        //                           a.timeStart.minute,
+        //                         );
+        //                         DateTime dateTimeB = DateTime(
+        //                           DateTime.now().year,
+        //                           DateTime.now().month,
+        //                           DateTime.now().day,
+        //                           b.timeStart.hour,
+        //                           b.timeStart.minute,
+        //                         );
+        //
+        //                         int timeComparison =
+        //                             dateTimeA.compareTo(dateTimeB);
+        //                         if (timeComparison != 0) {
+        //                           return timeComparison; // Sort by timeStart
+        //                         } else {
+        //                           return a.duration.compareTo(b
+        //                               .duration); // Sort by duration (secondary criteria)
+        //                         }
+        //                       });
+        //                       activitiesByDay =
+        //                           groupActivitiesByDay(transformedActivities);
+        //                       availableActivities.remove(activity);
+        //                     });
+        //                     Navigator.pop(context); // Close the dialog
+        //                   }
+        //                 },
+        //               );
+        //             },
+        //           ),
+        //         ),
+        //       ),
+        //     );
+        //   },
+        //   child: Icon(Icons.add),
+        // ),
+        persistentFooterButtons: [
+          TextButton(
+            onPressed: () => updateItinerary(context),
+            style: TextButton.styleFrom(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20.0),
+              ),
+              backgroundColor: Color(0xFFB0DB2D),
+              minimumSize: Size(double.infinity, 55.0),
+            ),
+            child: Container(
+              width: double.infinity,
+              child: Text(
+                'Update Itinerary',
+                textAlign: TextAlign.center,
+                style: GoogleFonts.manrope(
+                  textStyle: TextStyle(
+                    fontSize: 16,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+            ),
+          )
         ],
       ),
     );
