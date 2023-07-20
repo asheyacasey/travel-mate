@@ -156,7 +156,7 @@ class _PackageDetailsScreenState extends State<PackageDetailsScreen> {
                                 previousValue + activity.duration,
                               );
                               if (currentDuration + activity.duration >
-                                  (widget.numberOfDays * 180)) {
+                                  (widget.numberOfDays * 600 )) {
                                 showMessage(
                                     'Adding this activity will exceed the total duration.');
                               } else {
@@ -548,7 +548,7 @@ class _PackageDetailsScreenState extends State<PackageDetailsScreen> {
 
       int activityDuration = activity.duration;
 
-      if (totalDuration + activityDuration > 180 ||
+      if (totalDuration + activityDuration > 600 ||
           activityDateTime.difference(currentDay).inDays > 0) {
         activitiesByDay.add(currentDayActivities);
         currentDayActivities = [];

@@ -323,7 +323,7 @@ class _PackagesScreenState extends State<PackagesScreen> {
       Activity activity = activities[i];
       int totalDuration = currentPackage.totalDuration + activity.duration;
 
-      if (totalDuration <= (numberOfDays * 180)) {
+      if (totalDuration <= (numberOfDays * 600)) {
         currentPackage.activities.add(activity);
       } else {
         packages.add(currentPackage);
