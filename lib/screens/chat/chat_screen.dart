@@ -436,41 +436,26 @@ class _Message extends StatelessWidget {
       return Activity.fromFirebaseMap(data, context);
     }).toList();
 
-    activities.sort((a, b) {
-      DateTime dateTimeA = DateTime(
-        DateTime.now().year,
-        DateTime.now().month,
-        DateTime.now().day,
-        a.timeStart.hour,
-        a.timeStart.minute,
-      );
-      DateTime dateTimeB = DateTime(
-        DateTime.now().year,
-        DateTime.now().month,
-        DateTime.now().day,
-        b.timeStart.hour,
-        b.timeStart.minute,
-      );
+    TimeOfDay calculateTimeEnd(TimeOfDay startTime, int duration) {
+      int startMinutes = startTime.hour * 60 + startTime.minute;
+      int endMinutes = startMinutes + duration;
 
-      int timeComparison = dateTimeA.compareTo(dateTimeB);
-      if (timeComparison != 0) {
-        return timeComparison; // Sort by timeStart
-      } else {
-        return a.duration
-            .compareTo(b.duration); // Sort by duration (secondary criteria)
-      }
-    });
+      int endHour = endMinutes ~/ 60;
+      int endMinute = endMinutes % 60;
+
+      return TimeOfDay(hour: endHour, minute: endMinute);
+    }
 
     List<List<Activity>> groupByDay(List<Activity> activities) {
       List<List<Activity>> activitiesByDay = [];
       List<Activity> currentDayActivities = [];
 
       DateTime currentDay = DateTime.now();
+      TimeOfDay nextActivityStart = TimeOfDay(hour: 7, minute: 0);
       int totalDuration = 0;
 
       for (int i = 0; i < activities.length; i++) {
-        final Activity activity = activities[i];
-
+        Activity activity = activities[i];
         DateTime activityDateTime = DateTime(
           currentDay.year,
           currentDay.month,
@@ -483,13 +468,26 @@ class _Message extends StatelessWidget {
 
         if (totalDuration + activityDuration > 600 ||
             activityDateTime.difference(currentDay).inDays > 0) {
+          // Check if new day is being set, update nextActivityStart to 7:00 AM
+          nextActivityStart = TimeOfDay(hour: 7, minute: 0);
+
           activitiesByDay.add(currentDayActivities);
           currentDayActivities = [];
           totalDuration = 0;
         }
 
+        // Set timeStart of activity to nextActivityStart
+        activity.timeStart = nextActivityStart;
+
+        // Calculate and set timeEnd based on timeStart and duration
+        activity.timeEnd =
+            calculateTimeEnd(activity.timeStart, activity.duration);
+
         currentDayActivities.add(activity);
         totalDuration += activityDuration;
+
+        // Update nextActivityStart for the next iteration
+        nextActivityStart = activity.timeEnd;
         currentDay = activityDateTime;
       }
 
