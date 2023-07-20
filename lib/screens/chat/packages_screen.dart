@@ -377,10 +377,10 @@ class Activity {
       category: map['category'],
       address: map['address'],
       timeStart: TimeOfDay.fromDateTime(
-        DateFormat.Hm().parse(map['timeStart']),
+        DateFormat("h:mm a").parse(map['timeStart']),
       ),
       timeEnd: TimeOfDay.fromDateTime(
-        DateFormat.Hm().parse(map['timeEnd']),
+        DateFormat("h:mm a").parse(map['timeEnd']),
       ),
       duration: map['duration'],
     );

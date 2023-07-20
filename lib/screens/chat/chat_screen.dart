@@ -481,7 +481,7 @@ class _Message extends StatelessWidget {
 
         int activityDuration = activity.duration;
 
-        if (totalDuration + activityDuration > 180 ||
+        if (totalDuration + activityDuration > 600 ||
             activityDateTime.difference(currentDay).inDays > 0) {
           activitiesByDay.add(currentDayActivities);
           currentDayActivities = [];
