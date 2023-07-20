@@ -31,8 +31,8 @@ class _PackageDetailsScreenState extends State<PackageDetailsScreen> {
   @override
   void initState() {
     super.initState();
-    fetchActivitiesFromFirebase();
     activitiesByDay = groupActivitiesByDay(widget.package.activities);
+    fetchActivitiesFromFirebase();
   }
 
   Future<void> fetchActivitiesFromFirebase() async {
@@ -165,6 +165,31 @@ class _PackageDetailsScreenState extends State<PackageDetailsScreen> {
                                   activity.timeStart =
                                       widget.package.activities.last.timeEnd;
                                   widget.package.activities.add(activity);
+                                  widget.package.activities.sort((a, b) {
+                                    DateTime dateTimeA = DateTime(
+                                      DateTime.now().year,
+                                      DateTime.now().month,
+                                      DateTime.now().day,
+                                      a.timeStart.hour,
+                                      a.timeStart.minute,
+                                    );
+                                    DateTime dateTimeB = DateTime(
+                                      DateTime.now().year,
+                                      DateTime.now().month,
+                                      DateTime.now().day,
+                                      b.timeStart.hour,
+                                      b.timeStart.minute,
+                                    );
+
+                                    int timeComparison =
+                                        dateTimeA.compareTo(dateTimeB);
+                                    if (timeComparison != 0) {
+                                      return timeComparison; // Sort by timeStart
+                                    } else {
+                                      return a.duration.compareTo(b
+                                          .duration); // Sort by duration (secondary criteria)
+                                    }
+                                  });
                                   activitiesByDay = groupActivitiesByDay(
                                       widget.package.activities);
                                   availableActivities.remove(activity);
@@ -412,31 +437,6 @@ class _PackageDetailsScreenState extends State<PackageDetailsScreen> {
   List<List<Activity>> groupActivitiesByDay(List<Activity> activities) {
     List<List<Activity>> activitiesByDay = [];
     List<Activity> currentDayActivities = [];
-
-    activities.sort((a, b) {
-      DateTime dateTimeA = DateTime(
-        DateTime.now().year,
-        DateTime.now().month,
-        DateTime.now().day,
-        a.timeStart.hour,
-        a.timeStart.minute,
-      );
-      DateTime dateTimeB = DateTime(
-        DateTime.now().year,
-        DateTime.now().month,
-        DateTime.now().day,
-        b.timeStart.hour,
-        b.timeStart.minute,
-      );
-
-      int timeComparison = dateTimeA.compareTo(dateTimeB);
-      if (timeComparison != 0) {
-        return timeComparison; // Sort by timeStart
-      } else {
-        return a.duration
-            .compareTo(b.duration); // Sort by duration (secondary criteria)
-      }
-    });
 
     DateTime currentDay = DateTime.now();
     TimeOfDay nextActivityStart = TimeOfDay(hour: 7, minute: 0);

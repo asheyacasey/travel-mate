@@ -154,26 +154,29 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
                         itemCount: availableActivities.length + 1,
                         itemBuilder: (context, index) {
                           if (index == 0) {
-                            return Text('Select an activity'); // Placeholder text
+                            return Text(
+                                'Select an activity'); // Placeholder text
                           }
                           final activity = availableActivities[index - 1];
                           return ListTile(
                             title: Text(activity.activityName),
                             subtitle: Text(
-                              'Category: ${activity.category}\nAddress: ${activity.address}\nTime: ${activity.timeStart.format(context)} - ${addDurationToTime(activity.timeStart, activity.duration).format(context)}',
+                              'Category: ${activity.category}\nAddress: ${activity.address}\nTime: ${activity.duration}',
                             ),
                             onTap: () {
                               int currentDuration = transformedActivities.fold(
                                 0,
-                                    (previousValue, activity) =>
-                                previousValue + activity.duration,
+                                (previousValue, activity) =>
+                                    previousValue + activity.duration,
                               );
                               if (currentDuration + activity.duration >
-                                  (widget.numberOfDays! * 600 )) {
+                                  (widget.numberOfDays! * 600)) {
                                 showMessage(
                                     'Adding this activity will exceed the total duration.');
                               } else {
                                 setState(() {
+                                  activity.timeEnd =
+                                      transformedActivities.last.timeEnd;
                                   transformedActivities.add(activity);
                                   transformedActivities.sort((a, b) {
                                     DateTime dateTimeA = DateTime(
@@ -192,7 +195,7 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
                                     );
 
                                     int timeComparison =
-                                    dateTimeA.compareTo(dateTimeB);
+                                        dateTimeA.compareTo(dateTimeB);
                                     if (timeComparison != 0) {
                                       return timeComparison; // Sort by timeStart
                                     } else {
@@ -217,7 +220,6 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
               icon: Icon(UniconsLine.book_medical),
             ),
           ],
-
         ),
         body: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -230,7 +232,7 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
                   //width: double.infinity,
                   decoration: BoxDecoration(
                     image: DecorationImage(
-                   fit: BoxFit.cover,
+                      fit: BoxFit.cover,
                       image: AssetImage('assets/ph-cover-photo.png'),
                     ),
                   ),
@@ -239,8 +241,8 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
               SingleChildScrollView(
                 child: Expanded(
                   child: Container(
-                //    color: Colors.blue,
-                    height: 500,// Replace with your desired background color
+                    //    color: Colors.blue,
+                    height: 500, // Replace with your desired background color
                     child: ListView.builder(
                       itemCount: activitiesByDay.length,
                       itemBuilder: (context, dayIndex) {
@@ -255,8 +257,9 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
                               child: Container(
                                 width: double.infinity,
                                 decoration: BoxDecoration(
-                                  color:  Color(0xFFF5C518),
-                                  borderRadius: BorderRadius.circular(15),// Add any desired border styling
+                                  color: Color(0xFFF5C518),
+                                  borderRadius: BorderRadius.circular(
+                                      15), // Add any desired border styling
                                 ),
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
@@ -281,16 +284,17 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
                                   onDismissed: (direction) {
                                     setState(() {
                                       transformedActivities.remove(activity);
-                                      activitiesByDay = groupActivitiesByDay(transformedActivities);
+                                      activitiesByDay = groupActivitiesByDay(
+                                          transformedActivities);
                                     });
                                     fetchActivitiesFromFirebase();
                                   },
                                   child: ListTile(
                                     title: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
                                         Expanded(
-
                                           child: Text(
                                             activity.activityName,
                                             textAlign: TextAlign.left,
@@ -300,34 +304,31 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
                                           ),
                                         ),
                                         Text(
-                                          '${activity.timeStart.format(context)} - ${addDurationToTime(activity.timeStart, activity.duration).format(context)}',
+                                          '${activity.timeStart.format(context)} - ${activity.timeEnd.format(context)}',
                                           textAlign: TextAlign.right,
                                         ),
                                       ],
                                     ),
                                     subtitle: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Text(
                                           '${activity.address}',
-                                          style: TextStyle(
-                                              fontSize: 14
-                                          ),
+                                          style: TextStyle(fontSize: 14),
                                         ),
                                         Container(
                                           decoration: BoxDecoration(
                                             color: Color(0xFFB0DB2D),
-                                            borderRadius: BorderRadius.circular(5),
+                                            borderRadius:
+                                                BorderRadius.circular(5),
                                           ),
                                           padding: EdgeInsets.all(4),
                                           child: Text(
                                             '${activity.category}',
-                                            style: TextStyle(
-                                                fontSize: 14
-                                            ),
+                                            style: TextStyle(fontSize: 14),
                                           ),
                                         ),
-
                                       ],
                                     ),
                                   ),
@@ -459,19 +460,12 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
       List<Activity> updatedItinerary = [];
 
       itinerary.forEach((activity) {
-        int minutes = activity.timeStart.minute + activity.duration;
-        int hours = activity.timeStart.hour + (minutes ~/ 60);
-        int remainingMinutes = minutes % 60;
-
-        TimeOfDay updatedTimeEnd =
-            TimeOfDay(hour: hours, minute: remainingMinutes);
-
         Activity updatedActivity = Activity(
           activityName: activity.activityName,
           category: activity.category,
           address: activity.address,
           timeStart: activity.timeStart,
-          timeEnd: updatedTimeEnd, // Update the timeEnd value
+          timeEnd: activity.timeEnd, // Update the timeEnd value
           duration: activity.duration,
         );
 
@@ -554,33 +548,10 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
     List<List<Activity>> activitiesByDay = [];
     List<Activity> currentDayActivities = [];
 
-    activities.sort((a, b) {
-      DateTime dateTimeA = DateTime(
-        DateTime.now().year,
-        DateTime.now().month,
-        DateTime.now().day,
-        a.timeStart.hour,
-        a.timeStart.minute,
-      );
-      DateTime dateTimeB = DateTime(
-        DateTime.now().year,
-        DateTime.now().month,
-        DateTime.now().day,
-        b.timeStart.hour,
-        b.timeStart.minute,
-      );
-
-      int timeComparison = dateTimeA.compareTo(dateTimeB);
-      if (timeComparison != 0) {
-        return timeComparison; // Sort by timeStart
-      } else {
-        return a.duration
-            .compareTo(b.duration); // Sort by duration (secondary criteria)
-      }
-    });
-
     DateTime currentDay = DateTime.now();
+    TimeOfDay nextActivityStart = TimeOfDay(hour: 7, minute: 0);
     int totalDuration = 0;
+
     for (int i = 0; i < activities.length; i++) {
       Activity activity = activities[i];
       DateTime activityDateTime = DateTime(
@@ -595,13 +566,26 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
 
       if (totalDuration + activityDuration > 600 ||
           activityDateTime.difference(currentDay).inDays > 0) {
+        // Check if new day is being set, update nextActivityStart to 7:00 AM
+        nextActivityStart = TimeOfDay(hour: 7, minute: 0);
+
         activitiesByDay.add(currentDayActivities);
         currentDayActivities = [];
         totalDuration = 0;
       }
 
+      // Set timeStart of activity to nextActivityStart
+      activity.timeStart = nextActivityStart;
+
+      // Calculate and set timeEnd based on timeStart and duration
+      activity.timeEnd =
+          calculateTimeEnd(activity.timeStart, activity.duration);
+
       currentDayActivities.add(activity);
       totalDuration += activityDuration;
+
+      // Update nextActivityStart for the next iteration
+      nextActivityStart = activity.timeEnd;
       currentDay = activityDateTime;
     }
 
@@ -610,6 +594,16 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
     }
 
     return activitiesByDay;
+  }
+
+  TimeOfDay calculateTimeEnd(TimeOfDay startTime, int duration) {
+    int startMinutes = startTime.hour * 60 + startTime.minute;
+    int endMinutes = startMinutes + duration;
+
+    int endHour = endMinutes ~/ 60;
+    int endMinute = endMinutes % 60;
+
+    return TimeOfDay(hour: endHour, minute: endMinute);
   }
 
   void showMessage(String message) {
