@@ -146,67 +146,132 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
                 showDialog(
                   context: context,
                   builder: (context) => AlertDialog(
-                    title: Text('Add Activity'),
+                    title: Text(
+                      'Add activity to itinerary plan',
+                      style: GoogleFonts.fredokaOne(
+                        textStyle: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w500,
+                          color: Color(0xFFF5C518), // First color
+                        ),
+                      ),
+                    ),
                     content: Container(
                       width: MediaQuery.of(context).size.width * 0.8,
                       height: MediaQuery.of(context).size.height * 0.5,
                       child: ListView.builder(
-                        itemCount: availableActivities.length + 1,
+                        itemCount: availableActivities.length,
                         itemBuilder: (context, index) {
-                          if (index == 0) {
-                            return Text('Select an activity'); // Placeholder text
-                          }
-                          final activity = availableActivities[index - 1];
-                          return ListTile(
-                            title: Text(activity.activityName),
-                            subtitle: Text(
-                              'Category: ${activity.category}\nAddress: ${activity.address}\nTime: ${activity.timeStart.format(context)} - ${addDurationToTime(activity.timeStart, activity.duration).format(context)}',
-                            ),
-                            onTap: () {
-                              int currentDuration = transformedActivities.fold(
-                                0,
+                          final activity = availableActivities[index];
+                          return Padding(
+                            padding:
+                                const EdgeInsets.only(top: 5.0, bottom: 5.0),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(
+                                    10), // Set the border radius here
+                                color: Color(0xFFF1F1F1),
+                              ),
+                              child: ListTile(
+                                title: Padding(
+                                  padding: const EdgeInsets.only(top: 8.0),
+                                  child: Text(
+                                    activity.activityName,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                ),
+                                subtitle:
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                   // SizedBox(height: 8),
+                                    Text(
+                                      '${activity.address}',
+                                      style: TextStyle(fontSize: 14),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          top: 2.0, bottom: 2.0),
+                                      child: Text(
+                                        '${activity.timeStart.format(context)} - ${addDurationToTime(activity.timeStart, activity.duration).format(context)}',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize:14,
+                                        ),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding:
+                                      const EdgeInsets.only(top: 5.0),
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: Color(0xFFB0DB2D),
+                                          borderRadius: BorderRadius.circular(5),
+                                        ),
+                                        padding: EdgeInsets.all(4),
+                                        child: Text(
+                                          '${activity.category}',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 14
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(height: 10,)
+                                  ],
+                                ),
+                                onTap: () {
+                                  int currentDuration =
+                                      transformedActivities.fold(
+                                    0,
                                     (previousValue, activity) =>
-                                previousValue + activity.duration,
-                              );
-                              if (currentDuration + activity.duration >
-                                  (widget.numberOfDays! * 600 )) {
-                                showMessage(
-                                    'Adding this activity will exceed the total duration.');
-                              } else {
-                                setState(() {
-                                  transformedActivities.add(activity);
-                                  transformedActivities.sort((a, b) {
-                                    DateTime dateTimeA = DateTime(
-                                      DateTime.now().year,
-                                      DateTime.now().month,
-                                      DateTime.now().day,
-                                      a.timeStart.hour,
-                                      a.timeStart.minute,
-                                    );
-                                    DateTime dateTimeB = DateTime(
-                                      DateTime.now().year,
-                                      DateTime.now().month,
-                                      DateTime.now().day,
-                                      b.timeStart.hour,
-                                      b.timeStart.minute,
-                                    );
+                                        previousValue + activity.duration,
+                                  );
+                                  if (currentDuration + activity.duration >
+                                      (widget.numberOfDays! * 600)) {
+                                    showMessage(
+                                        'Adding this activity will exceed the total duration.');
+                                  } else {
+                                    setState(() {
+                                      transformedActivities.add(activity);
+                                      transformedActivities.sort((a, b) {
+                                        DateTime dateTimeA = DateTime(
+                                          DateTime.now().year,
+                                          DateTime.now().month,
+                                          DateTime.now().day,
+                                          a.timeStart.hour,
+                                          a.timeStart.minute,
+                                        );
+                                        DateTime dateTimeB = DateTime(
+                                          DateTime.now().year,
+                                          DateTime.now().month,
+                                          DateTime.now().day,
+                                          b.timeStart.hour,
+                                          b.timeStart.minute,
+                                        );
 
-                                    int timeComparison =
-                                    dateTimeA.compareTo(dateTimeB);
-                                    if (timeComparison != 0) {
-                                      return timeComparison; // Sort by timeStart
-                                    } else {
-                                      return a.duration.compareTo(b
-                                          .duration); // Sort by duration (secondary criteria)
-                                    }
-                                  });
-                                  activitiesByDay = groupActivitiesByDay(
-                                      transformedActivities);
-                                  availableActivities.remove(activity);
-                                });
-                                Navigator.pop(context); // Close the dialog
-                              }
-                            },
+                                        int timeComparison =
+                                            dateTimeA.compareTo(dateTimeB);
+                                        if (timeComparison != 0) {
+                                          return timeComparison; // Sort by timeStart
+                                        } else {
+                                          return a.duration.compareTo(b
+                                              .duration); // Sort by duration (secondary criteria)
+                                        }
+                                      });
+                                      activitiesByDay = groupActivitiesByDay(
+                                          transformedActivities);
+                                      availableActivities.remove(activity);
+                                    });
+                                    Navigator.pop(context); // Close the dialog
+                                  }
+                                },
+                              ),
+                            ),
                           );
                         },
                       ),
@@ -217,7 +282,6 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
               icon: Icon(UniconsLine.book_medical),
             ),
           ],
-
         ),
         body: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -227,10 +291,10 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
               Flexible(
                 child: Container(
                   height: 240,
-                  //width: double.infinity,
+                  width: double.infinity,
                   decoration: BoxDecoration(
                     image: DecorationImage(
-                   fit: BoxFit.cover,
+                      fit: BoxFit.cover,
                       image: AssetImage('assets/ph-cover-photo.png'),
                     ),
                   ),
@@ -239,8 +303,8 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
               SingleChildScrollView(
                 child: Expanded(
                   child: Container(
-                //    color: Colors.blue,
-                    height: 500,// Replace with your desired background color
+                    //    color: Colors.blue,
+                    height: 500, // Replace with your desired background color
                     child: ListView.builder(
                       itemCount: activitiesByDay.length,
                       itemBuilder: (context, dayIndex) {
@@ -255,15 +319,18 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
                               child: Container(
                                 width: double.infinity,
                                 decoration: BoxDecoration(
-                                  color:  Color(0xFFF5C518),
-                                  borderRadius: BorderRadius.circular(15),// Add any desired border styling
+                                  color: Color(0xFFF5C518),
+                                  borderRadius: BorderRadius.circular(
+                                      15), // Add any desired border styling
                                 ),
                                 child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
+                                  padding:
+                                      EdgeInsets.fromLTRB(18.0, 8.0, 0, 8.0),
                                   child: Text(
                                     'Day $dayNumber',
                                     style: TextStyle(
-                                      fontSize: 20,
+                                      color: Colors.white,
+                                      fontSize: 18,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
@@ -281,16 +348,17 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
                                   onDismissed: (direction) {
                                     setState(() {
                                       transformedActivities.remove(activity);
-                                      activitiesByDay = groupActivitiesByDay(transformedActivities);
+                                      activitiesByDay = groupActivitiesByDay(
+                                          transformedActivities);
                                     });
                                     fetchActivitiesFromFirebase();
                                   },
                                   child: ListTile(
                                     title: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
                                         Expanded(
-
                                           child: Text(
                                             activity.activityName,
                                             textAlign: TextAlign.left,
@@ -302,32 +370,45 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
                                         Text(
                                           '${activity.timeStart.format(context)} - ${addDurationToTime(activity.timeStart, activity.duration).format(context)}',
                                           textAlign: TextAlign.right,
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                         ),
                                       ],
                                     ),
                                     subtitle: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
-                                        Text(
-                                          '${activity.address}',
-                                          style: TextStyle(
-                                              fontSize: 14
-                                          ),
-                                        ),
-                                        Container(
-                                          decoration: BoxDecoration(
-                                            color: Color(0xFFB0DB2D),
-                                            borderRadius: BorderRadius.circular(5),
-                                          ),
-                                          padding: EdgeInsets.all(4),
-                                          child: Text(
-                                            '${activity.category}',
-                                            style: TextStyle(
-                                                fontSize: 14
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                              top: 2.0, bottom: 2.0),
+                                          child: Container(
+                                            width: 180,
+                                            child: Text(
+                                              '${activity.address}',
+                                              style: TextStyle(fontSize: 14),
                                             ),
                                           ),
                                         ),
-
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(top: 5.0),
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              color: Color(0xFFB0DB2D),
+                                              borderRadius:
+                                                  BorderRadius.circular(5),
+                                            ),
+                                            padding: EdgeInsets.all(4),
+                                            child: Text(
+                                              '${activity.category}',
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 14),
+                                            ),
+                                          ),
+                                        ),
                                       ],
                                     ),
                                   ),
@@ -535,9 +616,75 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
         ])
       });
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Itinerary successfully updated.'),
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   SnackBar(
+      //     content: Text('Itinerary successfully updated.'),
+      //   ),
+      // );
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text(
+            'Updated Itinerary Plan',
+            textAlign: TextAlign.center,
+            style: GoogleFonts.fredokaOne(
+              textStyle: TextStyle(
+                fontSize: 30,
+                fontWeight: FontWeight.w500,
+                color: Color(0xFFF5C518), // First color
+              ),
+            ),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Image.asset(
+                'assets/check-logo.png', // Replace this with the path to your image asset
+                height: 120,
+                width: 120,
+              ),
+              SizedBox(height: 10),
+              Container(
+                width: 180,
+                child: Text(
+                  'Your itinerary plan is successfully updated.',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 16),
+                ),
+              ),
+              SizedBox(height: 10),
+              Text(
+                'Thank you for using TravelMate!',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 14, color: Colors.grey),
+              ),
+            ],
+          ),
+          actions: [
+            Center(
+              child: TextButton(
+                onPressed: () {
+                  Navigator.pop(context); // Close the dialog
+                },
+                style: TextButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20.0),
+                  ),
+                  backgroundColor: Color(0xFFB0DB2D),
+                  minimumSize: Size(120, 45),
+                ),
+                child: Text(
+                  'Done',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(height: 10),
+          ],
         ),
       );
     } catch (error) {
