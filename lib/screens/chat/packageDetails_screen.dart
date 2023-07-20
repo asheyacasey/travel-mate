@@ -147,7 +147,7 @@ class _PackageDetailsScreenState extends State<PackageDetailsScreen> {
                           return ListTile(
                             title: Text(activity.activityName),
                             subtitle: Text(
-                              'Category: ${activity.category}\nAddress: ${activity.address}\nTime: ${activity.timeStart.format(context)} - ${addDurationToTime(activity.timeStart, activity.duration).format(context)}',
+                              'Category: ${activity.category}\nAddress: ${activity.address}\nDuration: ${activity.duration}',
                             ),
                             onTap: () {
                               int currentDuration =
@@ -162,32 +162,9 @@ class _PackageDetailsScreenState extends State<PackageDetailsScreen> {
                                     'Adding this activity will exceed the total duration.');
                               } else {
                                 setState(() {
+                                  activity.timeStart =
+                                      widget.package.activities.last.timeEnd;
                                   widget.package.activities.add(activity);
-                                  widget.package.activities.sort((a, b) {
-                                    DateTime dateTimeA = DateTime(
-                                      DateTime.now().year,
-                                      DateTime.now().month,
-                                      DateTime.now().day,
-                                      a.timeStart.hour,
-                                      a.timeStart.minute,
-                                    );
-                                    DateTime dateTimeB = DateTime(
-                                      DateTime.now().year,
-                                      DateTime.now().month,
-                                      DateTime.now().day,
-                                      b.timeStart.hour,
-                                      b.timeStart.minute,
-                                    );
-
-                                    int timeComparison =
-                                        dateTimeA.compareTo(dateTimeB);
-                                    if (timeComparison != 0) {
-                                      return timeComparison; // Sort by timeStart
-                                    } else {
-                                      return a.duration.compareTo(b
-                                          .duration); // Sort by duration (secondary criteria)
-                                    }
-                                  });
                                   activitiesByDay = groupActivitiesByDay(
                                       widget.package.activities);
                                   availableActivities.remove(activity);
