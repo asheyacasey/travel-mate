@@ -93,9 +93,8 @@ class _PackageDetailsScreenState extends State<PackageDetailsScreen> {
         databaseRepository: context.read<DatabaseRepository>(),
         authRepository: context.read<AuthRepository>(),
       ),
-
       child: Scaffold(
-     //  extendBodyBehindAppBar: true,
+        //  extendBodyBehindAppBar: true,
         appBar: AppBar(
           title: RichText(
             text: TextSpan(
@@ -141,7 +140,8 @@ class _PackageDetailsScreenState extends State<PackageDetailsScreen> {
                         itemCount: availableActivities.length + 1,
                         itemBuilder: (context, index) {
                           if (index == 0) {
-                            return Text('Select an activity'); // Placeholder text
+                            return Text(
+                                'Select an activity'); // Placeholder text
                           }
                           final activity = availableActivities[index - 1];
                           return ListTile(
@@ -150,13 +150,14 @@ class _PackageDetailsScreenState extends State<PackageDetailsScreen> {
                               'Category: ${activity.category}\nAddress: ${activity.address}\nTime: ${activity.timeStart.format(context)} - ${addDurationToTime(activity.timeStart, activity.duration).format(context)}',
                             ),
                             onTap: () {
-                              int currentDuration = widget.package.activities.fold(
+                              int currentDuration =
+                                  widget.package.activities.fold(
                                 0,
-                                    (previousValue, activity) =>
-                                previousValue + activity.duration,
+                                (previousValue, activity) =>
+                                    previousValue + activity.duration,
                               );
                               if (currentDuration + activity.duration >
-                                  (widget.numberOfDays * 600 )) {
+                                  (widget.numberOfDays * 600)) {
                                 showMessage(
                                     'Adding this activity will exceed the total duration.');
                               } else {
@@ -179,7 +180,7 @@ class _PackageDetailsScreenState extends State<PackageDetailsScreen> {
                                     );
 
                                     int timeComparison =
-                                    dateTimeA.compareTo(dateTimeB);
+                                        dateTimeA.compareTo(dateTimeB);
                                     if (timeComparison != 0) {
                                       return timeComparison; // Sort by timeStart
                                     } else {
@@ -216,7 +217,7 @@ class _PackageDetailsScreenState extends State<PackageDetailsScreen> {
                   //width: double.infinity,
                   decoration: BoxDecoration(
                     image: DecorationImage(
-                    fit: BoxFit.cover,
+                      fit: BoxFit.cover,
                       image: AssetImage('assets/ph-cover-photo.png'),
                     ),
                   ),
@@ -224,10 +225,9 @@ class _PackageDetailsScreenState extends State<PackageDetailsScreen> {
               ),
               SingleChildScrollView(
                 child: Container(
-                 // color: Colors.blue,
+                  // color: Colors.blue,
                   height: 500,
                   child: ListView.builder(
-
                     itemCount: activitiesByDay.length,
                     itemBuilder: (context, dayIndex) {
                       List<Activity> activities = activitiesByDay[dayIndex];
@@ -241,7 +241,7 @@ class _PackageDetailsScreenState extends State<PackageDetailsScreen> {
                             child: Container(
                               width: double.infinity,
                               decoration: BoxDecoration(
-                                color:  Color(0xFFF5C518),
+                                color: Color(0xFFF5C518),
                                 borderRadius: BorderRadius.circular(15),
                               ),
                               child: Padding(
@@ -258,7 +258,8 @@ class _PackageDetailsScreenState extends State<PackageDetailsScreen> {
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                            padding:
+                                const EdgeInsets.only(left: 8.0, right: 8.0),
                             child: ListView.builder(
                               shrinkWrap: true,
                               physics: NeverScrollableScrollPhysics(),
@@ -269,18 +270,19 @@ class _PackageDetailsScreenState extends State<PackageDetailsScreen> {
                                   key: Key(activity.activityName),
                                   onDismissed: (direction) {
                                     setState(() {
-                                      widget.package.activities.remove(activity);
-                                      activitiesByDay =
-                                          groupActivitiesByDay(widget.package.activities);
+                                      widget.package.activities
+                                          .remove(activity);
+                                      activitiesByDay = groupActivitiesByDay(
+                                          widget.package.activities);
                                     });
                                     fetchActivitiesFromFirebase();
                                   },
                                   child: ListTile(
                                     title: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
                                         Expanded(
-
                                           child: Text(
                                             activity.activityName,
                                             textAlign: TextAlign.left,
@@ -296,33 +298,28 @@ class _PackageDetailsScreenState extends State<PackageDetailsScreen> {
                                       ],
                                     ),
                                     subtitle: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Text(
                                           '${activity.address}',
-                                          style: TextStyle(
-                                            fontSize: 14
-                                          ),
+                                          style: TextStyle(fontSize: 14),
                                         ),
                                         Container(
                                           decoration: BoxDecoration(
                                             color: Color(0xFFB0DB2D),
-                                            borderRadius: BorderRadius.circular(5),
+                                            borderRadius:
+                                                BorderRadius.circular(5),
                                           ),
                                           padding: EdgeInsets.all(4),
                                           child: Text(
                                             '${activity.category}',
-                                            style: TextStyle(
-                                                fontSize: 14
-                                            ),
+                                            style: TextStyle(fontSize: 14),
                                           ),
                                         ),
-
                                       ],
                                     ),
                                   ),
-
-
                                 );
                               },
                             ),
@@ -362,7 +359,6 @@ class _PackageDetailsScreenState extends State<PackageDetailsScreen> {
               ),
             ),
           ),
-
         ],
       ),
     );
@@ -466,7 +462,9 @@ class _PackageDetailsScreenState extends State<PackageDetailsScreen> {
     });
 
     DateTime currentDay = DateTime.now();
+    TimeOfDay nextActivityStart = TimeOfDay(hour: 7, minute: 0);
     int totalDuration = 0;
+
     for (int i = 0; i < activities.length; i++) {
       Activity activity = activities[i];
       DateTime activityDateTime = DateTime(
@@ -481,13 +479,26 @@ class _PackageDetailsScreenState extends State<PackageDetailsScreen> {
 
       if (totalDuration + activityDuration > 600 ||
           activityDateTime.difference(currentDay).inDays > 0) {
+        // Check if new day is being set, update nextActivityStart to 7:00 AM
+        nextActivityStart = TimeOfDay(hour: 7, minute: 0);
+
         activitiesByDay.add(currentDayActivities);
         currentDayActivities = [];
         totalDuration = 0;
       }
 
+      // Set timeStart of activity to nextActivityStart
+      activity.timeStart = nextActivityStart;
+
+      // Calculate and set timeEnd based on timeStart and duration
+      activity.timeEnd =
+          calculateTimeEnd(activity.timeStart, activity.duration);
+
       currentDayActivities.add(activity);
       totalDuration += activityDuration;
+
+      // Update nextActivityStart for the next iteration
+      nextActivityStart = activity.timeEnd;
       currentDay = activityDateTime;
     }
 
@@ -496,6 +507,17 @@ class _PackageDetailsScreenState extends State<PackageDetailsScreen> {
     }
 
     return activitiesByDay;
+  }
+
+// Helper method to calculate timeEnd based on timeStart and duration
+  TimeOfDay calculateTimeEnd(TimeOfDay startTime, int duration) {
+    int startMinutes = startTime.hour * 60 + startTime.minute;
+    int endMinutes = startMinutes + duration;
+
+    int endHour = endMinutes ~/ 60;
+    int endMinute = endMinutes % 60;
+
+    return TimeOfDay(hour: endHour, minute: endMinute);
   }
 
   void showMessage(String message) {

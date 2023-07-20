@@ -30,26 +30,26 @@ class _PackagesScreenState extends State<PackagesScreen> {
 
   void _shuffleRandomTitles() {
     randomTitles = [
-          "Sweetheart Soiree",
-          "Lovely Rendezvous",
-          "Adorable Adventure",
-          "Charming Getaway",
-          "Whimsical Wanderlust",
-          "Enchanting Excursion",
-          "Playful Retreat",
-          "Darling Escape",
-          "Romantic Roaming",
-          "Magical Memories",
-          "Cuddlesome Journey",
-          "Blissful Expedition",
-          "Heartwarming Holiday",
-          "Dreamy Discovery",
-          "Sunny Serenade",
-          "Cozy Caravan",
-          "Honeybee Honeymoon",
-          "Cherished Trails",
-          "Sparkling Stroll",
-          "Smitten Sightseeing",
+      "Sweetheart Soiree",
+      "Lovely Rendezvous",
+      "Adorable Adventure",
+      "Charming Getaway",
+      "Whimsical Wanderlust",
+      "Enchanting Excursion",
+      "Playful Retreat",
+      "Darling Escape",
+      "Romantic Roaming",
+      "Magical Memories",
+      "Cuddlesome Journey",
+      "Blissful Expedition",
+      "Heartwarming Holiday",
+      "Dreamy Discovery",
+      "Sunny Serenade",
+      "Cozy Caravan",
+      "Honeybee Honeymoon",
+      "Cherished Trails",
+      "Sparkling Stroll",
+      "Smitten Sightseeing",
     ];
     randomTitles.shuffle();
     lastUsedTitleIndex = -1;
@@ -126,20 +126,22 @@ class _PackagesScreenState extends State<PackagesScreen> {
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Padding(
-                            padding: const EdgeInsets.only(left:8.0),
+                            padding: const EdgeInsets.only(left: 8.0),
                             child: Text(
                               'Travel Date Plans',
                               textAlign: TextAlign.start,
                               style: GoogleFonts.manrope(
                                   textStyle: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w900,
-                                    color: Color(0xFFB0DB2D),
-                                  )),
+                                fontSize: 20,
+                                fontWeight: FontWeight.w900,
+                                color: Color(0xFFB0DB2D),
+                              )),
                             ),
                           ),
                         ),
-                        SizedBox(height: 8,),
+                        SizedBox(
+                          height: 8,
+                        ),
                         Image.asset(
                           'assets/coverphoto.png', // Replace with your image path
                           fit: BoxFit.cover,
@@ -170,7 +172,8 @@ class _PackagesScreenState extends State<PackagesScreen> {
                           Package package = packages[index];
                           String randomTitle = _getNextRandomTitle();
                           return Padding(
-                            padding: const EdgeInsets.fromLTRB(6.0, 3.0, 6.0, 3.0),
+                            padding:
+                                const EdgeInsets.fromLTRB(6.0, 3.0, 6.0, 3.0),
                             child: Card(
                               elevation: 0,
                               shape: RoundedRectangleBorder(
@@ -179,7 +182,8 @@ class _PackagesScreenState extends State<PackagesScreen> {
                               color: Color(0xFFFAE4A1),
                               child: ListTile(
                                 title: Padding(
-                                  padding: const EdgeInsets.only(top: 8.0, bottom: 4.0),
+                                  padding: const EdgeInsets.only(
+                                      top: 8.0, bottom: 4.0),
                                   child: Text(
                                     randomTitle,
                                     style: TextStyle(
@@ -187,7 +191,6 @@ class _PackagesScreenState extends State<PackagesScreen> {
                                     ),
                                   ),
                                 ),
-
                                 subtitle: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -208,7 +211,7 @@ class _PackagesScreenState extends State<PackagesScreen> {
                                         color: Colors.black54,
                                       ),
                                     ),
-                                    SizedBox(height:10),
+                                    SizedBox(height: 10),
                                   ],
                                 ),
                                 trailing: Icon(
@@ -216,12 +219,12 @@ class _PackagesScreenState extends State<PackagesScreen> {
                                   size: 30,
                                   color: Colors.black,
                                 ),
-
                                 onTap: () {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => PackageDetailsScreen(
+                                      builder: (context) =>
+                                          PackageDetailsScreen(
                                         package: package,
                                         numberOfDays: widget.numberOfDays,
                                         match: widget.match,
@@ -247,7 +250,7 @@ class _PackagesScreenState extends State<PackagesScreen> {
 
   Future<List<Package>> generatePackagesFromFirebase() async {
     QuerySnapshot snapshot =
-    await FirebaseFirestore.instance.collection('business').get();
+        await FirebaseFirestore.instance.collection('business').get();
 
     List<Activity> activities = [];
 
@@ -270,7 +273,7 @@ class _PackagesScreenState extends State<PackagesScreen> {
 
         // Check if activity with the same activityName and address already exists in activities list
         bool activityExists = activities.any((existingActivity) =>
-        existingActivity.activityName == activity.activityName &&
+            existingActivity.activityName == activity.activityName &&
             existingActivity.address == activity.address);
 
         if (!activityExists) {
@@ -343,8 +346,8 @@ class Activity {
   final String activityName;
   final String category;
   final String address;
-  final TimeOfDay timeStart;
-  final TimeOfDay timeEnd;
+  TimeOfDay timeStart;
+  TimeOfDay timeEnd;
   final int duration;
 
   Activity({
