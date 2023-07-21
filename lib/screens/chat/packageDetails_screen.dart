@@ -201,7 +201,7 @@ class _PackageDetailsScreenState extends State<PackageDetailsScreen> {
                                         (previousValue, activity) => previousValue + activity.duration,
                                   );
                                   if (currentDuration + activity.duration > (widget.numberOfDays * 600)) {
-                                    showMessage('Adding this activity will exceed the total duration.');
+                                    showMessage('Adding this activity will exceed the total duration. Do you still want to continue?');
                                   } else {
                                     setState(() {
                                       activity.timeStart = widget.package.activities.last.timeEnd;
@@ -631,17 +631,43 @@ class _PackageDetailsScreenState extends State<PackageDetailsScreen> {
   void showMessage(String message) {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Text('Warning'),
-        content: Text(message),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context); // Close the dialog
-            },
-            child: Text('OK'),
+      builder: (context) => Center(
+        child: AlertDialog(
+          title: Text(
+            'Hi Traveller,',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize:20,
+              color: Color(0xFFF5C518),
+            ),
           ),
-        ],
+          content: Text(
+            message,
+            style: TextStyle(
+              fontSize: 18,
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context); // Close the dialog
+              },
+              child: Text(
+                'Yes',
+                style: TextStyle(
+                  color: Colors.blue, // Custom button text color
+                  fontSize: 18,
+                ),
+              ),
+            ),
+          ],
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          backgroundColor: Colors.white,
+          contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          elevation: 8,
+        ),
       ),
     );
   }
