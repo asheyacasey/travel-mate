@@ -628,9 +628,13 @@ class _Message extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        CircleAvatar(
-                          radius: 20,
-                          backgroundColor: Colors.greenAccent,
+                        Container(
+                          width: 45, // Set a width for the container to provide enough space for the CircleAvatar
+                          height: 45, // Set a height for the container to make it a square (for circular appearance)
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle, // Set the container shape to circle
+                            color: Color(0xFFB8ED19), // Set your desired circle background color (green)
+                          ),
                           child: IconButton(
                             onPressed: () {
                               String newId = Uuid().v4();
@@ -650,12 +654,22 @@ class _Message extends StatelessWidget {
                               print("THIS IS THE MESSAGE ID ===> " + messageId);
                               print("THIS IS THE NEW ID ===>" + newId);
                             },
-                            icon: Icon(Icons.check),
+                            icon: Center(
+                              child: Icon(
+                                UniconsLine.check, // Unicons "check-circle" icon (monochrome version)
+                                color: Colors.white, // Set your desired monochrome icon color
+                                size: 30,// Set your desired icon size
+                              ),
+                            ),
                           ),
                         ),
-                        CircleAvatar(
-                          radius: 20,
-                          backgroundColor: Colors.redAccent,
+                        Container(
+                          width: 45,
+                          height: 45, 
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle, // Set the container shape to circle
+                            color: Color(0xFFDCDCDC),
+                          ),
                           child: IconButton(
                             onPressed: () {
                               String newId = Uuid().v4();
