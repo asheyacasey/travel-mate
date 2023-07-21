@@ -1,12 +1,16 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:travel_mate/blocs/auth/auth_bloc.dart';
 import 'package:travel_mate/blocs/blocs.dart';
 import 'package:travel_mate/repositories/database/database_repository.dart';
+import 'package:travel_mate/screens/chat/itinerary_screen.dart';
+import 'package:travel_mate/screens/chat/packages_screen.dart';
 import 'package:unicons/unicons.dart';
 import 'package:travel_mate/models/models.dart';
 import 'package:uuid/uuid.dart';
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 
 class ChatScreen extends StatelessWidget {
   static const String routeName = '/chat';
@@ -14,10 +18,15 @@ class ChatScreen extends StatelessWidget {
   static Route route({required Match match}) {
     return MaterialPageRoute(
       settings: RouteSettings(name: routeName),
-      builder: (context) => BlocProvider<ChatBloc>(
-        create: (context) => ChatBloc(
-          databaseRepository: context.read<DatabaseRepository>(),
-        )..add(LoadChat(match.chat.id)),
+      builder: (context) => MultiBlocProvider(
+        providers: [
+          BlocProvider<AuthBloc>.value(value: context.read<AuthBloc>()),
+          BlocProvider<ChatBloc>(
+            create: (context) => ChatBloc(
+              databaseRepository: context.read<DatabaseRepository>(),
+            )..add(LoadChat(match.chat.id)),
+          ),
+        ],
         child: ChatScreen(match: match),
       ),
     );
@@ -54,6 +63,7 @@ class ChatScreen extends StatelessWidget {
                           message: messages[index].message,
                           messageId: messages[index].messageId,
                           itinerary: messages[index].itinerary,
+                          numberOfDays: messages[index].numberOfDays,
                           isAccepted: messages[index].itineraryAccept,
                           isFromCurrentUser: messages[index].senderId ==
                               context.read<AuthBloc>().state.authUser!.uid,
@@ -92,12 +102,14 @@ class _CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       title: Column(
         children: [
           CircleAvatar(
-            radius: 15,
+            radius: 20,
             backgroundImage: NetworkImage(match.matchUser.imageUrls[0]),
           ),
           Text(
             match.matchUser.name,
-            style: Theme.of(context).textTheme.headline4,
+            style: Theme.of(context).textTheme.headline4!.copyWith(
+                  fontWeight: FontWeight.w800,
+                ),
           ),
         ],
       ),
@@ -105,7 +117,7 @@ class _CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => Size.fromHeight(56.0);
+  Size get preferredSize => Size.fromHeight(65.0);
 }
 
 class _MessageInput extends StatelessWidget {
@@ -122,115 +134,71 @@ class _MessageInput extends StatelessWidget {
       child: SingleChildScrollView(
         child: Row(
           children: [
+            IconButton(
+              icon: Icon(
+                EvaIcons.fileAdd,
+                size: 40,
+                color: Color(0xFFF5C518),
+              ),
+              onPressed: () {
+                showModalBottomSheet(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return _buildBottomModal(context, match);
+                  },
+                );
+              },
+            ),
             Expanded(
               child: TextField(
                 controller: controller,
                 decoration: InputDecoration(
                   filled: true,
-                  fillColor: Colors.white,
+                  fillColor: Color(0xFFEDEDED),
                   hintText: 'Type a message',
                   contentPadding:
                       const EdgeInsets.only(left: 20, bottom: 5, top: 5),
                   focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.white),
+                    borderRadius: BorderRadius.circular(15.0),
                   ),
                   enabledBorder: UnderlineInputBorder(
                     borderSide: BorderSide(color: Colors.white),
+                    borderRadius: BorderRadius.circular(15.0),
                   ),
                 ),
               ),
             ),
-            IconButton(
-              icon: Icon(Icons.add),
-              onPressed: () {
-                showModalBottomSheet(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return Container(
-                      height: 300,
-                      child: ListView.builder(
-                        itemCount: itineraryOptions.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return ListTile(
-                            title: Text(itineraryOptions[index]['name']),
-                            onTap: () {
-                              Navigator.pop(context);
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return Builder(
-                                    builder: (BuildContext context) {
-                                      return AlertDialog(
-                                        title: Text(
-                                            itineraryOptions[index]['name']),
-                                        content: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            for (var place
-                                                in itineraryOptions[index]
-                                                    ['places'])
-                                              ListTile(
-                                                title: Text(place['name']),
-                                                subtitle: Text(
-                                                    place['departureTime']),
-                                              ),
-                                          ],
-                                        ),
-                                        actions: <Widget>[
-                                          TextButton(
-                                            onPressed: () {
-                                              Navigator.pop(context);
-                                            },
-                                            child: const Text('Cancel'),
-                                          ),
-                                          TextButton(
-                                            child: Text('Save'),
-                                            onPressed: () {
-                                              finalOption =
-                                                  itineraryOptions[index];
-                                              controller.text =
-                                                  itineraryOptions[index]
-                                                      ['name'];
-                                              Navigator.of(context).pop();
-                                            },
-                                          ),
-                                        ],
-                                      );
-                                    },
-                                  );
-                                },
-                              );
-                            },
-                          );
-                        },
-                      ),
-                    );
+            // IconButton(
+
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Theme.of(context).primaryColor,
+                ),
+                child: IconButton(
+                  icon: Icon(
+                    UniconsLine.message,
+                    size: 25,
+                  ),
+                  onPressed: () {
+                    String uuid = new Uuid().v4();
+                    context.read<ChatBloc>()
+                      ..add(
+                        AddMessage(
+                          userId: match.userId,
+                          matchUserId: match.matchUser.id!,
+                          message: controller.text,
+                          messageId: uuid,
+                          itinerary: finalOption,
+                        ),
+                      );
+                    controller.clear();
                   },
-                );
-              },
-            ),
-            Container(
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Theme.of(context).primaryColor,
-              ),
-              child: IconButton(
-                icon: Icon(UniconsLine.message),
-                onPressed: () {
-                  String uuid = new Uuid().v4();
-                  context.read<ChatBloc>()
-                    ..add(
-                      AddMessage(
-                        userId: match.userId,
-                        matchUserId: match.matchUser.id,
-                        message: controller.text,
-                        messageId: uuid,
-                        itinerary: finalOption,
-                      ),
-                    );
-                  controller.clear();
-                },
-                color: Colors.white,
+                  color: Colors.white,
+                ),
               ),
             ),
           ],
@@ -240,32 +208,203 @@ class _MessageInput extends StatelessWidget {
   }
 }
 
-List<Map<String, dynamic>> itineraryOptions = [
-  {
-    'name': 'Option 1',
-    'places': [
-      {'name': 'Central Park', 'departureTime': '10:00 AM'},
-      {'name': 'Empire State Building', 'departureTime': '1:00 PM'},
-      {'name': 'Statue of Liberty', 'departureTime': '4:00 PM'},
-    ],
-  },
-  {
-    'name': 'Option 2',
-    'places': [
-      {'name': 'Brooklyn Bridge', 'departureTime': '9:00 AM'},
-      {'name': 'One World Trade Center', 'departureTime': '12:00 PM'},
-      {'name': 'The High Line', 'departureTime': '3:00 PM'},
-    ],
-  },
-  {
-    'name': 'Option 3',
-    'places': [
-      {'name': 'The Metropolitan Museum of Art', 'departureTime': '11:00 AM'},
-      {'name': 'Top of the Rock Observation Deck', 'departureTime': '2:00 PM'},
-      {'name': 'Central Park Zoo', 'departureTime': '5:00 PM'},
-    ],
-  },
-];
+Widget _buildBottomModal(BuildContext context, Match match) {
+  int selectedDays = 1;
+
+  return StatefulBuilder(
+    builder: (BuildContext context, StateSetter setState) {
+      return Container(
+        height: 440,
+        padding: EdgeInsets.all(20.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'travelmate',
+              style: GoogleFonts.fredokaOne(
+                textStyle: TextStyle(
+                  fontSize: 25,
+                  color: Color(0xFFB0DB2D),
+                ),
+              ),
+            ),
+            SizedBox(height: 5),
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8.0),
+                color: Color(0xFFF5C518),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(6.0),
+                child: Text(
+                  'Itinerary Planner',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(height: 16.0),
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15.0),
+                color: Colors.transparent,
+                border: Border.all(
+                  color: Color(
+                      0xFFECEAEA), // Replace with your desired border color
+                  width: 2.0, // Adjust the border width as needed
+                ),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(15.0, 20.0, 15.0, 15.0),
+                child: Column(
+                  children: [
+                    Text(
+                      'How many days do you plan to travel together?',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            width: 180,
+                            child: TextButton(
+                              onPressed: () => setState(() => selectedDays = 1),
+                              style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                  selectedDays == 1
+                                      ? Color(0xFFF5C518)
+                                      : Color(0xFFEDEDED),
+                                ),
+                                shape: MaterialStateProperty.all<
+                                    RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20.0),
+                                  ),
+                                ),
+                              ),
+                              child: Text(
+                                '1 Day',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: selectedDays == 1
+                                      ? Colors.white
+                                      : Colors.black,
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 180,
+                            child: TextButton(
+                              onPressed: () => setState(() => selectedDays = 2),
+                              style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                  selectedDays == 2
+                                      ? Color(0xFFF5C518)
+                                      : Color(0xFFEDEDED),
+                                ),
+                                shape: MaterialStateProperty.all<
+                                    RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20.0),
+                                  ),
+                                ),
+                              ),
+                              child: Text(
+                                '2 Days',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: selectedDays == 2
+                                      ? Colors.white
+                                      : Colors.black,
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 180,
+                            child: TextButton(
+                              onPressed: () => setState(() => selectedDays = 3),
+                              style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                  selectedDays == 3
+                                      ? Color(0xFFF5C518)
+                                      : Color(0xFFEDEDED),
+                                ),
+                                shape: MaterialStateProperty.all<
+                                    RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20.0),
+                                  ),
+                                ),
+                              ),
+                              child: Text(
+                                '3 Days or more',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: selectedDays == 3
+                                      ? Colors.white
+                                      : Colors.black,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(height: 16.0),
+            Container(
+              height: 50, // Adjust the height as desired
+              width: 300, // Adjust the width as desired
+              child: TextButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => PackagesScreen(
+                        numberOfDays: selectedDays,
+                        match: match,
+                      ),
+                    ),
+                  );
+                },
+                style: ButtonStyle(
+                  backgroundColor:
+                      MaterialStateProperty.all<Color>(Color(0xFFB0DB2D)),
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(25.0),
+                    ),
+                  ),
+                ),
+                child: Text(
+                  'Create Itinerary Plan',
+                  style: TextStyle(color: Colors.white, fontSize: 16),
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    },
+  );
+}
 
 class _Message extends StatelessWidget {
   const _Message({
@@ -275,6 +414,7 @@ class _Message extends StatelessWidget {
     required this.match,
     this.itinerary,
     this.isAccepted,
+    this.numberOfDays,
     required this.isFromCurrentUser,
   }) : super(key: key);
 
@@ -284,55 +424,172 @@ class _Message extends StatelessWidget {
   final bool isFromCurrentUser;
   final Map<String, dynamic>? itinerary;
   final int? isAccepted;
+  final int? numberOfDays;
 
   @override
   Widget build(BuildContext context) {
+    final List<dynamic> activitiesData = itinerary?['activities'] ?? [];
+
+    // Convert activitiesData into List<Activity>
+    final List<Activity> activities = activitiesData.map((data) {
+      return Activity.fromFirebaseMap(data, context);
+    }).toList();
+
+    TimeOfDay calculateTimeEnd(TimeOfDay startTime, int duration) {
+      int startMinutes = startTime.hour * 60 + startTime.minute;
+      int endMinutes = startMinutes + duration;
+
+      int endHour = endMinutes ~/ 60;
+      int endMinute = endMinutes % 60;
+
+      return TimeOfDay(hour: endHour, minute: endMinute);
+    }
+
+    List<List<Activity>> groupByDay(List<Activity> activities) {
+      List<List<Activity>> activitiesByDay = [];
+      List<Activity> currentDayActivities = [];
+
+      DateTime currentDay = DateTime.now();
+      TimeOfDay nextActivityStart = TimeOfDay(hour: 7, minute: 0);
+      int totalDuration = 0;
+
+      for (int i = 0; i < activities.length; i++) {
+        Activity activity = activities[i];
+        DateTime activityDateTime = DateTime(
+          currentDay.year,
+          currentDay.month,
+          currentDay.day,
+          activity.timeStart.hour,
+          activity.timeStart.minute,
+        );
+
+        int activityDuration = activity.duration;
+
+        if (totalDuration + activityDuration > 600 ||
+            activityDateTime.difference(currentDay).inDays > 0) {
+          // Check if new day is being set, update nextActivityStart to 7:00 AM
+          nextActivityStart = TimeOfDay(hour: 7, minute: 0);
+
+          activitiesByDay.add(currentDayActivities);
+          currentDayActivities = [];
+          totalDuration = 0;
+        }
+
+        // Set timeStart of activity to nextActivityStart
+        activity.timeStart = nextActivityStart;
+
+        // Calculate and set timeEnd based on timeStart and duration
+        activity.timeEnd =
+            calculateTimeEnd(activity.timeStart, activity.duration);
+
+        currentDayActivities.add(activity);
+        totalDuration += activityDuration;
+
+        // Update nextActivityStart for the next iteration
+        nextActivityStart = activity.timeEnd;
+        currentDay = activityDateTime;
+      }
+
+      if (currentDayActivities.isNotEmpty) {
+        activitiesByDay.add(currentDayActivities);
+      }
+
+      return activitiesByDay;
+    }
+
+    final List<List<Activity>> activitiesByDay = groupByDay(activities);
+
     AlignmentGeometry alignment =
         isFromCurrentUser ? Alignment.topRight : Alignment.topLeft;
 
     Color color = isFromCurrentUser
-        ? Theme.of(context).backgroundColor
-        : Theme.of(context).primaryColor;
+        ? Theme.of(context).primaryColor
+        : Theme.of(context).backgroundColor;
 
     TextStyle? textStyle = isFromCurrentUser
-        ? Theme.of(context).textTheme.headline6!.copyWith(color: Colors.black)
-        : Theme.of(context).textTheme.headline6!.copyWith(color: Colors.white);
+        ? Theme.of(context)
+            .textTheme
+            .titleLarge!
+            .copyWith(color: Colors.white, fontSize: 17)
+        : Theme.of(context)
+            .textTheme
+            .titleLarge!
+            .copyWith(color: Colors.black, fontSize: 17);
 
     if (itinerary != null) {
       return GestureDetector(
         onTap: () {
           if (isFromCurrentUser || isAccepted == 1) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ItineraryScreen(
+                    itinerary: itinerary,
+                    numberOfDays: numberOfDays,
+                    match: match,
+                    oldMessageId: messageId),
+              ),
+            );
+          } else if (!isFromCurrentUser && isAccepted == null) {
             showDialog(
               context: context,
-              builder: (BuildContext context) {
-                return AlertDialog(
-                  title: Text(itinerary?['name']),
-                  content: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      for (var place in itinerary?['places'])
-                        ListTile(
-                          title: Text(place['name']),
-                          subtitle: Text(place['departureTime']),
-                        ),
-                    ],
+              builder: (context) => AlertDialog(
+                title: Text('Itinerary Preview'),
+                content: Container(
+                  width: MediaQuery.of(context).size.width * 0.8,
+                  height: MediaQuery.of(context).size.height * 0.5,
+                  child: ListView.builder(
+                    itemCount: activitiesByDay.length,
+                    itemBuilder: (context, dayIndex) {
+                      final List<Activity> dayActivities =
+                          activitiesByDay[dayIndex];
+                      final int dayNumber = dayIndex + 1;
+
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              'Day $dayNumber',
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          ListView.builder(
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                            itemCount: dayActivities.length,
+                            itemBuilder: (context, index) {
+                              final Activity activity = dayActivities[index];
+
+                              return ListTile(
+                                title: Text(activity.activityName),
+                                subtitle: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text('Category: ${activity.category}'),
+                                    Text('Address: ${activity.address}'),
+                                    Text('Duration: ${activity.duration} mins'),
+                                    Text(
+                                        'Time Start: ${activity.timeStart.format(context)}'),
+                                    Text(
+                                        'Time End: ${activity.timeEnd.format(context)}'),
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
+                        ],
+                      );
+                    },
                   ),
-                  actions: [
-                    TextButton(
-                      child: Text('OK'),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                  ],
-                );
-              },
+                ),
+              ),
             );
-          } else
-            () {
-              SizedBox();
-            };
+          }
         },
         child: Row(
           children: [
@@ -370,9 +627,13 @@ class _Message extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        CircleAvatar(
-                          radius: 20,
-                          backgroundColor: Colors.greenAccent,
+                        Container(
+                          width: 45, // Set a width for the container to provide enough space for the CircleAvatar
+                          height: 45, // Set a height for the container to make it a square (for circular appearance)
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle, // Set the container shape to circle
+                            color: Color(0xFFB8ED19), // Set your desired circle background color (green)
+                          ),
                           child: IconButton(
                             onPressed: () {
                               String newId = Uuid().v4();
@@ -381,8 +642,10 @@ class _Message extends StatelessWidget {
                                       userId: match.matchUser.id,
                                       matchUserId: match.userId,
                                       itinerary: itinerary,
+                                      numberOfDays: numberOfDays,
                                       isAccepted: 1,
-                                      message: 'View Details',
+                                      message:
+                                          '${context.read<AuthBloc>().state.user!.name} accepted the invitation',
                                       messageId: newId,
                                       oldMessageId: messageId,
                                     ),
@@ -390,12 +653,22 @@ class _Message extends StatelessWidget {
                               print("THIS IS THE MESSAGE ID ===> " + messageId);
                               print("THIS IS THE NEW ID ===>" + newId);
                             },
-                            icon: Icon(Icons.check),
+                            icon: Center(
+                              child: Icon(
+                                UniconsLine.check, // Unicons "check-circle" icon (monochrome version)
+                                color: Colors.white, // Set your desired monochrome icon color
+                                size: 30,// Set your desired icon size
+                              ),
+                            ),
                           ),
                         ),
-                        CircleAvatar(
-                          radius: 20,
-                          backgroundColor: Colors.redAccent,
+                        Container(
+                          width: 45,
+                          height: 45, 
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle, // Set the container shape to circle
+                            color: Color(0xFFDCDCDC),
+                          ),
                           child: IconButton(
                             onPressed: () {
                               String newId = Uuid().v4();
@@ -405,7 +678,8 @@ class _Message extends StatelessWidget {
                                       matchUserId: match.userId,
                                       itinerary: itinerary,
                                       isAccepted: 0,
-                                      message: 'Invitation Closed.',
+                                      message:
+                                          '${context.read<AuthBloc>().state.user!.name} denied the invitation.',
                                       messageId: newId,
                                       oldMessageId: messageId,
                                     ),
@@ -429,7 +703,7 @@ class _Message extends StatelessWidget {
           child: Row(
             children: [
               CircleAvatar(
-                radius: 15,
+                radius: 22,
                 backgroundImage: NetworkImage(match.matchUser.imageUrls[0]),
               ),
               SizedBox(
@@ -440,9 +714,9 @@ class _Message extends StatelessWidget {
                   child: Align(
                     alignment: alignment,
                     child: Container(
-                      padding: const EdgeInsets.all(8),
+                      padding: const EdgeInsets.all(10),
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8.0),
+                        borderRadius: BorderRadius.circular(20.0),
                         color: color,
                       ),
                       child: Text(
@@ -460,9 +734,9 @@ class _Message extends StatelessWidget {
         return Align(
           alignment: alignment,
           child: Container(
-            padding: const EdgeInsets.all(8),
+            padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8.0),
+              borderRadius: BorderRadius.circular(20.0),
               color: color,
             ),
             child: Text(

@@ -21,8 +21,8 @@ class UsersScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
+      backgroundColor: Color(0xFFF8F7CA),
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.transparent,
@@ -72,13 +72,6 @@ class UsersScreen extends StatelessWidget {
                           color: Colors.white,
                           icon: UniconsSolid.favorite,
                         ),
-                        // ChoiceButton(
-                        //     width: 80,
-                        //     size: 30,
-                        //     height: 80,
-                        //     color: Theme.of(context).primaryColor,
-                        //     icon:  UniconsSolid.check_circle,
-                        //     hasGradient: true)
                       ],
                     ),
                   ),
@@ -86,60 +79,81 @@ class UsersScreen extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox( height: 20),
+          SizedBox(height: 30),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8.0),
-
-            child:
-
-            Column(
+            padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 8.0),
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-
               children: [
-                Text(
-                  '${user.name}, ${user.age}',
-                  style: Theme.of(context).primaryTextTheme.headline2!.copyWith(
-                      fontFamily: GoogleFonts.fredoka().fontFamily,
-                      fontWeight: FontWeight.w900,
-                      color: Colors.black ),
-
+                Text('About me',
+                  style: GoogleFonts.manrope(
+                    textStyle: TextStyle(
+                      fontSize: 16,
+                      color: Colors.black45,
+                      //fontWeight: FontWeight.w500,
+                    ),
+                  ),
                 ),
-                Text(
-                  '${user.jobTitle}',
-                  style: Theme.of(context).textTheme.headline3!.copyWith(
-                        fontWeight: FontWeight.normal,
-                      ),
-                ),
-                SizedBox(height: 15),
-                Text('About',
-                    style: Theme.of(context).textTheme.headline3!.copyWith(
-                          fontWeight: FontWeight.bold,
-                        )),
+                SizedBox(height: 5),
                 Text('${user.bio}',
-                    style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                          height: 2,
-                        )),
-                SizedBox(height: 15),
+                  style: GoogleFonts.manrope(
+                    textStyle: TextStyle(
+                      fontSize: 20,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                ),
+                SizedBox(height: 25),
+                Row(
+                  children: [
+                    Text('My Basics',
+                      style: GoogleFonts.manrope(
+                        textStyle: TextStyle(
+                          fontSize: 16,
+                          color: Colors.black45,
+                          //fontWeight: FontWeight.w500,
+                        ),
+                      ),),
+                    SizedBox(width: 5.0,),
+
+                  ],
+                ),
+            Text('${user.jobTitle}',
+                  style: GoogleFonts.manrope(
+                    textStyle: TextStyle(
+                      fontSize: 20,
+                      color: Colors.black,
+                      //fontWeight: FontWeight.w500,
+                    ),
+                  ),),
+                SizedBox(height: 30),
                 Text('Interest',
-                    style: Theme.of(context).textTheme.headline3!.copyWith(
-                          fontWeight: FontWeight.bold,
-                        )),
+                  style: GoogleFonts.manrope(
+                    textStyle: TextStyle(
+                      fontSize: 16,
+                      color: Colors.black45,
+                    ),
+                  ),),
+                SizedBox(height: 5,),
                 Row(
                   children: user.interests
                       .map((interest) => Container(
-                            padding: const EdgeInsets.all(5.0),
+                            padding: const EdgeInsets.all(10.0),
                             margin: const EdgeInsets.only(top: 5.0, right: 5.0),
                             decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5.0),
-                              color: Theme.of(context).primaryColor,
+                              borderRadius: BorderRadius.circular(22.0),
+                              color: Color(0xFFF5C518),
                             ),
                             child: Text(
                               interest,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headline6!
-                                  .copyWith(color: Colors.white),
-                            ),
+                              style: GoogleFonts.manrope(
+                                textStyle: TextStyle(
+                                  fontSize: 18,
+                                  color: Colors.white,
+                                  //fontWeight: FontWeight.w500,
+                                ),
+                              ),),
                           ))
                       .toList(),
                 )
@@ -151,5 +165,3 @@ class UsersScreen extends StatelessWidget {
     );
   }
 }
-
-

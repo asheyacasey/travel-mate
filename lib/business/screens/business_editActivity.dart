@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -112,7 +113,15 @@ class _EditActivityScreenState extends State<EditActivityScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Edit Activity'),
+        elevation: 0.0,
+        backgroundColor: Theme.of(context).primaryColorLight,
+        title: Text(
+          'Edit Activity',
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -129,6 +138,7 @@ class _EditActivityScreenState extends State<EditActivityScreen> {
                   TextFormField(
                     controller: addressController,
                     decoration: InputDecoration(
+                      labelText: 'Location',
                       hintText: 'Enter your business address',
                     ),
                     onChanged: (query) {
@@ -158,7 +168,6 @@ class _EditActivityScreenState extends State<EditActivityScreen> {
                 ],
               ),
               SizedBox(height: 16),
-              Text('Category'),
               DropdownButtonFormField<String>(
                 value: selectedCategory,
                 decoration: InputDecoration(
@@ -176,93 +185,172 @@ class _EditActivityScreenState extends State<EditActivityScreen> {
                   );
                 }).toList(),
               ),
-              SizedBox(height: 16),
-              Text('Start Time'),
-              InkWell(
-                onTap: () async {
-                  TimeOfDay? selectedTime = await showTimePicker(
-                    context: context,
-                    initialTime: startTime ?? TimeOfDay.now(),
-                  );
-                  if (selectedTime != null) {
-                    setState(() {
-                      startTime = selectedTime;
-                    });
-                  }
-                },
-                child: Container(
-                  padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey),
+              SizedBox(height: 30),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    'Business Hours',
+                    style: TextStyle(
+                      fontSize: 20,
+                    ),
                   ),
-                  child: startTime != null
-                      ? Text('${startTime!.format(context)}')
-                      : Text('Select start time'),
                 ),
               ),
-              SizedBox(height: 16),
-              Text('End Time'),
-              InkWell(
-                onTap: () async {
-                  TimeOfDay? selectedTime = await showTimePicker(
-                    context: context,
-                    initialTime: TimeOfDay.now(),
-                  );
-                  if (selectedTime != null) {
-                    setState(() {
-                      endTime = selectedTime;
-                    });
-                  }
-                },
-                child: Container(
-                  padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey),
+              SizedBox(height: 10),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    'Start Time',
+                    style: TextStyle(
+                      fontSize: 16,
+                    ),
                   ),
-                  child: endTime != null
-                      ? Text('${endTime!.format(context)}')
-                      : Text('Select end time'),
                 ),
               ),
-              SizedBox(height: 16),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: Text('Cancel'),
-                  ),
-                  ElevatedButton(
-                    onPressed: () async {
-                      if (startTime != null &&
-                          endTime != null &&
-                          selectedCategory != null) {
-                        String name = nameController.text.trim();
-                        String address = addressController.text.trim();
-                        if (name.isNotEmpty && address.isNotEmpty) {
-                          // Calculate duration based on selected category
-                          int duration = _calculateDuration(selectedCategory!);
-
-                          Activity updatedActivity = Activity(
-                            id: widget.activity.id,
-                            name: name,
-                            category: selectedCategory!,
-                            startTime: startTime!,
-                            endTime: endTime!,
-                            duration: duration,
-                            address: address,
-                          );
-                          await _updateActivity(updatedActivity);
-                          Navigator.pop(context);
-                          widget.onActivityEdited();
+                  Expanded(
+                    child: InkWell(
+                      onTap: () async {
+                        TimeOfDay? selectedTime = await showTimePicker(
+                          context: context,
+                          initialTime: startTime ?? TimeOfDay.now(),
+                        );
+                        if (selectedTime != null) {
+                          setState(() {
+                            startTime = selectedTime;
+                          });
                         }
-                      }
-                    },
-                    child: Text('Save'),
+                      },
+                      child: Container(
+                        padding: EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(color: Colors.grey),
+                        ),
+
+                        child: startTime != null
+                            ? Text('${startTime!.format(context)} ', style: TextStyle(fontSize: 18), )
+                            : Text('Select start time', style: TextStyle(fontSize: 18)),
+                      ),
+                    ),
                   ),
                 ],
+              ),
+              SizedBox(height: 10),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    'Close Time',
+                    style: TextStyle(
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    child: InkWell(
+                      onTap: () async {
+                        TimeOfDay? selectedTime = await showTimePicker(
+                          context: context,
+                          initialTime: TimeOfDay.now(),
+                        );
+                        if (selectedTime != null) {
+                          setState(() {
+                            endTime = selectedTime;
+                          });
+                        }
+                      },
+                      child: Container(
+                        padding: EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: endTime != null
+                            ? Text('${endTime!.format(context)}', style: TextStyle(fontSize: 18))
+                            : Text('Select end time', style: TextStyle(fontSize: 18)),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 60),
+              TextButton(
+                onPressed: () async {
+                  if (startTime != null &&
+                      endTime != null &&
+                      selectedCategory != null) {
+                    String name = nameController.text.trim();
+                    String address = addressController.text.trim();
+                    if (name.isNotEmpty && address.isNotEmpty) {
+                      // Calculate duration based on selected category
+                      int duration = _calculateDuration(selectedCategory!);
+
+                      Activity updatedActivity = Activity(
+                        id: widget.activity.id,
+                        name: name,
+                        category: selectedCategory!,
+                        startTime: startTime!,
+                        endTime: endTime!,
+                        duration: duration,
+                        address: address,
+                      );
+                      await _updateActivity(updatedActivity);
+                      Navigator.pop(context);
+                      widget.onActivityEdited();
+                    }
+                  }
+                },
+
+                child: Text(
+                  'Save',
+                  style: GoogleFonts.manrope(
+                    textStyle: TextStyle(
+                      fontSize: 16,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+                style: TextButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20.0),
+                  ),
+                  backgroundColor: Color(0xFFB0DB2D),
+                  minimumSize: Size(double.infinity, 55.0),
+                ),
+              ),
+              SizedBox(height: 16),
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text(
+                  'Cancel',
+                  style: GoogleFonts.manrope(
+                    textStyle: TextStyle(
+                      fontSize: 16,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+                style: TextButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20.0),
+                  ),
+                  backgroundColor: Color(0xFFF55F5F),
+                  minimumSize: Size(double.infinity, 55.0),
+                ),
               ),
             ],
           ),

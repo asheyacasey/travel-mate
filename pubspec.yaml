@@ -41,7 +41,7 @@ dependencies:
   cloud_firestore: ^4.7.0
   uuid: ^3.0.5
   google_fonts: ^4.0.4
-  unicons: ^2.1.0
+  unicons: ^2.1.1
   rxdart: ^0.27.5
   google_maps_flutter: ^2.2.1
   provider:
@@ -52,6 +52,8 @@ dependencies:
   http: ^1.1.0
   flutter_picker: ^2.1.0
   flutter_typeahead: ^4.6.2
+  eva_icons_flutter: ^3.1.0
+
 
 
 
@@ -75,6 +77,10 @@ flutter:
   assets:
     - assets/logo.svg
     - assets/start-up-logo.svg
+    - assets/coverphoto.png
+    - assets/buko.svg
+    - assets/ph-cover-photo.png
+    - assets/check-logo.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

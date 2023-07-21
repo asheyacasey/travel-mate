@@ -1,6 +1,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:travel_mate/widgets/custom_elevated_button.dart';
 import 'package:unicons/unicons.dart';
 import '../../blocs/blocs.dart';
@@ -79,17 +81,26 @@ class SwipedMatchedHomeScreen extends StatelessWidget {
           children: [
             Text(
               'Congrats, it\'s a match!',
-              style: Theme.of(context).textTheme.headline2,
+              style: GoogleFonts.fredokaOne(
+                textStyle: TextStyle(
+                  fontSize: 30,
+                  color: Colors.black54,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 8),
             Text(
               'You and ${state.user.name} have liked each other!',
-              style: Theme.of(context)
-                  .textTheme
-                  .headline4!
-                  .copyWith(fontWeight: FontWeight.normal),
+              style: GoogleFonts.manrope(
+                textStyle: TextStyle(
+                  fontSize: 20,
+                  color: Colors.black54,
+                  fontWeight: FontWeight.normal,
+                ),
+              ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 30),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -102,14 +113,14 @@ class SwipedMatchedHomeScreen extends StatelessWidget {
                       Theme.of(context).primaryColor,
                     ])),
                     child: CircleAvatar(
-                      radius: 45,
+                      radius: 60,
                       backgroundImage: NetworkImage(
                         context.read<AuthBloc>().state.user!.imageUrls[0],
                       ),
                     ),
                   ),
                 ),
-                const SizedBox(width: 10),
+                //const SizedBox(width: 5),
                 ClipOval(
                   child: Container(
                     padding: const EdgeInsets.all(5.0),
@@ -119,7 +130,7 @@ class SwipedMatchedHomeScreen extends StatelessWidget {
                       Theme.of(context).primaryColor,
                     ])),
                     child: CircleAvatar(
-                      radius: 45,
+                      radius: 60,
                       backgroundImage: NetworkImage(
                         state.user.imageUrls[0],
                       ),
@@ -129,16 +140,16 @@ class SwipedMatchedHomeScreen extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(width: 10),
+            const SizedBox(height: 30),
             CustomElevatedButton(
               text: 'Send a message',
-              beginColor: Colors.white,
-              endColor: Colors.white,
-              textColor: Theme.of(context).primaryColor,
+              beginColor: Theme.of(context).primaryColor,
+              endColor: Theme.of(context).colorScheme.secondary,
+              textColor: Colors.white,
               onPressed: () {},
             ),
-            const SizedBox(width: 10),
-            CustomElevatedButton(
+            const SizedBox(height: 10),
+            CustomElevatedButton4(
               text: 'Back to Swiping',
               beginColor: Theme.of(context).primaryColor,
               endColor: Theme.of(context).colorScheme.secondary,
