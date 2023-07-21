@@ -77,12 +77,67 @@ class _AddNewActivityScreenState extends State<AddNewActivityScreen> {
       DocumentReference docRef =
           FirebaseFirestore.instance.collection('business').doc(user.uid);
 
-      await FirebaseFirestore.instance.runTransaction((transaction) async {
-        DocumentSnapshot snapshot = await transaction.get(docRef);
-        List<dynamic> activitiesData = snapshot.get('activities') ?? [];
-        activitiesData.add(activity.toMap());
-        transaction.update(docRef, {'activities': activitiesData});
-      });
+      final url = Uri.parse(
+          'https://nominatim.openstreetmap.org/search?format=json&q=${addressController.text}');
+      final response = await http.get(url);
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body) as List<dynamic>;
+        if (data.isNotEmpty) {
+          final lat = double.parse(data[0]['lat']);
+          final lon = double.parse(data[0]['lon']);
+
+          Activity newActivity = Activity(
+            id: activity.id,
+            name: activity.name,
+            category: activity.category,
+            startTime: activity.startTime,
+            endTime: activity.endTime,
+            duration: activity.duration,
+            address: activity.address,
+            lat: lat,
+            long: lon,
+          );
+
+          await FirebaseFirestore.instance.runTransaction((transaction) async {
+            DocumentSnapshot snapshot = await transaction.get(docRef);
+            List<dynamic> activitiesData = snapshot.get('activities') ?? [];
+            activitiesData.add(newActivity.toMap());
+            transaction.update(docRef, {'activities': activitiesData});
+          });
+        } else {
+          // Handle the case when the API call returns no data or is not successful.
+          print('Error: API call failed or returned empty data.');
+        }
+      } else {
+        // Handle the case when the API call is not successful.
+        print('Error: API call failed with status code ${response.statusCode}');
+      }
+    }
+  }
+
+  int _calculateDuration(String category) {
+    switch (category) {
+      case 'Swimming':
+        return 120;
+      case 'Foods':
+        return 60;
+      case 'Adventure':
+        return 60;
+      case 'Beach':
+        return 120;
+      case 'Night Life':
+        return 180;
+      case 'Land Tour':
+        return 360;
+      case 'Hiking':
+        return 180;
+      case 'Pool':
+        return 120;
+      case 'Diving':
+        return 120;
+      default:
+        return 0;
     }
   }
 
@@ -318,6 +373,8 @@ class _AddNewActivityScreenState extends State<AddNewActivityScreen> {
                         endTime: endTime!,
                         duration: duration,
                         address: address,
+                        lat: 0.00,
+                        long: 0.00,
                       );
                       await _addActivity(activity);
                       Navigator.pop(context);
@@ -371,30 +428,5 @@ class _AddNewActivityScreenState extends State<AddNewActivityScreen> {
         ),
       ),
     );
-  }
-
-  int _calculateDuration(String category) {
-    switch (category) {
-      case 'Swimming':
-        return 120;
-      case 'Foods':
-        return 60;
-      case 'Adventure':
-        return 60;
-      case 'Beach':
-        return 120;
-      case 'Night Life':
-        return 180;
-      case 'Land Tour':
-        return 360;
-      case 'Hiking':
-        return 180;
-      case 'Pool':
-        return 120;
-      case 'Diving':
-        return 120;
-      default:
-        return 0;
-    }
   }
 }

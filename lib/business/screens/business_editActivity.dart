@@ -77,24 +77,50 @@ class _EditActivityScreenState extends State<EditActivityScreen> {
       DocumentReference docRef =
           FirebaseFirestore.instance.collection('business').doc(user.uid);
 
-      try {
-        await FirebaseFirestore.instance.runTransaction((transaction) async {
-          DocumentSnapshot snapshot = await transaction.get(docRef);
-          List<dynamic> activitiesData = snapshot.get('activities') ?? [];
+      final url = Uri.parse(
+          'https://nominatim.openstreetmap.org/search?format=json&q=${addressController.text}');
+      final response = await http.get(url);
 
-          // Find the index of the activity to update
-          int index = activitiesData.indexWhere((a) => a['id'] == activity.id);
-          if (index != -1) {
-            // Update the activity at the found index
-            activitiesData[index] = activity.toMap();
-            transaction.update(docRef, {'activities': activitiesData});
-            print('Activity updated successfully!');
-          } else {
-            print('Activity not found in the array!');
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body) as List<dynamic>;
+        if (data.isNotEmpty) {
+          final lat = double.parse(data[0]['lat']);
+          final lon = double.parse(data[0]['lon']);
+
+          Activity newActivity = Activity(
+            id: activity.id,
+            name: activity.name,
+            category: activity.category,
+            startTime: activity.startTime,
+            endTime: activity.endTime,
+            duration: activity.duration,
+            address: activity.address,
+            lat: lat,
+            long: lon,
+          );
+
+          try {
+            await FirebaseFirestore.instance
+                .runTransaction((transaction) async {
+              DocumentSnapshot snapshot = await transaction.get(docRef);
+              List<dynamic> activitiesData = snapshot.get('activities') ?? [];
+
+              // Find the index of the activity to update
+              int index =
+                  activitiesData.indexWhere((a) => a['id'] == activity.id);
+              if (index != -1) {
+                // Update the activity at the found index
+                activitiesData[index] = newActivity.toMap();
+                transaction.update(docRef, {'activities': activitiesData});
+                print('Activity updated successfully!');
+              } else {
+                print('Activity not found in the array!');
+              }
+            });
+          } catch (e) {
+            print('Error updating activity: $e');
           }
-        });
-      } catch (e) {
-        print('Error updating activity: $e');
+        }
       }
     }
   }
@@ -227,15 +253,19 @@ class _EditActivityScreenState extends State<EditActivityScreen> {
                         }
                       },
                       child: Container(
-                        padding: EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+                        padding:
+                            EdgeInsets.symmetric(vertical: 20, horizontal: 16),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(8),
                           border: Border.all(color: Colors.grey),
                         ),
-
                         child: startTime != null
-                            ? Text('${startTime!.format(context)} ', style: TextStyle(fontSize: 18), )
-                            : Text('Select start time', style: TextStyle(fontSize: 18)),
+                            ? Text(
+                                '${startTime!.format(context)} ',
+                                style: TextStyle(fontSize: 18),
+                              )
+                            : Text('Select start time',
+                                style: TextStyle(fontSize: 18)),
                       ),
                     ),
                   ),
@@ -270,14 +300,17 @@ class _EditActivityScreenState extends State<EditActivityScreen> {
                         }
                       },
                       child: Container(
-                        padding: EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+                        padding:
+                            EdgeInsets.symmetric(vertical: 20, horizontal: 16),
                         decoration: BoxDecoration(
                           border: Border.all(color: Colors.grey),
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: endTime != null
-                            ? Text('${endTime!.format(context)}', style: TextStyle(fontSize: 18))
-                            : Text('Select end time', style: TextStyle(fontSize: 18)),
+                            ? Text('${endTime!.format(context)}',
+                                style: TextStyle(fontSize: 18))
+                            : Text('Select end time',
+                                style: TextStyle(fontSize: 18)),
                       ),
                     ),
                   ),
@@ -303,6 +336,8 @@ class _EditActivityScreenState extends State<EditActivityScreen> {
                         endTime: endTime!,
                         duration: duration,
                         address: address,
+                        lat: 0.00,
+                        long: 0.00,
                       );
                       await _updateActivity(updatedActivity);
                       Navigator.pop(context);
@@ -310,7 +345,6 @@ class _EditActivityScreenState extends State<EditActivityScreen> {
                     }
                   }
                 },
-
                 child: Text(
                   'Save',
                   style: GoogleFonts.manrope(
