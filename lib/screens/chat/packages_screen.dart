@@ -29,7 +29,7 @@ class PackagesScreen extends StatefulWidget {
 class _PackagesScreenState extends State<PackagesScreen> {
   List<String> randomTitles = [];
   int lastUsedTitleIndex = -1;
-  bool withinLimit = false;
+  bool hasActivities = false;
   Future<List<Package>>? _packagesFuture;
 
   @override
@@ -176,7 +176,7 @@ class _PackagesScreenState extends State<PackagesScreen> {
                       return Center(child: Text('Error: ${snapshot.error}'));
                     } else {
                       List<Package> packages = snapshot.data!;
-                      if (withinLimit) {
+                      if (hasActivities) {
                         return ListView.builder(
                           physics: AlwaysScrollableScrollPhysics(),
                           itemCount: packages.length,
@@ -330,6 +330,9 @@ class _PackagesScreenState extends State<PackagesScreen> {
 
           bool isWithinMaxDistance = distance <= _defaultRadius;
 
+          print(
+              "ACTIVITYNAME IS ${activity.activityName} ADDRESS IS ${activity.address} DISTANCE IS ${distance} AND RADIUS IS ${_defaultRadius}");
+
           bool interestCategoryMatches = stringInterests
               .any((interest) => activity.category.contains(interest));
           if (isWithinMaxDistance && interestCategoryMatches) {
@@ -401,8 +404,6 @@ class _PackagesScreenState extends State<PackagesScreen> {
   }
 
   List<Package> generatePackages(List<Activity> activities, int numberOfDays) {
-    double limiter = (numberOfDays * 600) / 2;
-    withinLimit = false;
     List<Package> packages = [];
     int packageDuration = 0;
     Package currentPackage = Package(activities: []);
@@ -431,9 +432,9 @@ class _PackagesScreenState extends State<PackagesScreen> {
       packages.add(currentPackage);
     }
 
-    if (packageDuration > limiter) {
+    if (activities.length > 0) {
       setState(() {
-        withinLimit = true;
+        hasActivities = true;
       });
     }
 
