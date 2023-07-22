@@ -11,8 +11,14 @@ import 'package:unicons/unicons.dart';
 class PackagesScreen extends StatefulWidget {
   final int numberOfDays;
   final Match match;
+  final double lat;
+  final double lon;
 
-  PackagesScreen({required this.numberOfDays, required this.match});
+  PackagesScreen(
+      {required this.numberOfDays,
+      required this.match,
+      required this.lat,
+      required this.lon});
 
   @override
   _PackagesScreenState createState() => _PackagesScreenState();

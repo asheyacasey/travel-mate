@@ -472,20 +472,36 @@ Widget _buildGenerateModal(BuildContext context, Match match) {
                 height: 50, // Adjust the height as desired
                 width: 300, // Adjust the width as desired
                 child: TextButton(
-                  onPressed: () {
+                  onPressed: () async {
                     if (_addressController.text.isEmpty) {
                       setState(() => isAddressEmpty = true);
                     } else {
-                      // Navigate to the PackagesScreen if the address is not empty
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => PackagesScreen(
-                            numberOfDays: selectedDays,
-                            match: match,
-                          ),
-                        ),
-                      );
+                      final url = Uri.parse(
+                          'https://nominatim.openstreetmap.org/search?format=json&q=${_addressController.text}');
+                      final response = await http.get(url);
+
+                      if (response.statusCode == 200) {
+                        final data = jsonDecode(response.body) as List<dynamic>;
+                        if (data.isNotEmpty) {
+                          final lat = double.parse(data[0]['lat']);
+                          final lon = double.parse(data[0]['lon']);
+
+                          // Navigate to the PackagesScreen if the address is not empty
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => PackagesScreen(
+                                numberOfDays: selectedDays,
+                                match: match,
+                                lat: lat,
+                                lon: lon,
+                              ),
+                            ),
+                          );
+                        }
+                      } else {
+                        print('Failed to fetch coordinates for the address');
+                      }
                     }
                   },
                   style: ButtonStyle(
