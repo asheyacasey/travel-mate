@@ -147,7 +147,7 @@ class _MessageInput extends StatelessWidget {
                   context: context,
                   builder: (BuildContext context) {
                     return Center(
-                      child: _buildBottomModal(context, match),
+                      child: _buildGenerateModal(context, match),
                     );
                   },
                 );
@@ -212,10 +212,11 @@ class _MessageInput extends StatelessWidget {
   }
 }
 
-Widget _buildBottomModal(BuildContext context, Match match) {
+Widget _buildGenerateModal(BuildContext context, Match match) {
   int selectedDays = 1;
   final TextEditingController _addressController = TextEditingController();
   List<String> _addressSuggestions = [];
+  bool isAddressEmpty = false;
 
   Future<List<String>> _getAddressSuggestions(String query) async {
     try {
@@ -431,6 +432,17 @@ Widget _buildBottomModal(BuildContext context, Match match) {
                         });
                       },
                     ),
+                    if (isAddressEmpty)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 4.0),
+                        child: Text(
+                          'Please enter a place.',
+                          style: TextStyle(
+                            color: Colors.red,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ),
                     SizedBox(height: 10),
                     if (_addressSuggestions.isNotEmpty)
                       Container(
@@ -445,6 +457,7 @@ Widget _buildBottomModal(BuildContext context, Match match) {
                                 setState(() {
                                   _addressController.text = suggestion;
                                   _addressSuggestions = [];
+                                  isAddressEmpty = false;
                                 });
                               },
                             );
@@ -460,15 +473,20 @@ Widget _buildBottomModal(BuildContext context, Match match) {
                 width: 300, // Adjust the width as desired
                 child: TextButton(
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => PackagesScreen(
-                          numberOfDays: selectedDays,
-                          match: match,
+                    if (_addressController.text.isEmpty) {
+                      setState(() => isAddressEmpty = true);
+                    } else {
+                      // Navigate to the PackagesScreen if the address is not empty
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => PackagesScreen(
+                            numberOfDays: selectedDays,
+                            match: match,
+                          ),
                         ),
-                      ),
-                    );
+                      );
+                    }
                   },
                   style: ButtonStyle(
                     backgroundColor:
