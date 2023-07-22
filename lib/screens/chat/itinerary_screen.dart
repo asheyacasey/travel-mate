@@ -65,6 +65,8 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
         String activityName = activityData['name'];
         String category = activityData['category'];
         String address = activityData['address'];
+        double lat = activityData['lat'];
+        double lon = activityData['long'];
         TimeOfDay timeStart = _convertToTimeOfDay(activityData['startTime']);
         TimeOfDay timeEnd = _convertToTimeOfDay(activityData['endTime']);
         int duration = activityData['duration'];
@@ -73,6 +75,8 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
           activityName: activityName,
           category: category,
           address: address,
+          lat: lat,
+          lon: lon,
           timeStart: timeStart,
           timeEnd: timeEnd,
           duration: duration,
@@ -164,16 +168,19 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
                         itemBuilder: (context, index) {
                           final activity = availableActivities[index];
                           return Padding(
-                            padding: const EdgeInsets.only(top: 5.0, bottom: 5.0),
+                            padding:
+                                const EdgeInsets.only(top: 5.0, bottom: 5.0),
                             child: Container(
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10), // Set the border radius here
+                                borderRadius: BorderRadius.circular(
+                                    10), // Set the border radius here
                                 color: Color(0xFFF1F1F1),
                               ),
                               child: ListTile(
                                 title: Padding(
                                   padding: const EdgeInsets.only(top: 8.0),
-                                  child: Text(activity.activityName,
+                                  child: Text(
+                                    activity.activityName,
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 18,
@@ -188,36 +195,42 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
                                       style: TextStyle(fontSize: 14),
                                     ),
                                     Padding(
-                                      padding:
-                                      const EdgeInsets.only(top: 5.0),
+                                      padding: const EdgeInsets.only(top: 5.0),
                                       child: Container(
                                         decoration: BoxDecoration(
                                           color: Color(0xFFB0DB2D),
-                                          borderRadius: BorderRadius.circular(5),
+                                          borderRadius:
+                                              BorderRadius.circular(5),
                                         ),
                                         padding: EdgeInsets.all(4),
                                         child: Text(
                                           '${activity.category}',
                                           style: TextStyle(
                                               color: Colors.white,
-                                              fontSize: 14
-                                          ),
+                                              fontSize: 14),
                                         ),
                                       ),
                                     ),
-                                    SizedBox(height: 10,)
+                                    SizedBox(
+                                      height: 10,
+                                    )
                                   ],
                                 ),
                                 onTap: () {
-                                  int currentDuration = transformedActivities.fold(
+                                  int currentDuration =
+                                      transformedActivities.fold(
                                     0,
-                                        (previousValue, activity) => previousValue + activity.duration,
+                                    (previousValue, activity) =>
+                                        previousValue + activity.duration,
                                   );
-                                  if (currentDuration + activity.duration > (widget.numberOfDays! * 600)) {
-                                    showMessage('Adding this activity will exceed the total duration. Do you still want to continue?');
+                                  if (currentDuration + activity.duration >
+                                      (widget.numberOfDays! * 600)) {
+                                    showMessage(
+                                        'Adding this activity will exceed the total duration. Do you still want to continue?');
                                   } else {
                                     setState(() {
-                                      activity.timeEnd = transformedActivities.last.timeEnd;
+                                      activity.timeEnd =
+                                          transformedActivities.last.timeEnd;
                                       transformedActivities.add(activity);
                                       transformedActivities.sort((a, b) {
                                         DateTime dateTimeA = DateTime(
@@ -235,14 +248,17 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
                                           b.timeStart.minute,
                                         );
 
-                                        int timeComparison = dateTimeA.compareTo(dateTimeB);
+                                        int timeComparison =
+                                            dateTimeA.compareTo(dateTimeB);
                                         if (timeComparison != 0) {
                                           return timeComparison; // Sort by timeStart
                                         } else {
-                                          return a.duration.compareTo(b.duration); // Sort by duration (secondary criteria)
+                                          return a.duration.compareTo(b
+                                              .duration); // Sort by duration (secondary criteria)
                                         }
                                       });
-                                      activitiesByDay = groupActivitiesByDay(transformedActivities);
+                                      activitiesByDay = groupActivitiesByDay(
+                                          transformedActivities);
                                       availableActivities.remove(activity);
                                     });
                                     Navigator.pop(context); // Close the dialog
@@ -256,7 +272,6 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
                     ),
                   ),
                 );
-
               },
               icon: Icon(UniconsLine.book_medical),
             ),
@@ -317,7 +332,7 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
                             ),
                             Padding(
                               padding:
-                              const EdgeInsets.only(left: 8.0, right: 8.0),
+                                  const EdgeInsets.only(left: 8.0, right: 8.0),
                               child: ListView.builder(
                                 shrinkWrap: true,
                                 physics: NeverScrollableScrollPhysics(),
@@ -373,7 +388,8 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
                                             ),
                                           ),
                                           Padding(
-                                            padding:  const EdgeInsets.only(top: 5.0),
+                                            padding:
+                                                const EdgeInsets.only(top: 5.0),
                                             child: Container(
                                               decoration: BoxDecoration(
                                                 color: Color(0xFFB0DB2D),
@@ -525,6 +541,8 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
           activityName: activity.activityName,
           category: activity.category,
           address: activity.address,
+          lat: activity.lat,
+          lon: activity.lon,
           timeStart: activity.timeStart,
           timeEnd: activity.timeEnd, // Update the timeEnd value
           duration: activity.duration,
@@ -737,7 +755,7 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
             'Hi Traveller,',
             style: TextStyle(
               fontWeight: FontWeight.bold,
-              fontSize:20,
+              fontSize: 20,
               color: Color(0xFFF5C518),
             ),
           ),
@@ -770,7 +788,6 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
         ),
       ),
     );
-
   }
 }
 

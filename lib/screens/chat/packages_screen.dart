@@ -29,10 +29,13 @@ class PackagesScreen extends StatefulWidget {
 class _PackagesScreenState extends State<PackagesScreen> {
   List<String> randomTitles = [];
   int lastUsedTitleIndex = -1;
+  bool withinLimit = false;
+  Future<List<Package>>? _packagesFuture;
 
   @override
   void initState() {
     super.initState();
+    _packagesFuture = generatePackagesFromFirebase();
     _shuffleRandomTitles();
   }
 
@@ -165,7 +168,7 @@ class _PackagesScreenState extends State<PackagesScreen> {
               ),
               Expanded(
                 child: FutureBuilder<List<Package>>(
-                  future: generatePackagesFromFirebase(),
+                  future: _packagesFuture,
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return Center(child: CircularProgressIndicator());
@@ -173,78 +176,92 @@ class _PackagesScreenState extends State<PackagesScreen> {
                       return Center(child: Text('Error: ${snapshot.error}'));
                     } else {
                       List<Package> packages = snapshot.data!;
-                      return ListView.builder(
-                        physics: AlwaysScrollableScrollPhysics(),
-                        itemCount: packages.length,
-                        itemBuilder: (context, index) {
-                          Package package = packages[index];
-                          String randomTitle = _getNextRandomTitle();
-                          return Padding(
-                            padding:
-                                const EdgeInsets.fromLTRB(6.0, 3.0, 6.0, 3.0),
-                            child: Card(
-                              elevation: 0,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              color: Color(0xFFFAE4A1),
-                              child: ListTile(
-                                title: Padding(
-                                  padding: const EdgeInsets.only(
-                                      top: 8.0, bottom: 4.0),
-                                  child: Text(
-                                    randomTitle,
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
+                      if (withinLimit) {
+                        return ListView.builder(
+                          physics: AlwaysScrollableScrollPhysics(),
+                          itemCount: packages.length,
+                          itemBuilder: (context, index) {
+                            Package package = packages[index];
+                            String randomTitle = _getNextRandomTitle();
+                            return Padding(
+                              padding:
+                                  const EdgeInsets.fromLTRB(6.0, 3.0, 6.0, 3.0),
+                              child: Card(
+                                elevation: 0,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                color: Color(0xFFFAE4A1),
+                                child: ListTile(
+                                  title: Padding(
+                                    padding: const EdgeInsets.only(
+                                        top: 8.0, bottom: 4.0),
+                                    child: Text(
+                                      randomTitle,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
                                   ),
-                                ),
-                                subtitle: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "Around Cebu",
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 15,
-                                        color: Colors.black54,
+                                  subtitle: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "Around Cebu",
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 15,
+                                          color: Colors.black54,
+                                        ),
                                       ),
-                                    ),
-                                    SizedBox(height: 4),
-                                    Text(
-                                      'Trip Duration: ${getTripDurationText(widget.numberOfDays)}',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 15,
-                                        color: Colors.black54,
+                                      SizedBox(height: 4),
+                                      Text(
+                                        'Trip Duration: ${getTripDurationText(widget.numberOfDays)}',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 15,
+                                          color: Colors.black54,
+                                        ),
                                       ),
-                                    ),
-                                    SizedBox(height: 10),
-                                  ],
-                                ),
-                                trailing: Icon(
-                                  UniconsLine.angle_right_b,
-                                  size: 30,
-                                  color: Colors.black,
-                                ),
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          PackageDetailsScreen(
-                                        package: package,
-                                        numberOfDays: widget.numberOfDays,
-                                        match: widget.match,
+                                      SizedBox(height: 10),
+                                    ],
+                                  ),
+                                  trailing: Icon(
+                                    UniconsLine.angle_right_b,
+                                    size: 30,
+                                    color: Colors.black,
+                                  ),
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            PackageDetailsScreen(
+                                          package: package,
+                                          numberOfDays: widget.numberOfDays,
+                                          match: widget.match,
+                                        ),
                                       ),
-                                    ),
-                                  );
-                                },
+                                    );
+                                  },
+                                ),
                               ),
+                            );
+                          },
+                        );
+                      } else {
+                        return Center(
+                          child: Text(
+                            "No or not enough activities found in the area.",
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
                             ),
-                          );
-                        },
-                      );
+                          ),
+                        );
+                      }
                     }
                   },
                 ),
@@ -261,6 +278,14 @@ class _PackagesScreenState extends State<PackagesScreen> {
         await FirebaseFirestore.instance.collection('business').get();
 
     List<Activity> activities = [];
+    List interests =
+        widget.match.matchUser.interests + widget.currentUser.interests;
+
+    // Convert interests list to List<String>
+    List<String> stringInterests =
+        interests.map((interest) => interest.toString()).toList();
+
+    double _defaultRadius = 1000.0 / 1000;
 
     for (QueryDocumentSnapshot doc in snapshot.docs) {
       List<dynamic> activityList = doc['activities'];
@@ -286,8 +311,35 @@ class _PackagesScreenState extends State<PackagesScreen> {
             existingActivity.activityName == activity.activityName &&
             existingActivity.address == activity.address);
 
-        if (!activityExists) {}
+        if (!activityExists) {
+          // Calculate the distance between the inputted place and the location of the activity
+          double distance = calculateDistance(
+            widget.lat,
+            widget.lon,
+            activity.lat,
+            activity.lon,
+          );
+
+          print("WIDGET LAT ${widget.lat}");
+          print("WIDGET LONG ${widget.lon}");
+          print("ACTIVITY LAT ${activity.lat}");
+          print("ACTIVITY LONG ${activity.lon}");
+          print(
+              'ACTIVITY NAME ${activity.activityName} AND CATEGORY ${activity.category}');
+          stringInterests.forEach((interest) => print(interest));
+
+          bool isWithinMaxDistance = distance <= _defaultRadius;
+
+          bool interestCategoryMatches = stringInterests
+              .any((interest) => activity.category.contains(interest));
+          if (isWithinMaxDistance && interestCategoryMatches) {
+            tempActivities.add(activity);
+          }
+        }
       });
+
+      print("NUMBER OF TEMPACTIVITES IS ${tempActivities.length}");
+      tempActivities.forEach((activity) => print(activity.activityName));
 
       tempActivities.sort((a, b) {
         DateTime dateTimeA = DateTime(
@@ -349,12 +401,23 @@ class _PackagesScreenState extends State<PackagesScreen> {
   }
 
   List<Package> generatePackages(List<Activity> activities, int numberOfDays) {
+    double limiter = (numberOfDays * 600) / 2;
+    withinLimit = false;
     List<Package> packages = [];
+    int packageDuration = 0;
     Package currentPackage = Package(activities: []);
+    print('===========================================================');
+    print('PACKAGE DURATION IS ${packageDuration}');
+    print("NUMBER OF ACTIVITIES IS ${activities.length}");
+    activities.forEach((activity) => print(activity.activityName));
+    print('===========================================================');
 
     for (int i = 0; i < activities.length; i++) {
       Activity activity = activities[i];
       int totalDuration = currentPackage.totalDuration + activity.duration;
+      packageDuration = packageDuration + totalDuration;
+
+      print('TOTAL DURATION IS ${packageDuration}');
 
       if (totalDuration <= (numberOfDays * 600)) {
         currentPackage.activities.add(activity);
@@ -368,6 +431,12 @@ class _PackagesScreenState extends State<PackagesScreen> {
       packages.add(currentPackage);
     }
 
+    if (packageDuration > limiter) {
+      setState(() {
+        withinLimit = true;
+      });
+    }
+
     return packages;
   }
 }
@@ -378,16 +447,16 @@ class Activity {
   final String address;
   TimeOfDay timeStart;
   TimeOfDay timeEnd;
-  double? lat;
-  double? lon;
+  double lat;
+  double lon;
   final int duration;
 
   Activity({
     required this.activityName,
     required this.category,
     required this.address,
-    this.lat,
-    this.lon,
+    required this.lat,
+    required this.lon,
     required this.timeStart,
     required this.timeEnd,
     required this.duration,
