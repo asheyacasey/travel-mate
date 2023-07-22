@@ -214,6 +214,7 @@ class _MessageInput extends StatelessWidget {
 
 Widget _buildGenerateModal(BuildContext context, Match match) {
   int selectedDays = 1;
+  final User currentUser = context.read<AuthBloc>().state.user!;
   final TextEditingController _addressController = TextEditingController();
   List<String> _addressSuggestions = [];
   bool isAddressEmpty = false;
@@ -493,6 +494,7 @@ Widget _buildGenerateModal(BuildContext context, Match match) {
                               builder: (context) => PackagesScreen(
                                 numberOfDays: selectedDays,
                                 match: match,
+                                currentUser: currentUser,
                                 lat: lat,
                                 lon: lon,
                               ),
