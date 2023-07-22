@@ -5,18 +5,20 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:travel_mate/models/models.dart';
 import 'package:travel_mate/screens/chat/packageDetails_screen.dart';
-import 'dart:math';
+import 'dart:math' as math;
 import 'package:unicons/unicons.dart';
 
 class PackagesScreen extends StatefulWidget {
   final int numberOfDays;
   final Match match;
+  final User currentUser;
   final double lat;
   final double lon;
 
   PackagesScreen(
       {required this.numberOfDays,
       required this.match,
+      required this.currentUser,
       required this.lat,
       required this.lon});
 
@@ -284,9 +286,7 @@ class _PackagesScreenState extends State<PackagesScreen> {
             existingActivity.activityName == activity.activityName &&
             existingActivity.address == activity.address);
 
-        if (!activityExists) {
-          tempActivities.add(activity);
-        }
+        if (!activityExists) {}
       });
 
       tempActivities.sort((a, b) {
@@ -318,6 +318,28 @@ class _PackagesScreenState extends State<PackagesScreen> {
     }
 
     return generatePackages(activities, widget.numberOfDays);
+  }
+
+  double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
+    const int earthRadius = 6371; // Radius of the Earth in kilometers
+
+    double dLat = _toRadians(lat2 - lat1);
+    double dLon = _toRadians(lon2 - lon1);
+
+    double a = math.sin(dLat / 2) * math.sin(dLat / 2) +
+        math.cos(_toRadians(lat1)) *
+            math.cos(_toRadians(lat2)) *
+            math.sin(dLon / 2) *
+            math.sin(dLon / 2);
+
+    double c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a));
+    double distance = earthRadius * c;
+
+    return distance;
+  }
+
+  double _toRadians(double degree) {
+    return degree * (math.pi / 180);
   }
 
   TimeOfDay _convertToTimeOfDay(Map<String, dynamic> timeMap) {
