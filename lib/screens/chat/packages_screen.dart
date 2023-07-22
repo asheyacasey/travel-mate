@@ -272,6 +272,8 @@ class _PackagesScreenState extends State<PackagesScreen> {
           activityName: activityData['name'],
           category: activityData['category'],
           address: activityData['address'],
+          lat: activityData['lat'],
+          lon: activityData['long'],
           timeStart: startTime,
           timeEnd: endTime,
           duration: activityData['duration'],
@@ -354,12 +356,16 @@ class Activity {
   final String address;
   TimeOfDay timeStart;
   TimeOfDay timeEnd;
+  double? lat;
+  double? lon;
   final int duration;
 
   Activity({
     required this.activityName,
     required this.category,
     required this.address,
+    this.lat,
+    this.lon,
     required this.timeStart,
     required this.timeEnd,
     required this.duration,
@@ -370,6 +376,8 @@ class Activity {
       'activityName': activityName,
       'category': category,
       'address': address,
+      'lat': lat,
+      'long': lon,
       'timeStart': timeStart.format(context),
       'timeEnd': timeEnd.format(context),
       'duration': duration,
@@ -382,6 +390,8 @@ class Activity {
       activityName: map['activityName'],
       category: map['category'],
       address: map['address'],
+      lat: map['lat'],
+      lon: map['long'],
       timeStart: TimeOfDay.fromDateTime(
         DateFormat("h:mm a").parse(map['timeStart']),
       ),
