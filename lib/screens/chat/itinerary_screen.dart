@@ -153,6 +153,13 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
     setState(() {
       availableActivities = activities;
     });
+
+    print('DEFAULT RADIUS IS ${_defaultRadius}');
+    print('AVAILABLE ACTIVITIES ARE');
+    print('NUMBER OF ACTIVITIES ${availableActivities.length}');
+    availableActivities.forEach((element) {
+      print(element.activityName);
+    });
   }
 
   void _onRadiusChanged(int handlerIndex, lowerValue, upperValue) {
@@ -163,6 +170,7 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
 
   // Function to fetch activities again with the new radius and generate new packages.
   void _applyNewRadius() {
+    availableActivities.clear();
     fetchActivitiesFromFirebase();
   }
 
