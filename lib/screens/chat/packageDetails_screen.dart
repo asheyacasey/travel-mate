@@ -16,9 +16,13 @@ class PackageDetailsScreen extends StatefulWidget {
   final Package package;
   final int numberOfDays;
   final Match match;
+  final List<Activity> fetchedActivities;
 
   PackageDetailsScreen(
-      {required this.package, required this.numberOfDays, required this.match});
+      {required this.package,
+      required this.numberOfDays,
+      required this.match,
+      required this.fetchedActivities});
 
   @override
   _PackageDetailsScreenState createState() => _PackageDetailsScreenState();
@@ -32,55 +36,28 @@ class _PackageDetailsScreenState extends State<PackageDetailsScreen> {
   void initState() {
     super.initState();
     activitiesByDay = groupActivitiesByDay(widget.package.activities);
-    fetchActivitiesFromFirebase();
+    removeExistingInPackage();
   }
 
-  Future<void> fetchActivitiesFromFirebase() async {
+  Future<void> removeExistingInPackage() async {
     List<Activity> activities = [];
 
-    QuerySnapshot snapshot =
-        await FirebaseFirestore.instance.collection('business').get();
+    widget.fetchedActivities.forEach((activityData) {
+      // Check if the activity is already in the itinerary
+      bool isActivityInItinerary = widget.package.activities.any(
+          (itineraryActivity) =>
+              itineraryActivity.activityName == activityData.activityName &&
+              itineraryActivity.address == activityData.address);
 
-    snapshot.docs.forEach((doc) {
-      List<dynamic> activityList = doc['activities'];
+      //Check if the activity is a duplicate
+      bool activityExists = activities.any((existingActivity) =>
+          existingActivity.activityName == activityData.activityName &&
+          existingActivity.address == activityData.address);
 
-      activityList.forEach((activityData) {
-        String activityName = activityData['name'];
-        String category = activityData['category'];
-        String address = activityData['address'];
-        double lat = activityData['lat'];
-        double lon = activityData['long'];
-        TimeOfDay timeStart = _convertToTimeOfDay(activityData['startTime']);
-        TimeOfDay timeEnd = _convertToTimeOfDay(activityData['endTime']);
-        int duration = activityData['duration'];
-
-        Activity activity = Activity(
-          activityName: activityName,
-          category: category,
-          address: address,
-          lat: lat,
-          lon: lon,
-          timeStart: timeStart,
-          timeEnd: timeEnd,
-          duration: duration,
-        );
-
-        // Check if the activity is already in the itinerary
-        bool isActivityInItinerary = widget.package.activities.any(
-            (itineraryActivity) =>
-                itineraryActivity.activityName == activity.activityName &&
-                itineraryActivity.address == activity.address);
-
-        //Check if the activity is a duplicate
-        bool activityExists = activities.any((existingActivity) =>
-            existingActivity.activityName == activity.activityName &&
-            existingActivity.address == activity.address);
-
-        // Add the activity to the list only if it is not already in the itinerary
-        if (!isActivityInItinerary && !activityExists) {
-          activities.add(activity);
-        }
-      });
+      // Add the activity to the list only if it is not already in the itinerary
+      if (!isActivityInItinerary && !activityExists) {
+        activities.add(activityData);
+      }
     });
 
     setState(() {
@@ -332,7 +309,7 @@ class _PackageDetailsScreenState extends State<PackageDetailsScreen> {
                                       activitiesByDay = groupActivitiesByDay(
                                           widget.package.activities);
                                     });
-                                    fetchActivitiesFromFirebase();
+                                    removeExistingInPackage();
                                   },
                                   child: ListTile(
                                     title: Row(

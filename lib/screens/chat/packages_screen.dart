@@ -33,6 +33,7 @@ class _PackagesScreenState extends State<PackagesScreen> {
   bool hasActivities = false;
   Future<List<Package>>? _packagesFuture;
   double _defaultRadius = 1000.0;
+  List<Activity> fetchedActivities = [];
 
   @override
   void initState() {
@@ -313,6 +314,7 @@ class _PackagesScreenState extends State<PackagesScreen> {
                                       MaterialPageRoute(
                                         builder: (context) =>
                                             PackageDetailsScreen(
+                                          fetchedActivities: fetchedActivities,
                                           package: package,
                                           numberOfDays: widget.numberOfDays,
                                           match: widget.match,
@@ -512,6 +514,8 @@ class _PackagesScreenState extends State<PackagesScreen> {
         hasActivities = true;
       });
     }
+
+    fetchedActivities = activities;
 
     return packages;
   }
