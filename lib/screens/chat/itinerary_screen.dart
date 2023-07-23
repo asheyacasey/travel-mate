@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -11,18 +10,27 @@ import 'package:travel_mate/screens/chat/packages_screen.dart';
 import 'package:travel_mate/models/models.dart';
 import 'package:unicons/unicons.dart';
 import 'package:uuid/uuid.dart';
+import 'dart:math' as math;
 
 class ItineraryScreen extends StatefulWidget {
   final int? numberOfDays;
   final Map<String, dynamic>? itinerary;
   final Match? match;
   final String? oldMessageId;
+  final double? placeLat;
+  final double? placeLon;
+  final double? placeRadius;
+  final User? currentUser;
 
   ItineraryScreen(
       {required this.numberOfDays,
       this.itinerary,
       this.match,
-      this.oldMessageId});
+      this.oldMessageId,
+      this.placeLat,
+      this.placeLon,
+      this.placeRadius,
+      this.currentUser});
 
   @override
   _ItineraryScreenState createState() => _ItineraryScreenState();
@@ -52,11 +60,41 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
     activitiesByDay = groupActivitiesByDay(activities);
   }
 
+  double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
+    const int earthRadius = 6371; // Radius of the Earth in kilometers
+
+    double dLat = _toRadians(lat2 - lat1);
+    double dLon = _toRadians(lon2 - lon1);
+
+    double a = math.sin(dLat / 2) * math.sin(dLat / 2) +
+        math.cos(_toRadians(lat1)) *
+            math.cos(_toRadians(lat2)) *
+            math.sin(dLon / 2) *
+            math.sin(dLon / 2);
+
+    double c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a));
+    double distance = earthRadius * c;
+
+    return distance;
+  }
+
+  double _toRadians(double degree) {
+    return degree * (math.pi / 180);
+  }
+
   Future<void> fetchActivitiesFromFirebase() async {
     List<Activity> activities = [];
 
     QuerySnapshot snapshot =
         await FirebaseFirestore.instance.collection('business').get();
+
+    double _mapRadius = widget.placeRadius! / 1000;
+
+    List interests =
+        widget.match!.matchUser.interests + widget.currentUser!.interests;
+
+    List<String> stringInterests =
+        interests.map((interest) => interest.toString()).toList();
 
     snapshot.docs.forEach((doc) {
       List<dynamic> activityList = doc['activities'];
@@ -88,14 +126,23 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
                 itineraryActivity.activityName == activity.activityName &&
                 itineraryActivity.address == activity.address);
 
-        //Check if the activity is a duplicate
-        bool activityExists = activities.any((existingActivity) =>
-            existingActivity.activityName == activity.activityName &&
-            existingActivity.address == activity.address);
+        if (!isActivityInItinerary) {
+          // Calculate the distance between the inputted place and the location of the activity
+          double distance = calculateDistance(
+            widget.placeLat!,
+            widget.placeLon!,
+            activity.lat,
+            activity.lon,
+          );
 
-        // Add the activity to the list only if it is not already in the itinerary
-        if (!isActivityInItinerary && !activityExists) {
-          activities.add(activity);
+          bool isWithinMaxDistance = distance <= _mapRadius;
+
+          bool interestCategoryMatches = stringInterests
+              .any((interest) => activity.category.contains(interest));
+
+          if (isWithinMaxDistance && interestCategoryMatches) {
+            activities.add(activity);
+          }
         }
       });
     });
@@ -595,6 +642,9 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
           messageId: messageId,
           message: "${name} updated the Itinerary",
           numberOfDays: widget.numberOfDays,
+          placeLat: widget.placeLat,
+          placeLon: widget.placeLon,
+          placeRadius: widget.placeRadius,
           itinerary: itineraryMap,
           dateTime: DateTime.now(),
           timeString: DateFormat('HH:mm').format(DateTime.now()));

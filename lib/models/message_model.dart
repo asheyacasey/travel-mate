@@ -10,6 +10,9 @@ class Message extends Equatable {
   final int? numberOfDays;
   final int? itineraryAccept;
   final Map<String, dynamic>? itinerary;
+  final double? placeLat;
+  final double? placeLon;
+  final double? placeRadius;
   final DateTime dateTime;
   final String timeString;
 
@@ -21,6 +24,9 @@ class Message extends Equatable {
     this.numberOfDays,
     this.itinerary,
     this.itineraryAccept,
+    this.placeLat,
+    this.placeLon,
+    this.placeRadius,
     required this.dateTime,
     required this.timeString,
   });
@@ -34,6 +40,9 @@ class Message extends Equatable {
       numberOfDays: json['numberOfDays'],
       itinerary: json['itinerary'],
       itineraryAccept: json['itineraryAccept'],
+      placeLat: json['placeLat'],
+      placeLon: json['placeLon'],
+      placeRadius: json['placeRadius'],
       dateTime: (json['dateTime'] as Timestamp).toDate(),
       timeString: DateFormat('HH:mm').format(
         json['dateTime'].toDate(),
@@ -50,6 +59,9 @@ class Message extends Equatable {
       'numberOfDays': numberOfDays,
       'itinerary': itinerary,
       'itineraryAccept': itineraryAccept,
+      'placeLat': placeLat,
+      'placeLon': placeLon,
+      'placeRadius': placeRadius,
       'dateTime': dateTime,
     };
   }
@@ -63,6 +75,9 @@ class Message extends Equatable {
         numberOfDays,
         itinerary,
         itineraryAccept,
+        placeLat,
+        placeLon,
+        placeRadius,
         dateTime,
         timeString,
       ];

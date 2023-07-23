@@ -314,6 +314,9 @@ class _PackagesScreenState extends State<PackagesScreen> {
                                       MaterialPageRoute(
                                         builder: (context) =>
                                             PackageDetailsScreen(
+                                          lat: widget.lat,
+                                          lon: widget.lon,
+                                          radius: _defaultRadius,
                                           fetchedActivities: fetchedActivities,
                                           package: package,
                                           numberOfDays: widget.numberOfDays,

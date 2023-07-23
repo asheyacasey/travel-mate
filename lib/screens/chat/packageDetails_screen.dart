@@ -17,12 +17,18 @@ class PackageDetailsScreen extends StatefulWidget {
   final int numberOfDays;
   final Match match;
   final List<Activity> fetchedActivities;
+  final double lat;
+  final double lon;
+  final double radius;
 
   PackageDetailsScreen(
       {required this.package,
       required this.numberOfDays,
       required this.match,
-      required this.fetchedActivities});
+      required this.fetchedActivities,
+      required this.lat,
+      required this.lon,
+      required this.radius});
 
   @override
   _PackageDetailsScreenState createState() => _PackageDetailsScreenState();
@@ -457,6 +463,9 @@ class _PackageDetailsScreenState extends State<PackageDetailsScreen> {
           message: "${name} sent a date invitation",
           numberOfDays: widget.numberOfDays,
           itinerary: itineraryMap,
+          placeLat: widget.lat,
+          placeLon: widget.lon,
+          placeRadius: widget.radius,
           dateTime: DateTime.now(),
           timeString: DateFormat('HH:mm').format(DateTime.now()));
 

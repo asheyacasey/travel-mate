@@ -65,7 +65,11 @@ class ChatScreen extends StatelessWidget {
                           message: messages[index].message,
                           messageId: messages[index].messageId,
                           itinerary: messages[index].itinerary,
+                          placeLat: messages[index].placeLat,
+                          placeLon: messages[index].placeLon,
+                          placeRadius: messages[index].placeRadius,
                           numberOfDays: messages[index].numberOfDays,
+                          currentUser: context.read<AuthBloc>().state.user!,
                           isAccepted: messages[index].itineraryAccept,
                           isFromCurrentUser: messages[index].senderId ==
                               context.read<AuthBloc>().state.authUser!.uid,
@@ -538,6 +542,10 @@ class _Message extends StatelessWidget {
     this.itinerary,
     this.isAccepted,
     this.numberOfDays,
+    this.placeLat,
+    this.placeLon,
+    this.placeRadius,
+    this.currentUser,
     required this.isFromCurrentUser,
   }) : super(key: key);
 
@@ -548,6 +556,10 @@ class _Message extends StatelessWidget {
   final Map<String, dynamic>? itinerary;
   final int? isAccepted;
   final int? numberOfDays;
+  final double? placeLat;
+  final double? placeLon;
+  final double? placeRadius;
+  final User? currentUser;
 
   @override
   Widget build(BuildContext context) {
@@ -650,6 +662,10 @@ class _Message extends StatelessWidget {
                     itinerary: itinerary,
                     numberOfDays: numberOfDays,
                     match: match,
+                    placeLat: placeLat,
+                    placeLon: placeLon,
+                    placeRadius: placeRadius,
+                    currentUser: currentUser,
                     oldMessageId: messageId),
               ),
             );
@@ -770,6 +786,9 @@ class _Message extends StatelessWidget {
                                       matchUserId: match.userId,
                                       itinerary: itinerary,
                                       numberOfDays: numberOfDays,
+                                      placeLat: placeLat,
+                                      placeLon: placeLon,
+                                      placeRadius: placeRadius,
                                       isAccepted: 1,
                                       message:
                                           '${context.read<AuthBloc>().state.user!.name} accepted the invitation',
