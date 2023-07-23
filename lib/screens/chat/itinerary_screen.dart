@@ -10,6 +10,7 @@ import 'package:travel_mate/screens/chat/packages_screen.dart';
 import 'package:travel_mate/models/models.dart';
 import 'package:unicons/unicons.dart';
 import 'package:uuid/uuid.dart';
+import 'package:flutter_xlider/flutter_xlider.dart';
 import 'dart:math' as math;
 
 class ItineraryScreen extends StatefulWidget {
@@ -40,10 +41,12 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
   List<List<Activity>> activitiesByDay = [];
   List<Activity> availableActivities = [];
   List<Activity> transformedActivities = [];
+  double _defaultRadius = 0;
 
   @override
   void initState() {
     super.initState();
+    _defaultRadius = widget.placeRadius!;
     transformIntoActivity();
     fetchActivitiesFromFirebase();
   }
@@ -88,7 +91,7 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
     QuerySnapshot snapshot =
         await FirebaseFirestore.instance.collection('business').get();
 
-    double _mapRadius = widget.placeRadius! / 1000;
+    double _mapRadius = _defaultRadius / 1000;
 
     List interests =
         widget.match!.matchUser.interests + widget.currentUser!.interests;
@@ -152,6 +155,17 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
     });
   }
 
+  void _onRadiusChanged(int handlerIndex, lowerValue, upperValue) {
+    setState(() {
+      _defaultRadius = lowerValue;
+    });
+  }
+
+  // Function to fetch activities again with the new radius and generate new packages.
+  void _applyNewRadius() {
+    fetchActivitiesFromFirebase();
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -192,6 +206,64 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
           iconTheme: IconThemeData(color: Theme.of(context).primaryColor),
           elevation: 0.0,
           actions: [
+            IconButton(
+              icon: Icon(Icons.settings),
+              onPressed: () {
+                showModalBottomSheet(
+                  context: context,
+                  builder: (context) {
+                    return Container(
+                      padding: EdgeInsets.all(16.0),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text("Adjust Radius"),
+                          FlutterSlider(
+                            values: [_defaultRadius],
+                            max:
+                                100000.0, // Adjust the max value according to your requirement.
+                            min:
+                                1000.0, // Adjust the min value according to your requirement.
+                            step: FlutterSliderStep(
+                                step:
+                                    10000.0), // Adjust the step value according to your requirement.
+                            onDragging: _onRadiusChanged,
+                            trackBar: FlutterSliderTrackBar(
+                              activeTrackBar: BoxDecoration(
+                                color: Colors
+                                    .blue, // Customize the color of the active part of the Slider
+                              ),
+                              inactiveTrackBar: BoxDecoration(
+                                color: Colors
+                                    .grey, // Customize the color of the inactive part of the Slider
+                              ),
+                            ),
+                            handler: FlutterSliderHandler(
+                              child: Icon(
+                                Icons
+                                    .circle, // Customize the appearance of the handler (dot/tick).
+                                color: Colors
+                                    .blue, // Customize the color of the handler (dot/tick).
+                                size:
+                                    20.0, // Customize the size of the handler (dot/tick).
+                              ),
+                            ),
+                          ),
+                          ElevatedButton(
+                            onPressed: () {
+                              // Apply the new radius when the button is clicked.
+                              _applyNewRadius();
+                              Navigator.of(context).pop();
+                            },
+                            child: Text("Apply Radius"),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
             IconButton(
               onPressed: () {
                 showDialog(
