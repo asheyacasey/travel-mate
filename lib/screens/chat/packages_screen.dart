@@ -7,6 +7,7 @@ import 'package:travel_mate/models/models.dart';
 import 'package:travel_mate/screens/chat/packageDetails_screen.dart';
 import 'dart:math' as math;
 import 'package:unicons/unicons.dart';
+import 'package:flutter_xlider/flutter_xlider.dart';
 
 class PackagesScreen extends StatefulWidget {
   final int numberOfDays;
@@ -89,10 +90,9 @@ class _PackagesScreenState extends State<PackagesScreen> {
     }
   }
 
-  // Function to handle changes in the slider value.
-  void _onRadiusChanged(double value) {
+  void _onRadiusChanged(int handlerIndex, lowerValue, upperValue) {
     setState(() {
-      _defaultRadius = value;
+      _defaultRadius = lowerValue;
     });
   }
 
@@ -137,7 +137,6 @@ class _PackagesScreenState extends State<PackagesScreen> {
           IconButton(
             icon: Icon(Icons.settings),
             onPressed: () {
-              // Show the slider when the button is clicked.
               showModalBottomSheet(
                 context: context,
                 builder: (context) {
@@ -147,13 +146,36 @@ class _PackagesScreenState extends State<PackagesScreen> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text("Adjust Radius"),
-                        Slider(
-                          value: _defaultRadius,
-                          onChanged: _onRadiusChanged,
-                          min: 1000.0,
-                          max: 100000.0,
-                          divisions: 10000,
-                          label: "${_defaultRadius.toStringAsFixed(2)} km",
+                        FlutterSlider(
+                          values: [_defaultRadius],
+                          max:
+                              100000.0, // Adjust the max value according to your requirement.
+                          min:
+                              1000.0, // Adjust the min value according to your requirement.
+                          step: FlutterSliderStep(
+                              step:
+                                  10000.0), // Adjust the step value according to your requirement.
+                          onDragging: _onRadiusChanged,
+                          trackBar: FlutterSliderTrackBar(
+                            activeTrackBar: BoxDecoration(
+                              color: Colors
+                                  .blue, // Customize the color of the active part of the Slider
+                            ),
+                            inactiveTrackBar: BoxDecoration(
+                              color: Colors
+                                  .grey, // Customize the color of the inactive part of the Slider
+                            ),
+                          ),
+                          handler: FlutterSliderHandler(
+                            child: Icon(
+                              Icons
+                                  .circle, // Customize the appearance of the handler (dot/tick).
+                              color: Colors
+                                  .blue, // Customize the color of the handler (dot/tick).
+                              size:
+                                  20.0, // Customize the size of the handler (dot/tick).
+                            ),
+                          ),
                         ),
                         ElevatedButton(
                           onPressed: () {
