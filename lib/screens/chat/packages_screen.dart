@@ -31,6 +31,7 @@ class _PackagesScreenState extends State<PackagesScreen> {
   int lastUsedTitleIndex = -1;
   bool hasActivities = false;
   Future<List<Package>>? _packagesFuture;
+  double _defaultRadius = 1000.0;
 
   @override
   void initState() {
@@ -88,6 +89,20 @@ class _PackagesScreenState extends State<PackagesScreen> {
     }
   }
 
+  // Function to handle changes in the slider value.
+  void _onRadiusChanged(double value) {
+    setState(() {
+      _defaultRadius = value;
+    });
+  }
+
+  // Function to fetch activities again with the new radius and generate new packages.
+  void _applyNewRadius() {
+    setState(() {
+      _packagesFuture = generatePackagesFromFirebase();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -118,6 +133,44 @@ class _PackagesScreenState extends State<PackagesScreen> {
             ],
           ),
         ),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.settings),
+            onPressed: () {
+              // Show the slider when the button is clicked.
+              showModalBottomSheet(
+                context: context,
+                builder: (context) {
+                  return Container(
+                    padding: EdgeInsets.all(16.0),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text("Adjust Radius"),
+                        Slider(
+                          value: _defaultRadius,
+                          onChanged: _onRadiusChanged,
+                          min: 1000.0,
+                          max: 100000.0,
+                          divisions: 10000,
+                          label: "${_defaultRadius.toStringAsFixed(2)} km",
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            // Apply the new radius when the button is clicked.
+                            _applyNewRadius();
+                            Navigator.of(context).pop();
+                          },
+                          child: Text("Apply Radius"),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              );
+            },
+          ),
+        ],
         centerTitle: true,
         backgroundColor: Colors.white,
         iconTheme: IconThemeData(color: Theme.of(context).primaryColor),
@@ -281,11 +334,11 @@ class _PackagesScreenState extends State<PackagesScreen> {
     List interests =
         widget.match.matchUser.interests + widget.currentUser.interests;
 
+    double _mapRadius = _defaultRadius / 1000;
+
     // Convert interests list to List<String>
     List<String> stringInterests =
         interests.map((interest) => interest.toString()).toList();
-
-    double _defaultRadius = 1000.0 / 1000;
 
     for (QueryDocumentSnapshot doc in snapshot.docs) {
       List<dynamic> activityList = doc['activities'];
@@ -328,7 +381,7 @@ class _PackagesScreenState extends State<PackagesScreen> {
               'ACTIVITY NAME ${activity.activityName} AND CATEGORY ${activity.category}');
           stringInterests.forEach((interest) => print(interest));
 
-          bool isWithinMaxDistance = distance <= _defaultRadius;
+          bool isWithinMaxDistance = distance <= _mapRadius;
 
           print(
               "ACTIVITYNAME IS ${activity.activityName} ADDRESS IS ${activity.address} DISTANCE IS ${distance} AND RADIUS IS ${_defaultRadius}");
