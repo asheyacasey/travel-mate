@@ -30,7 +30,7 @@ class _AddNewActivityScreenState extends State<AddNewActivityScreen> {
     'Foods',
     'Adventure',
     'Beach',
-    'Night Life',
+    'Bonding',
     'Land Tour',
     'Hiking',
     'Pool',

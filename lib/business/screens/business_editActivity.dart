@@ -32,7 +32,7 @@ class _EditActivityScreenState extends State<EditActivityScreen> {
     'Foods',
     'Adventure',
     'Beach',
-    'Night Life',
+    'Bonding',
     'Land Tour',
     'Hiking',
     'Pool',

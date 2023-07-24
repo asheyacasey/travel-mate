@@ -15,7 +15,7 @@ class Biography extends StatelessWidget {
     'Foods',
     'Adventure',
     'Beach',
-    'Night Life',
+    'Bonding',
     'Land Tour',
     'Hiking',
     'Pool',
