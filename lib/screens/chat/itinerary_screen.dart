@@ -855,7 +855,7 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
       totalDuration += activityDuration;
 
       // Update nextActivityStart for the next iteration
-      nextActivityStart = activity.timeEnd;
+      nextActivityStart = calculateTimeEnd(activity.timeEnd, 30);
       currentDay = activityDateTime;
     }
 
