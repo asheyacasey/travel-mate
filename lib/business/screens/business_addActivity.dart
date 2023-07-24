@@ -126,7 +126,7 @@ class _AddNewActivityScreenState extends State<AddNewActivityScreen> {
         return 60;
       case 'Beach':
         return 120;
-      case 'Night Life':
+      case 'Bonding':
         return 180;
       case 'Land Tour':
         return 360;
