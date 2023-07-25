@@ -245,287 +245,421 @@ Widget _buildGenerateModal(BuildContext context, Match match) {
 
   return StatefulBuilder(
     builder: (BuildContext context, StateSetter setState) {
-      return Container(
-        decoration: BoxDecoration(
-          color: Colors.white
-              .withOpacity(0.9), // Add transparency to the white background
-          borderRadius: BorderRadius.circular(20.0),
-        ),
-        height: MediaQuery.of(context).size.height * 0.6,
-        padding: EdgeInsets.all(10.0),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                'travelmate',
-                style: GoogleFonts.fredokaOne(
-                  textStyle: TextStyle(
-                    fontSize: 25,
-                    color: Color(0xFFB0DB2D),
-                  ),
-                ),
-              ),
-              SizedBox(height: 5),
-              Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8.0),
-                  color: Color(0xFFF5C518),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(6.0),
+      return Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white
+                .withOpacity(0.9), // Add transparency to the white background
+            borderRadius: BorderRadius.circular(20.0),
+          ),
+          height: MediaQuery.of(context).size.height * 0.6,
+          padding: EdgeInsets.all(10.0),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 20.0),
                   child: Text(
-                    'Itinerary Planner',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
+                    'travelmate',
+                    style: GoogleFonts.fredokaOne(
+                      textStyle: TextStyle(
+                        fontSize: 25,
+                        color: Color(0xFFB0DB2D),
+                      ),
                     ),
                   ),
                 ),
-              ),
-              SizedBox(height: 16.0),
-              Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15.0),
-                  color: Colors.transparent,
-                  border: Border.all(
-                    color: Color(
-                        0xFFECEAEA), // Replace with your desired border color
-                    width: 2.0, // Adjust the border width as needed
+                SizedBox(height: 5),
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8.0),
+                    color: Color(0xFFF5C518),
                   ),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(15.0, 20.0, 15.0, 15.0),
-                  child: Column(
-                    children: [
-                      Text(
-                        'How many days do you plan to travel together?',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(6.0),
+                    child: Text(
+                      'Itinerary Planner',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Column(
-                          children: [
-                            SizedBox(
-                              width: 180,
-                              child: TextButton(
-                                onPressed: () =>
-                                    setState(() => selectedDays = 1),
-                                style: ButtonStyle(
-                                  backgroundColor:
-                                      MaterialStateProperty.all<Color>(
-                                    selectedDays == 1
-                                        ? Color(0xFFF5C518)
-                                        : Color(0xFFEDEDED),
-                                  ),
-                                  shape: MaterialStateProperty.all<
-                                      RoundedRectangleBorder>(
-                                    RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20.0),
-                                    ),
-                                  ),
-                                ),
-                                child: Text(
-                                  '1 Day',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: selectedDays == 1
-                                        ? Colors.white
-                                        : Colors.black,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              width: 180,
-                              child: TextButton(
-                                onPressed: () =>
-                                    setState(() => selectedDays = 2),
-                                style: ButtonStyle(
-                                  backgroundColor:
-                                      MaterialStateProperty.all<Color>(
-                                    selectedDays == 2
-                                        ? Color(0xFFF5C518)
-                                        : Color(0xFFEDEDED),
-                                  ),
-                                  shape: MaterialStateProperty.all<
-                                      RoundedRectangleBorder>(
-                                    RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20.0),
-                                    ),
-                                  ),
-                                ),
-                                child: Text(
-                                  '2 Days',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: selectedDays == 2
-                                        ? Colors.white
-                                        : Colors.black,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              width: 180,
-                              child: TextButton(
-                                onPressed: () =>
-                                    setState(() => selectedDays = 3),
-                                style: ButtonStyle(
-                                  backgroundColor:
-                                      MaterialStateProperty.all<Color>(
-                                    selectedDays == 3
-                                        ? Color(0xFFF5C518)
-                                        : Color(0xFFEDEDED),
-                                  ),
-                                  shape: MaterialStateProperty.all<
-                                      RoundedRectangleBorder>(
-                                    RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20.0),
-                                    ),
-                                  ),
-                                ),
-                                child: Text(
-                                  '3 Days or more',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: selectedDays == 3
-                                        ? Colors.white
-                                        : Colors.black,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              SizedBox(height: 16.0),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  'Enter a place',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                ),
-              ),
-              Material(
-                child: Column(
-                  children: [
-                    TextFormField(
-                      controller: _addressController,
-                      decoration: InputDecoration(
-                        hintText: 'Enter a place',
-                      ),
-                      onChanged: (query) {
-                        _getAddressSuggestions(query).then((suggestions) {
-                          // Show the suggestions to the user (e.g., using a ListView)
-                          print(suggestions);
-                          setState(() {
-                            _addressSuggestions = suggestions;
-                          });
-                        }).catchError((error) {
-                          print('Failed to load address suggestions: $error');
-                        });
-                      },
                     ),
-                    if (isAddressEmpty)
-                      Padding(
-                        padding: const EdgeInsets.only(top: 4.0),
-                        child: Text(
-                          'Please enter a place.',
+                  ),
+                ),
+                SizedBox(height: 16.0),
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15.0),
+                    color: Colors.transparent,
+                    border: Border.all(
+                      color: Color(
+                          0xFFECEAEA), // Replace with your desired border color
+                      width: 2.0, // Adjust the border width as needed
+                    ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 0.0),
+                    child: Column(
+                      children: [
+                        Text(
+                          'Where do you want to go?',
+                          textAlign: TextAlign.center,
                           style: TextStyle(
-                            color: Colors.red,
-                            fontSize: 12,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
-                      ),
-                    SizedBox(height: 10),
-                    if (_addressSuggestions.isNotEmpty)
-                      Container(
-                        height: 200,
-                        child: ListView.builder(
-                          itemCount: _addressSuggestions.length,
-                          itemBuilder: (context, index) {
-                            final suggestion = _addressSuggestions[index];
-                            return ListTile(
-                              title: Text(suggestion),
-                              onTap: () {
-                                setState(() {
-                                  _addressController.text = suggestion;
-                                  _addressSuggestions = [];
-                                  isAddressEmpty = false;
-                                });
-                              },
-                            );
-                          },
-                        ),
-                      ),
-                  ],
-                ),
-              ),
-              SizedBox(height: 16.0),
-              Container(
-                height: 50, // Adjust the height as desired
-                width: 300, // Adjust the width as desired
-                child: TextButton(
-                  onPressed: () async {
-                    if (_addressController.text.isEmpty) {
-                      setState(() => isAddressEmpty = true);
-                    } else {
-                      final url = Uri.parse(
-                          'https://nominatim.openstreetmap.org/search?format=json&q=${_addressController.text}');
-                      final response = await http.get(url);
-
-                      if (response.statusCode == 200) {
-                        final data = jsonDecode(response.body) as List<dynamic>;
-                        if (data.isNotEmpty) {
-                          final lat = double.parse(data[0]['lat']);
-                          final lon = double.parse(data[0]['lon']);
-
-                          // Navigate to the PackagesScreen if the address is not empty
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => PackagesScreen(
-                                numberOfDays: selectedDays,
-                                match: match,
-                                currentUser: currentUser,
-                                lat: lat,
-                                lon: lon,
+                        Padding(
+                          padding:
+                              const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 0.0),
+                          child: Container(
+                            color: Colors.transparent,
+                            child: Material(
+                              color: Colors.transparent,
+                              child: Column(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: TextFormField(
+                                      controller: _addressController,
+                                      decoration: InputDecoration(
+                                        hintText: 'Enter a place',
+                                        filled: true,
+                                        fillColor: Colors.white,
+                                        contentPadding: EdgeInsets.symmetric(
+                                            vertical: 12.0, horizontal: 16.0),
+                                        enabledBorder: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10.0),
+                                          borderSide:
+                                              BorderSide(color: Colors.grey),
+                                        ),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10.0),
+                                          borderSide:
+                                              BorderSide(color: Colors.blue),
+                                        ),
+                                        errorBorder: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10.0),
+                                          borderSide:
+                                              BorderSide(color: Colors.red),
+                                        ),
+                                        focusedErrorBorder: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10.0),
+                                          borderSide:
+                                              BorderSide(color: Colors.red),
+                                        ),
+                                      ),
+                                      onChanged: (query) {
+                                        _getAddressSuggestions(query)
+                                            .then((suggestions) {
+                                          // Show the suggestions to the user (e.g., using a ListView)
+                                          print(suggestions);
+                                          setState(() {
+                                            _addressSuggestions = suggestions;
+                                          });
+                                        }).catchError((error) {
+                                          print(
+                                              'Failed to load address suggestions: $error');
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                  SizedBox(height: 10),
+                                  if (_addressSuggestions.isNotEmpty)
+                                    Container(
+                                      height: 200,
+                                      child: ListView.builder(
+                                        itemCount: _addressSuggestions.length,
+                                        itemBuilder: (context, index) {
+                                          final suggestion =
+                                              _addressSuggestions[index];
+                                          return ListTile(
+                                            title: Text(suggestion),
+                                            onTap: () {
+                                              setState(() {
+                                                _addressController.text =
+                                                    suggestion;
+                                                _addressSuggestions = [];
+                                                isAddressEmpty = false;
+                                              });
+                                            },
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                ],
                               ),
                             ),
-                          );
-                        }
-                      } else {
-                        print('Failed to fetch coordinates for the address');
-                      }
-                    }
-                  },
-                  style: ButtonStyle(
-                    backgroundColor:
-                        MaterialStateProperty.all<Color>(Color(0xFFB0DB2D)),
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(25.0),
-                      ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  child: Text(
-                    'Create Itinerary Plan',
-                    style: TextStyle(color: Colors.white, fontSize: 16),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15.0),
+                    color: Colors.transparent,
+                    border: Border.all(
+                      color: Color(
+                          0xFFECEAEA), // Replace with your desired border color
+                      width: 2.0, // Adjust the border width as needed
+                    ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(15.0, 20.0, 15.0, 15.0),
+                    child: Column(
+                      children: [
+                        Text(
+                          'How many days do you plan to travel together?',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Row(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: SizedBox(
+                                  width: 90,
+                                  child: TextButton(
+                                    onPressed: () =>
+                                        setState(() => selectedDays = 1),
+                                    style: ButtonStyle(
+                                      backgroundColor:
+                                          MaterialStateProperty.all<Color>(
+                                        selectedDays == 1
+                                            ? Color(0xFFF5C518)
+                                            : Color(0xFFEDEDED),
+                                      ),
+                                      shape: MaterialStateProperty.all<
+                                          RoundedRectangleBorder>(
+                                        RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(20.0),
+                                        ),
+                                      ),
+                                    ),
+                                    child: Text(
+                                      '1 Day',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        color: selectedDays == 1
+                                            ? Colors.white
+                                            : Colors.black,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: SizedBox(
+                                  width: 90,
+                                  child: TextButton(
+                                    onPressed: () =>
+                                        setState(() => selectedDays = 2),
+                                    style: ButtonStyle(
+                                      backgroundColor:
+                                          MaterialStateProperty.all<Color>(
+                                        selectedDays == 2
+                                            ? Color(0xFFF5C518)
+                                            : Color(0xFFEDEDED),
+                                      ),
+                                      shape: MaterialStateProperty.all<
+                                          RoundedRectangleBorder>(
+                                        RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(20.0),
+                                        ),
+                                      ),
+                                    ),
+                                    child: Text(
+                                      '2 Days',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        color: selectedDays == 2
+                                            ? Colors.white
+                                            : Colors.black,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: SizedBox(
+                                  width: 90,
+                                  child: TextButton(
+                                    onPressed: () =>
+                                        setState(() => selectedDays = 3),
+                                    style: ButtonStyle(
+                                      backgroundColor:
+                                          MaterialStateProperty.all<Color>(
+                                        selectedDays == 3
+                                            ? Color(0xFFF5C518)
+                                            : Color(0xFFEDEDED),
+                                      ),
+                                      shape: MaterialStateProperty.all<
+                                          RoundedRectangleBorder>(
+                                        RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(20.0),
+                                        ),
+                                      ),
+                                    ),
+                                    child: Text(
+                                      '3 Days',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        color: selectedDays == 3
+                                            ? Colors.white
+                                            : Colors.black,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
+                SizedBox(height: 16.0),
+                // Align(
+                //   alignment: Alignment.centerLeft,
+                //   child: Text(
+                //     'Enter a place',
+                //     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                //   ),
+                // ),
+                // Material(
+                //   child: Column(
+                //     children: [
+                //       TextFormField(
+                //         controller: _addressController,
+                //         decoration: InputDecoration(
+                //           hintText: 'Enter a place',
+                //         ),
+                //         onChanged: (query) {
+                //           _getAddressSuggestions(query).then((suggestions) {
+                //             // Show the suggestions to the user (e.g., using a ListView)
+                //             print(suggestions);
+                //             setState(() {
+                //               _addressSuggestions = suggestions;
+                //             });
+                //           }).catchError((error) {
+                //             print('Failed to load address suggestions: $error');
+                //           });
+                //         },
+                //       ),
+                //       if (isAddressEmpty)
+                //         Padding(
+                //           padding: const EdgeInsets.only(top: 4.0),
+                //           child: Text(
+                //             'Please enter a place.',
+                //             style: TextStyle(
+                //               color: Colors.red,
+                //               fontSize: 12,
+                //             ),
+                //           ),
+                //         ),
+                //       SizedBox(height: 10),
+                //       if (_addressSuggestions.isNotEmpty)
+                //         Container(
+                //           height: 200,
+                //           child: ListView.builder(
+                //             itemCount: _addressSuggestions.length,
+                //             itemBuilder: (context, index) {
+                //               final suggestion = _addressSuggestions[index];
+                //               return ListTile(
+                //                 title: Text(suggestion),
+                //                 onTap: () {
+                //                   setState(() {
+                //                     _addressController.text = suggestion;
+                //                     _addressSuggestions = [];
+                //                     isAddressEmpty = false;
+                //                   });
+                //                 },
+                //               );
+                //             },
+                //           ),
+                //         ),
+                //     ],
+                //   ),
+                // ),
+                SizedBox(height: 16.0),
+                Container(
+                  height: 50, // Adjust the height as desired
+                  width: 300, // Adjust the width as desired
+                  child: TextButton(
+                    onPressed: () async {
+                      if (_addressController.text.isEmpty) {
+                        setState(() => isAddressEmpty = true);
+                      } else {
+                        final url = Uri.parse(
+                            'https://nominatim.openstreetmap.org/search?format=json&q=${_addressController.text}');
+                        final response = await http.get(url);
+
+                        if (response.statusCode == 200) {
+                          final data = jsonDecode(response.body) as List<dynamic>;
+                          if (data.isNotEmpty) {
+                            final lat = double.parse(data[0]['lat']);
+                            final lon = double.parse(data[0]['lon']);
+
+                            // Navigate to the PackagesScreen if the address is not empty
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => PackagesScreen(
+                                  numberOfDays: selectedDays,
+                                  match: match,
+                                  currentUser: currentUser,
+                                  lat: lat,
+                                  lon: lon,
+                                ),
+                              ),
+                            );
+                          }
+                        } else {
+                          print('Failed to fetch coordinates for the address');
+                        }
+                      }
+                    },
+                    style: ButtonStyle(
+                      backgroundColor:
+                          MaterialStateProperty.all<Color>(Color(0xFFB0DB2D)),
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(25.0),
+                        ),
+                      ),
+                    ),
+                    child: Text(
+                      'Create Itinerary Plan',
+                      style: TextStyle(color: Colors.white, fontSize: 16),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       );
