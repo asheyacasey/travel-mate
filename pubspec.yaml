@@ -53,6 +53,7 @@ dependencies:
   flutter_picker: ^2.1.0
   flutter_typeahead: ^4.6.2
   eva_icons_flutter: ^3.1.0
+  flutter_xlider: ^3.5.0
 
 
 

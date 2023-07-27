@@ -53,6 +53,9 @@ class UpdateMessage extends ChatEvent {
   final String messageId;
   final String oldMessageId;
   final Map<String, dynamic>? itinerary;
+  final double? placeLat;
+  final double? placeLon;
+  final double? placeRadius;
   final int? isAccepted;
   final int? numberOfDays;
 
@@ -63,6 +66,9 @@ class UpdateMessage extends ChatEvent {
       required this.messageId,
       required this.oldMessageId,
       this.itinerary,
+      this.placeLat,
+      this.placeLon,
+      this.placeRadius,
       this.numberOfDays,
       this.isAccepted});
 
@@ -74,6 +80,9 @@ class UpdateMessage extends ChatEvent {
         messageId,
         oldMessageId,
         numberOfDays,
+        placeLat,
+        placeLon,
+        placeRadius,
         itinerary,
         isAccepted
       ];

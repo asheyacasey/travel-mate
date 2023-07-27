@@ -16,9 +16,19 @@ class PackageDetailsScreen extends StatefulWidget {
   final Package package;
   final int numberOfDays;
   final Match match;
+  final List<Activity> fetchedActivities;
+  final double lat;
+  final double lon;
+  final double radius;
 
   PackageDetailsScreen(
-      {required this.package, required this.numberOfDays, required this.match});
+      {required this.package,
+      required this.numberOfDays,
+      required this.match,
+      required this.fetchedActivities,
+      required this.lat,
+      required this.lon,
+      required this.radius});
 
   @override
   _PackageDetailsScreenState createState() => _PackageDetailsScreenState();
@@ -32,51 +42,28 @@ class _PackageDetailsScreenState extends State<PackageDetailsScreen> {
   void initState() {
     super.initState();
     activitiesByDay = groupActivitiesByDay(widget.package.activities);
-    fetchActivitiesFromFirebase();
+    removeExistingInPackage();
   }
 
-  Future<void> fetchActivitiesFromFirebase() async {
+  Future<void> removeExistingInPackage() async {
     List<Activity> activities = [];
 
-    QuerySnapshot snapshot =
-        await FirebaseFirestore.instance.collection('business').get();
+    widget.fetchedActivities.forEach((activityData) {
+      // Check if the activity is already in the itinerary
+      bool isActivityInItinerary = widget.package.activities.any(
+          (itineraryActivity) =>
+              itineraryActivity.activityName == activityData.activityName &&
+              itineraryActivity.address == activityData.address);
 
-    snapshot.docs.forEach((doc) {
-      List<dynamic> activityList = doc['activities'];
+      //Check if the activity is a duplicate
+      bool activityExists = activities.any((existingActivity) =>
+          existingActivity.activityName == activityData.activityName &&
+          existingActivity.address == activityData.address);
 
-      activityList.forEach((activityData) {
-        String activityName = activityData['name'];
-        String category = activityData['category'];
-        String address = activityData['address'];
-        TimeOfDay timeStart = _convertToTimeOfDay(activityData['startTime']);
-        TimeOfDay timeEnd = _convertToTimeOfDay(activityData['endTime']);
-        int duration = activityData['duration'];
-
-        Activity activity = Activity(
-          activityName: activityName,
-          category: category,
-          address: address,
-          timeStart: timeStart,
-          timeEnd: timeEnd,
-          duration: duration,
-        );
-
-        // Check if the activity is already in the itinerary
-        bool isActivityInItinerary = widget.package.activities.any(
-            (itineraryActivity) =>
-                itineraryActivity.activityName == activity.activityName &&
-                itineraryActivity.address == activity.address);
-
-        //Check if the activity is a duplicate
-        bool activityExists = activities.any((existingActivity) =>
-            existingActivity.activityName == activity.activityName &&
-            existingActivity.address == activity.address);
-
-        // Add the activity to the list only if it is not already in the itinerary
-        if (!isActivityInItinerary && !activityExists) {
-          activities.add(activity);
-        }
-      });
+      // Add the activity to the list only if it is not already in the itinerary
+      if (!isActivityInItinerary && !activityExists) {
+        activities.add(activityData);
+      }
     });
 
     setState(() {
@@ -150,10 +137,12 @@ class _PackageDetailsScreenState extends State<PackageDetailsScreen> {
                         itemBuilder: (context, index) {
                           final activity = availableActivities[index];
                           return Padding(
-                            padding: const EdgeInsets.only(top: 5.0, bottom: 5.0),
+                            padding:
+                                const EdgeInsets.only(top: 5.0, bottom: 5.0),
                             child: Container(
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10), // Set the border radius here
+                                borderRadius: BorderRadius.circular(
+                                    10), // Set the border radius here
                                 color: Color(0xFFF1F1F1),
                               ),
                               child: ListTile(
@@ -175,36 +164,42 @@ class _PackageDetailsScreenState extends State<PackageDetailsScreen> {
                                       style: TextStyle(fontSize: 14),
                                     ),
                                     Padding(
-                                      padding:
-                                      const EdgeInsets.only(top: 5.0),
+                                      padding: const EdgeInsets.only(top: 5.0),
                                       child: Container(
                                         decoration: BoxDecoration(
                                           color: Color(0xFFB0DB2D),
-                                          borderRadius: BorderRadius.circular(5),
+                                          borderRadius:
+                                              BorderRadius.circular(5),
                                         ),
                                         padding: EdgeInsets.all(4),
                                         child: Text(
                                           '${activity.category}',
                                           style: TextStyle(
                                               color: Colors.white,
-                                              fontSize: 14
-                                          ),
+                                              fontSize: 14),
                                         ),
                                       ),
                                     ),
-                                    SizedBox(height: 10,)
+                                    SizedBox(
+                                      height: 10,
+                                    )
                                   ],
                                 ),
                                 onTap: () {
-                                  int currentDuration = widget.package.activities.fold(
+                                  int currentDuration =
+                                      widget.package.activities.fold(
                                     0,
-                                        (previousValue, activity) => previousValue + activity.duration,
+                                    (previousValue, activity) =>
+                                        previousValue + activity.duration,
                                   );
-                                  if (currentDuration + activity.duration > (widget.numberOfDays * 600)) {
-                                    showMessage('Adding this activity will exceed the total duration. Do you still want to continue?');
+                                  if (currentDuration + activity.duration >
+                                      (widget.numberOfDays * 600)) {
+                                    showMessage(
+                                        'Adding this activity will exceed the total duration. Do you still want to continue?');
                                   } else {
                                     setState(() {
-                                      activity.timeStart = widget.package.activities.last.timeEnd;
+                                      activity.timeStart = widget
+                                          .package.activities.last.timeEnd;
                                       widget.package.activities.add(activity);
                                       widget.package.activities.sort((a, b) {
                                         DateTime dateTimeA = DateTime(
@@ -222,14 +217,17 @@ class _PackageDetailsScreenState extends State<PackageDetailsScreen> {
                                           b.timeStart.minute,
                                         );
 
-                                        int timeComparison = dateTimeA.compareTo(dateTimeB);
+                                        int timeComparison =
+                                            dateTimeA.compareTo(dateTimeB);
                                         if (timeComparison != 0) {
                                           return timeComparison; // Sort by timeStart
                                         } else {
-                                          return a.duration.compareTo(b.duration); // Sort by duration (secondary criteria)
+                                          return a.duration.compareTo(b
+                                              .duration); // Sort by duration (secondary criteria)
                                         }
                                       });
-                                      activitiesByDay = groupActivitiesByDay(widget.package.activities);
+                                      activitiesByDay = groupActivitiesByDay(
+                                          widget.package.activities);
                                       availableActivities.remove(activity);
                                     });
                                     Navigator.pop(context); // Close the dialog
@@ -243,7 +241,6 @@ class _PackageDetailsScreenState extends State<PackageDetailsScreen> {
                     ),
                   ),
                 );
-
               },
               icon: Icon(UniconsLine.book_medical),
             ),
@@ -288,8 +285,7 @@ class _PackageDetailsScreenState extends State<PackageDetailsScreen> {
                                 borderRadius: BorderRadius.circular(15),
                               ),
                               child: Padding(
-                                padding:
-                                EdgeInsets.fromLTRB(18.0, 8.0, 0, 8.0),
+                                padding: EdgeInsets.fromLTRB(18.0, 8.0, 0, 8.0),
                                 child: Text(
                                   'Day $dayNumber',
                                   style: TextStyle(
@@ -319,7 +315,7 @@ class _PackageDetailsScreenState extends State<PackageDetailsScreen> {
                                       activitiesByDay = groupActivitiesByDay(
                                           widget.package.activities);
                                     });
-                                    fetchActivitiesFromFirebase();
+                                    removeExistingInPackage();
                                   },
                                   child: ListTile(
                                     title: Row(
@@ -361,7 +357,7 @@ class _PackageDetailsScreenState extends State<PackageDetailsScreen> {
                                         ),
                                         Padding(
                                           padding:
-                                          const EdgeInsets.only(top: 5.0),
+                                              const EdgeInsets.only(top: 5.0),
                                           child: Container(
                                             decoration: BoxDecoration(
                                               color: Color(0xFFB0DB2D),
@@ -444,6 +440,8 @@ class _PackageDetailsScreenState extends State<PackageDetailsScreen> {
           activityName: activity.activityName,
           category: activity.category,
           address: activity.address,
+          lat: activity.lat,
+          lon: activity.lon,
           timeStart: activity.timeStart,
           timeEnd: updatedTimeEnd, // Update the timeEnd value
           duration: activity.duration,
@@ -465,6 +463,9 @@ class _PackageDetailsScreenState extends State<PackageDetailsScreen> {
           message: "${name} sent a date invitation",
           numberOfDays: widget.numberOfDays,
           itinerary: itineraryMap,
+          placeLat: widget.lat,
+          placeLon: widget.lon,
+          placeRadius: widget.radius,
           dateTime: DateTime.now(),
           timeString: DateFormat('HH:mm').format(DateTime.now()));
 
@@ -549,12 +550,6 @@ class _PackageDetailsScreenState extends State<PackageDetailsScreen> {
           ],
         ),
       );
-
-
-
-
-
-
     } catch (error) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -606,7 +601,7 @@ class _PackageDetailsScreenState extends State<PackageDetailsScreen> {
       totalDuration += activityDuration;
 
       // Update nextActivityStart for the next iteration
-      nextActivityStart = activity.timeEnd;
+      nextActivityStart = calculateTimeEnd(activity.timeEnd, 30);
       currentDay = activityDateTime;
     }
 
@@ -637,7 +632,7 @@ class _PackageDetailsScreenState extends State<PackageDetailsScreen> {
             'Hi Traveller,',
             style: TextStyle(
               fontWeight: FontWeight.bold,
-              fontSize:20,
+              fontSize: 20,
               color: Color(0xFFF5C518),
             ),
           ),

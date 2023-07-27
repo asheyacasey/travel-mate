@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -11,18 +10,28 @@ import 'package:travel_mate/screens/chat/packages_screen.dart';
 import 'package:travel_mate/models/models.dart';
 import 'package:unicons/unicons.dart';
 import 'package:uuid/uuid.dart';
+import 'package:flutter_xlider/flutter_xlider.dart';
+import 'dart:math' as math;
 
 class ItineraryScreen extends StatefulWidget {
   final int? numberOfDays;
   final Map<String, dynamic>? itinerary;
   final Match? match;
   final String? oldMessageId;
+  final double? placeLat;
+  final double? placeLon;
+  final double? placeRadius;
+  final User? currentUser;
 
   ItineraryScreen(
       {required this.numberOfDays,
       this.itinerary,
       this.match,
-      this.oldMessageId});
+      this.oldMessageId,
+      this.placeLat,
+      this.placeLon,
+      this.placeRadius,
+      this.currentUser});
 
   @override
   _ItineraryScreenState createState() => _ItineraryScreenState();
@@ -32,10 +41,12 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
   List<List<Activity>> activitiesByDay = [];
   List<Activity> availableActivities = [];
   List<Activity> transformedActivities = [];
+  double _defaultRadius = 0;
 
   @override
   void initState() {
     super.initState();
+    _defaultRadius = widget.placeRadius!;
     transformIntoActivity();
     fetchActivitiesFromFirebase();
   }
@@ -52,11 +63,41 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
     activitiesByDay = groupActivitiesByDay(activities);
   }
 
+  double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
+    const int earthRadius = 6371; // Radius of the Earth in kilometers
+
+    double dLat = _toRadians(lat2 - lat1);
+    double dLon = _toRadians(lon2 - lon1);
+
+    double a = math.sin(dLat / 2) * math.sin(dLat / 2) +
+        math.cos(_toRadians(lat1)) *
+            math.cos(_toRadians(lat2)) *
+            math.sin(dLon / 2) *
+            math.sin(dLon / 2);
+
+    double c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a));
+    double distance = earthRadius * c;
+
+    return distance;
+  }
+
+  double _toRadians(double degree) {
+    return degree * (math.pi / 180);
+  }
+
   Future<void> fetchActivitiesFromFirebase() async {
     List<Activity> activities = [];
 
     QuerySnapshot snapshot =
         await FirebaseFirestore.instance.collection('business').get();
+
+    double _mapRadius = _defaultRadius / 1000;
+
+    List interests =
+        widget.match!.matchUser.interests + widget.currentUser!.interests;
+
+    List<String> stringInterests =
+        interests.map((interest) => interest.toString()).toList();
 
     snapshot.docs.forEach((doc) {
       List<dynamic> activityList = doc['activities'];
@@ -65,6 +106,8 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
         String activityName = activityData['name'];
         String category = activityData['category'];
         String address = activityData['address'];
+        double lat = activityData['lat'];
+        double lon = activityData['long'];
         TimeOfDay timeStart = _convertToTimeOfDay(activityData['startTime']);
         TimeOfDay timeEnd = _convertToTimeOfDay(activityData['endTime']);
         int duration = activityData['duration'];
@@ -73,6 +116,8 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
           activityName: activityName,
           category: category,
           address: address,
+          lat: lat,
+          lon: lon,
           timeStart: timeStart,
           timeEnd: timeEnd,
           duration: duration,
@@ -84,14 +129,23 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
                 itineraryActivity.activityName == activity.activityName &&
                 itineraryActivity.address == activity.address);
 
-        //Check if the activity is a duplicate
-        bool activityExists = activities.any((existingActivity) =>
-            existingActivity.activityName == activity.activityName &&
-            existingActivity.address == activity.address);
+        if (!isActivityInItinerary) {
+          // Calculate the distance between the inputted place and the location of the activity
+          double distance = calculateDistance(
+            widget.placeLat!,
+            widget.placeLon!,
+            activity.lat,
+            activity.lon,
+          );
 
-        // Add the activity to the list only if it is not already in the itinerary
-        if (!isActivityInItinerary && !activityExists) {
-          activities.add(activity);
+          bool isWithinMaxDistance = distance <= _mapRadius;
+
+          bool interestCategoryMatches = stringInterests
+              .any((interest) => activity.category.contains(interest));
+
+          if (isWithinMaxDistance && interestCategoryMatches) {
+            activities.add(activity);
+          }
         }
       });
     });
@@ -99,6 +153,25 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
     setState(() {
       availableActivities = activities;
     });
+
+    print('DEFAULT RADIUS IS ${_defaultRadius}');
+    print('AVAILABLE ACTIVITIES ARE');
+    print('NUMBER OF ACTIVITIES ${availableActivities.length}');
+    availableActivities.forEach((element) {
+      print(element.activityName);
+    });
+  }
+
+  void _onRadiusChanged(int handlerIndex, lowerValue, upperValue) {
+    setState(() {
+      _defaultRadius = lowerValue;
+    });
+  }
+
+  // Function to fetch activities again with the new radius and generate new packages.
+  void _applyNewRadius() {
+    availableActivities.clear();
+    fetchActivitiesFromFirebase();
   }
 
   @override
@@ -142,6 +215,64 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
           elevation: 0.0,
           actions: [
             IconButton(
+              icon: Icon(Icons.settings),
+              onPressed: () {
+                showModalBottomSheet(
+                  context: context,
+                  builder: (context) {
+                    return Container(
+                      padding: EdgeInsets.all(16.0),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text("Adjust Radius"),
+                          FlutterSlider(
+                            values: [_defaultRadius],
+                            max:
+                                100000.0, // Adjust the max value according to your requirement.
+                            min:
+                                1000.0, // Adjust the min value according to your requirement.
+                            step: FlutterSliderStep(
+                                step:
+                                    10000.0), // Adjust the step value according to your requirement.
+                            onDragging: _onRadiusChanged,
+                            trackBar: FlutterSliderTrackBar(
+                              activeTrackBar: BoxDecoration(
+                                color: Colors
+                                    .blue, // Customize the color of the active part of the Slider
+                              ),
+                              inactiveTrackBar: BoxDecoration(
+                                color: Colors
+                                    .grey, // Customize the color of the inactive part of the Slider
+                              ),
+                            ),
+                            handler: FlutterSliderHandler(
+                              child: Icon(
+                                Icons
+                                    .circle, // Customize the appearance of the handler (dot/tick).
+                                color: Colors
+                                    .blue, // Customize the color of the handler (dot/tick).
+                                size:
+                                    20.0, // Customize the size of the handler (dot/tick).
+                              ),
+                            ),
+                          ),
+                          ElevatedButton(
+                            onPressed: () {
+                              // Apply the new radius when the button is clicked.
+                              _applyNewRadius();
+                              Navigator.of(context).pop();
+                            },
+                            child: Text("Apply Radius"),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
+            IconButton(
               onPressed: () {
                 showDialog(
                   context: context,
@@ -164,16 +295,19 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
                         itemBuilder: (context, index) {
                           final activity = availableActivities[index];
                           return Padding(
-                            padding: const EdgeInsets.only(top: 5.0, bottom: 5.0),
+                            padding:
+                                const EdgeInsets.only(top: 5.0, bottom: 5.0),
                             child: Container(
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10), // Set the border radius here
+                                borderRadius: BorderRadius.circular(
+                                    10), // Set the border radius here
                                 color: Color(0xFFF1F1F1),
                               ),
                               child: ListTile(
                                 title: Padding(
                                   padding: const EdgeInsets.only(top: 8.0),
-                                  child: Text(activity.activityName,
+                                  child: Text(
+                                    activity.activityName,
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 18,
@@ -188,36 +322,42 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
                                       style: TextStyle(fontSize: 14),
                                     ),
                                     Padding(
-                                      padding:
-                                      const EdgeInsets.only(top: 5.0),
+                                      padding: const EdgeInsets.only(top: 5.0),
                                       child: Container(
                                         decoration: BoxDecoration(
                                           color: Color(0xFFB0DB2D),
-                                          borderRadius: BorderRadius.circular(5),
+                                          borderRadius:
+                                              BorderRadius.circular(5),
                                         ),
                                         padding: EdgeInsets.all(4),
                                         child: Text(
                                           '${activity.category}',
                                           style: TextStyle(
                                               color: Colors.white,
-                                              fontSize: 14
-                                          ),
+                                              fontSize: 14),
                                         ),
                                       ),
                                     ),
-                                    SizedBox(height: 10,)
+                                    SizedBox(
+                                      height: 10,
+                                    )
                                   ],
                                 ),
                                 onTap: () {
-                                  int currentDuration = transformedActivities.fold(
+                                  int currentDuration =
+                                      transformedActivities.fold(
                                     0,
-                                        (previousValue, activity) => previousValue + activity.duration,
+                                    (previousValue, activity) =>
+                                        previousValue + activity.duration,
                                   );
-                                  if (currentDuration + activity.duration > (widget.numberOfDays! * 600)) {
-                                    showMessage('Adding this activity will exceed the total duration. Do you still want to continue?');
+                                  if (currentDuration + activity.duration >
+                                      (widget.numberOfDays! * 600)) {
+                                    showMessage(
+                                        'Adding this activity will exceed the total duration. Do you still want to continue?');
                                   } else {
                                     setState(() {
-                                      activity.timeEnd = transformedActivities.last.timeEnd;
+                                      activity.timeEnd =
+                                          transformedActivities.last.timeEnd;
                                       transformedActivities.add(activity);
                                       transformedActivities.sort((a, b) {
                                         DateTime dateTimeA = DateTime(
@@ -235,14 +375,17 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
                                           b.timeStart.minute,
                                         );
 
-                                        int timeComparison = dateTimeA.compareTo(dateTimeB);
+                                        int timeComparison =
+                                            dateTimeA.compareTo(dateTimeB);
                                         if (timeComparison != 0) {
                                           return timeComparison; // Sort by timeStart
                                         } else {
-                                          return a.duration.compareTo(b.duration); // Sort by duration (secondary criteria)
+                                          return a.duration.compareTo(b
+                                              .duration); // Sort by duration (secondary criteria)
                                         }
                                       });
-                                      activitiesByDay = groupActivitiesByDay(transformedActivities);
+                                      activitiesByDay = groupActivitiesByDay(
+                                          transformedActivities);
                                       availableActivities.remove(activity);
                                     });
                                     Navigator.pop(context); // Close the dialog
@@ -256,7 +399,6 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
                     ),
                   ),
                 );
-
               },
               icon: Icon(UniconsLine.book_medical),
             ),
@@ -317,7 +459,7 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
                             ),
                             Padding(
                               padding:
-                              const EdgeInsets.only(left: 8.0, right: 8.0),
+                                  const EdgeInsets.only(left: 8.0, right: 8.0),
                               child: ListView.builder(
                                 shrinkWrap: true,
                                 physics: NeverScrollableScrollPhysics(),
@@ -373,7 +515,8 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
                                             ),
                                           ),
                                           Padding(
-                                            padding:  const EdgeInsets.only(top: 5.0),
+                                            padding:
+                                                const EdgeInsets.only(top: 5.0),
                                             child: Container(
                                               decoration: BoxDecoration(
                                                 color: Color(0xFFB0DB2D),
@@ -525,6 +668,8 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
           activityName: activity.activityName,
           category: activity.category,
           address: activity.address,
+          lat: activity.lat,
+          lon: activity.lon,
           timeStart: activity.timeStart,
           timeEnd: activity.timeEnd, // Update the timeEnd value
           duration: activity.duration,
@@ -577,6 +722,9 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
           messageId: messageId,
           message: "${name} updated the Itinerary",
           numberOfDays: widget.numberOfDays,
+          placeLat: widget.placeLat,
+          placeLon: widget.placeLon,
+          placeRadius: widget.placeRadius,
           itinerary: itineraryMap,
           dateTime: DateTime.now(),
           timeString: DateFormat('HH:mm').format(DateTime.now()));
@@ -707,7 +855,7 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
       totalDuration += activityDuration;
 
       // Update nextActivityStart for the next iteration
-      nextActivityStart = activity.timeEnd;
+      nextActivityStart = calculateTimeEnd(activity.timeEnd, 30);
       currentDay = activityDateTime;
     }
 
@@ -737,7 +885,7 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
             'Hi Traveller,',
             style: TextStyle(
               fontWeight: FontWeight.bold,
-              fontSize:20,
+              fontSize: 20,
               color: Color(0xFFF5C518),
             ),
           ),
@@ -770,7 +918,6 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
         ),
       ),
     );
-
   }
 }
 

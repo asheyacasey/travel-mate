@@ -11,20 +11,15 @@ class Biography extends StatelessWidget {
   final TabController tabController;
   String? interest;
   final List<String> availableTags = [
+    'Swimming',
+    'Foods',
+    'Adventure',
     'Beach',
+    'Bonding',
+    'Land Tour',
     'Hiking',
-    'Food',
-    'Art',
-    'Scuba Diving',
-    'Road trips',
-    'Trekking',
-    'Backpacking',
-    'Museums',
-    'Camping',
-    'Festival',
-    'Volunteering',
-    'Sustainable travel',
-
+    'Pool',
+    'Diving'
   ];
 
   bool isTagSelected(String tag, List<String> selectedTags) {
@@ -50,7 +45,8 @@ class Biography extends StatelessWidget {
           List<String> selectedTags = List<String>.from(state.user.interests);
 
           return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 50.0),
+            padding:
+                const EdgeInsets.symmetric(horizontal: 30.0, vertical: 50.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -73,43 +69,52 @@ class Biography extends StatelessWidget {
                     SizedBox(height: 10),
                     Text(
                       'Describe Yourself a Bit',
-                      style: Theme.of(context).primaryTextTheme.headline2!.copyWith(color: Colors.black),
+                      style: Theme.of(context)
+                          .primaryTextTheme
+                          .headline2!
+                          .copyWith(color: Colors.black),
                     ),
                     Text(
                       'Add a short description about your travel experience',
                       style: Theme.of(context).textTheme.headline6!.copyWith(
-                        fontWeight: FontWeight.w900,
-                        color: Colors.grey,
-                      ),
+                            fontWeight: FontWeight.w900,
+                            color: Colors.grey,
+                          ),
                     ),
                     SizedBox(height: 10),
                     CustomTextField(
                       hint: 'Edit bio',
                       onChanged: (value) {
                         context.read<OnboardingBloc>().add(
-                          UpdateUser(
-                            user: state.user.copyWith(bio: value),
-                          ),
-                        );
+                              UpdateUser(
+                                user: state.user.copyWith(bio: value),
+                              ),
+                            );
                       },
                     ),
                     SizedBox(height: 50),
                     Text(
                       'I\'m interested in...',
-                      style: Theme.of(context).primaryTextTheme.headline2!.copyWith(color: Colors.black),
+                      style: Theme.of(context)
+                          .primaryTextTheme
+                          .headline2!
+                          .copyWith(color: Colors.black),
                     ),
                     Wrap(
                       spacing: 8.0,
                       children: availableTags.map((tag) {
                         final isSelected = isTagSelected(tag, selectedTags);
                         return FilterChip(
-                          label: Text(tag,
+                          label: Text(
+                            tag,
                             style: TextStyle(
-                              fontSize: 16, // Specify the desired font size here
+                              fontSize:
+                                  16, // Specify the desired font size here
                             ),
                           ),
                           selected: isSelected,
-                          selectedColor: isSelected ? Color(0xFFF5C518) : Colors.black,
+                          selectedColor:
+                              isSelected ? Color(0xFFF5C518) : Colors.black,
                           onSelected: (isSelected) {
                             if (isSelected) {
                               if (!selectedTags.contains(tag)) {
@@ -119,12 +124,12 @@ class Biography extends StatelessWidget {
                               selectedTags.remove(tag);
                             }
                             context.read<OnboardingBloc>().add(
-                              UpdateUserInterest(
-                                user: state.user,
-                                interest: tag,
-                                selectedTags: selectedTags,
-                              ),
-                            );
+                                  UpdateUserInterest(
+                                    user: state.user,
+                                    interest: tag,
+                                    selectedTags: selectedTags,
+                                  ),
+                                );
                           },
                         );
                       }).toList(),
@@ -140,7 +145,8 @@ class Biography extends StatelessWidget {
                       unselectedColor: Theme.of(context).backgroundColor,
                     ),
                     SizedBox(height: 10),
-                    CustomButton(tabController: tabController, text: 'NEXT STEP'),
+                    CustomButton(
+                        tabController: tabController, text: 'NEXT STEP'),
                   ],
                 ),
               ],

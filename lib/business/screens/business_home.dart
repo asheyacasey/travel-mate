@@ -275,6 +275,8 @@ class Activity {
   final String id;
   final String name;
   final String address;
+  final double lat;
+  final double long;
   final String category;
   final TimeOfDay startTime;
   final TimeOfDay endTime;
@@ -284,6 +286,8 @@ class Activity {
     required this.id,
     required this.name,
     required this.address,
+    required this.lat,
+    required this.long,
     required this.category,
     required this.startTime,
     required this.endTime,
@@ -295,6 +299,8 @@ class Activity {
       id: map['id'],
       name: map['name'],
       address: map['address'],
+      lat: map['lat'],
+      long: map['long'],
       category: map['category'],
       startTime: TimeOfDay(
         hour: map['startTime']['hour'],
@@ -313,6 +319,8 @@ class Activity {
       'id': id,
       'name': name,
       'address': address,
+      'lat': lat,
+      'long': long,
       'category': category,
       'startTime': {
         'hour': startTime.hour,
